@@ -2,7 +2,7 @@
 ## Team Overview
 John Steenbruggen - Steenbruh
 Connor Andrews - Swerdnacs
-John Rand -
+John Rand - johnrandd241
 ## Innovative Idea
 This application is designed to bring together gamers in the UMass community. The site will essentially serve as a hub, where users can see upcoming events, meet new gaming partners, and discuss strategy.  It is a lot like most social media apps in the sense that users can create customized profiles, message each other directly, and post about their interests, but with a focus on organizing events and meetups for the UMass gaming community.
 ## Important Components
