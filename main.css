@@ -3,19 +3,23 @@
 }
 
 .row{
-    height: 100%;
     display: table-row;
 }
 .row .float{
     display: table-cell;
-    float: none;
+}
+.container{
+    display:table;
+    width: 100%;
+    margin-top: 0px;
+    padding: 0px 0 0 0; /*set left/right padding according to needs*/
+    max-width: 100%;
 }
 
-#page {
-    width: 100%;
+html,body,.container{
     height: 100%;
-    display: flex;
 }
-#content{
-    overflow-y: auto;
+.top{
+    z-index: -1;
+    color: darkgoldenrod;
 }
