@@ -4,10 +4,28 @@
     <title>This is the title of our page</title>
     <style rel="stylesheet" href="main.css"></style>
     <script type="text/javascript" src="main.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   </head>
   <body>
     <div id="header">
-      <span></span>
+      <nav class="navbar navbar-expand-lg bg-light sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="d-flex justify-content-center navbar-brand" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item ">
+                <a class="navbar-brand" aria-current="page" href="#"><img src ='./logo.png' alt="Company Logo"></a>
+              </li>
+            </ul>
+            <a class="nav-link active" aria-current="page" href='#'>
+               <button class="btn btn-outline-success" type="login">Login/Signup</button>
+            </a>
+          </div>
+        </div>
+      </nav>
     </div>
     <div id="page">
       <div id="siderbar"></div>
