@@ -1,0 +1,21 @@
+#siderbar {
+    background-color: aquamarine;
+}
+
+.row{
+    height: 100%;
+    display: table-row;
+}
+.row .float{
+    display: table-cell;
+    float: none;
+}
+
+#page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+#content{
+    overflow-y: auto;
+}
