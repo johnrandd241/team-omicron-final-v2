@@ -1,29 +1,6 @@
 #siderbar {
     background-color: aquamarine;
 }
-
-.row{
-    display: table-row;
-}
-.row .float{
-    display: table-cell;
-}
-.container{
-    display:table;
-    margin-top: 0px;
-    padding: 0px 0 0 0; /*set left/right padding according to needs*/
-    max-width: 100ch;
-    height: 100vh;
-}
-.fixed{
-    position:fixed;
-    height: 100vh;
-}
-.scroll{
-    overflow: auto;
-}
-.top{
-    z-index:-1;
-    position:sticky;
-    color: darkgoldenrod;
+.primc1{
+    background-color: rgb(102, 96, 89);
 }
