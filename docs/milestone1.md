@@ -20,7 +20,14 @@ Each page on our site (with the exception of the login/signup page) will have th
 
 ![](events.png)
 
+The profile page has a similar layout, except the columns now present the users friends, timestamped messages, and recent activity.
+
+![](profile.png)
+
 The login and signup page are combined into one (with a button to toggle between at the top). Users are provided with an option to sign up using a variety of services, including facebook and google, or by associating a password with their email or a username.
 
 ![](signin.png)
 
+### Division of labor
+
+Connor A. worked on the header and navigation bar, John S. focused on the page content for events and profile, and John R. created the login and signup pages.
