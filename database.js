@@ -3,7 +3,15 @@ function createUser(username, name){
 
 }
 
-function updateUser(id, bio, posts, msg){
+function updateUser(id, bio){
+
+}
+
+function updateUserPosts(id, postid, addremv){
+
+}
+
+function updateFriends(id, fid, addrmv){
 
 }
 
@@ -23,6 +31,22 @@ function deletePost(id){
 
 }
 
+function getPost(id){
+
+}
+
+function searchPosts(tags){
+    
+}
+
 function getMSGLog(logid, user){
+
+}
+
+function createMSGLog(postid){
+
+}
+
+function updateMSGLog(logid){
 
 }
