@@ -23,6 +23,6 @@ function deletePost(id){
 
 }
 
-function getMSGLog(logid, user)){
+function getMSGLog(logid, user){
 
 }
