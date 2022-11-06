@@ -1,5 +1,9 @@
 'use strict';
-function createUser(){
+function createUser(username, name){
+
+}
+
+function updateUser(id, bio, posts, msg){
 
 }
 
@@ -7,18 +11,18 @@ function deleteUser(username){
 
 }
 
-function createPost(){
+function createPost(id, title, date){
 
 }
 
-function updatePost(){
+function updatePost(id, title, date, comments){
 
 }
 
-function deletePost(){
+function deletePost(id){
 
 }
 
-function getMSGLog(id){
+function getMSGLog(logid, user)){
 
 }
