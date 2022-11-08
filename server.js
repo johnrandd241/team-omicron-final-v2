@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
+    console.log();
 });
 
 //for login page to redirect & such
