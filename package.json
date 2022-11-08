@@ -1,12 +1,11 @@
 {
   "name": "team-omicron-final-v2",
   "version": "1.0.0",
-  "main": "main.js",
+  
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "repository": {
