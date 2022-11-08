@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-//John made - for login page to redirect & such
+//for login page to redirect & such
  
 //to redirect from index to login page
 app.post("/login", (req, res) => {
