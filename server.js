@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
+//this section is for heroku, i believe it finds a port for the the deployment
+//on heroku, then runs or something, otherwise itll run locally on localhost:8000
+// - John Rand
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
@@ -15,7 +18,7 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-//John made - for his login page to redirect & such
+//for login page to redirect & such
  
 //to redirect from index to login page
 app.post("/login", (req, res) => {
@@ -30,5 +33,5 @@ app.post("/register", (req, res) => {
 
 
 
-//John made - for his login page to redirect & such
+
 
