@@ -12,7 +12,8 @@ if (port == null || port == "") {
 app.listen(port);
 
 app.use(express.static(__dirname));
-app.use(bodyParser.urlencoded({ extended: true }))
+//const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
@@ -22,7 +23,12 @@ app.get("/", (req, res) => {
  
 //to redirect from index to login page
 app.post("/login", (req, res) => {
+    //let password = req.body.password-field;
+    //res.send(username + password + ' Submitted Successfully!');
+    //console.log(username);
     res.sendFile(__dirname + "/login-page.html");
+    //let username = req.body.username-field;
+    //let username = res.body.username-field;
 });
 
 app.post("/userprofile", (req, res) => {
@@ -36,6 +42,18 @@ app.post("/userprofile", (req, res) => {
 app.post("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
 });
+app.post("/userprofilenew", (req, res) => {
+    //let username = req.body.username-field;
+    //let password = req.body.password-field;
+    //res.send(username + password + ' Submitted Successfully!');
+
+    res.sendFile(__dirname + "/profile.html");
+});
+app.post("/logout", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
+
+
 
 
 
