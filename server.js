@@ -38,10 +38,12 @@ app.post("/userprofile", (req, res) => {
 
     res.sendFile(__dirname + "/profile.html");
 });
+
 //to redirect from index to register page
 app.post("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
 });
+
 app.post("/userprofilenew", (req, res) => {
     //let username = req.body.username-field;
     //let password = req.body.password-field;
@@ -49,6 +51,7 @@ app.post("/userprofilenew", (req, res) => {
 
     res.sendFile(__dirname + "/profile.html");
 });
+
 app.post("/logout", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
