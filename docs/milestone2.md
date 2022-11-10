@@ -9,7 +9,7 @@ John Rand - johnrandd241
 ## Link to heroku: https://team-omicron.herokuapp.com/
 
 ## API
-For our project 
+For our project, our API gets displays to the user, such as events, login, register, and once requested by the user, it displays a new page. This new page for log in and register asks the user for information, and once gathered and the user hits submit, it redirects to a profile page.
 
 ### Division of labor
 
