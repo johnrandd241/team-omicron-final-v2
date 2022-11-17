@@ -44,6 +44,28 @@ app.post('/login', (req, res) => {
     res.sendFile(__dirname + "/profile.html");
   });
 
+app.post('/user/addFriend', (req, res) => {
+    // the request needs proof that this is indeed the user they claim to be
+});
+
+app.post('/user/removeFriend', (req, res) => {
+
+});
+
+app.post('/content/addPost', (req, res) => {
+    // this request will need some kind of proof which user is making it
+    // extract post type, title, desc, img, tags
+    // add the post to the list of posts in the database, and also add the post to the list of posts made by this user
+});
+
+app.post('/content/removePost', (req, res) => {
+    // 
+});
+
+app.get('/content/search', (req, res) => {
+    
+});
+
 //for login page to redirect & such
  /*
 //to redirect from index to login page
