@@ -16,24 +16,24 @@
 		</div>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
 			<div class="container-fluid">
-				<ul class="navbar-nav">
+				<ul class="navbar-nav" id="nav-list">
 					<!-- when you click on one of the events, people, or records tab, a request 
 						is sent asking for all posts of that type, and they are displayed onto 
 						the page according to date posted -->
 					<li class="nav-item">
-						<a class="nav-link active" href="/events">Events</a>
+						<a class="nav-link" id="events-link">Events</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/people">People</a>
+						<a class="nav-link" id="people-link">People</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/records">Records</a>
+						<a class="nav-link" id="records-link">Records</a>
 					</li>
 					<li class="nav-item">
 						<!-- must be logged in to use the messages tab -->
-						<a class="nav-link" href="/messages">Messages</a>
+						<a class="nav-link" id="message-link">Messages</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item" id="search-form">
 						<form class="form-inline">
 							<div class="input-group">
 								<input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search">
@@ -59,70 +59,72 @@
 				</ul>
 			</div>
 		</nav>
-		<div class="container mt-5">
-			<div class="row gx-5">
-				<div class="col">
-					<div class="bg-white p-2">
-						<h2>This is the event title or headline</h2>
-						<div style="height:200px;background:lightgray;">
-							Optional image to to grab attention
+		<div id="page">
+			<div class="container mt-5">
+				<div class="row gx-5">
+					<div class="col">
+						<div class="bg-white p-2">
+							<h2>This is the event title or headline</h2>
+							<div style="height:200px;background:lightgray;">
+								Optional image to to grab attention
+							</div>
+							<p>This is the beginning of a brief description of this event...</p>
+							<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
 						</div>
-						<p>This is the beginning of a brief description of this event...</p>
-						<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
+					</div>
+					<div class="col">
+						<div class="bg-white p-2">
+							<h2>This is the event title or headline</h2>
+							<div style="height:200px;background:lightgray;">
+								Optional image to to grab attention
+							</div>
+							<p>This is the beginning of a brief description of this event...</p>
+							<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
+						</div>
 					</div>
 				</div>
-				<div class="col">
-					<div class="bg-white p-2">
-						<h2>This is the event title or headline</h2>
-						<div style="height:200px;background:lightgray;">
-							Optional image to to grab attention
+				<div class="row gx-5">
+					<div class="col">
+						<div class="bg-white p-2">
+							<h2>This is the event title or headline</h2>
+							<div style="height:200px;background:lightgray;">
+								Optional image to to grab attention
+							</div>
+							<p>This is the beginning of a brief description of this event...</p>
+							<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
 						</div>
-						<p>This is the beginning of a brief description of this event...</p>
-						<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
+					</div>
+					<div class="col">
+						<div class="bg-white p-2">
+							<h2>This is the event title or headline</h2>
+							<div style="height:200px;background:lightgray;">
+								Optional image to to grab attention
+							</div>
+							<p>This is the beginning of a brief description of this event...</p>
+							<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row gx-5">
-				<div class="col">
-					<div class="bg-white p-2">
-						<h2>This is the event title or headline</h2>
-						<div style="height:200px;background:lightgray;">
-							Optional image to to grab attention
+				<div class="row gx-5">
+					<div class="col">
+						<div class="bg-white p-2">
+							<h2>This is the event title or headline</h2>
+							<div style="height:200px;background:lightgray;">
+								Optional image to to grab attention
+							</div>
+							<p>This is the beginning of a brief description of this event...</p>
+							<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
 						</div>
-						<p>This is the beginning of a brief description of this event...</p>
-						<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
 					</div>
-				</div>
-				<div class="col">
-					<div class="bg-white p-2">
-						<h2>This is the event title or headline</h2>
-						<div style="height:200px;background:lightgray;">
-							Optional image to to grab attention
+					<div class="col">
+						<div class="bg-white p-2">
+							<h2>This is the event title or headline</h2>
+							<div style="height:200px;background:lightgray;">
+								Optional image to to grab attention
+							</div>
+							<p>This is the beginning of a brief description of this event...</p>
+							<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
 						</div>
-						<p>This is the beginning of a brief description of this event...</p>
-						<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
-					</div>
-				</div>
-			</div>
-			<div class="row gx-5">
-				<div class="col">
-					<div class="bg-white p-2">
-						<h2>This is the event title or headline</h2>
-						<div style="height:200px;background:lightgray;">
-							Optional image to to grab attention
-						</div>
-						<p>This is the beginning of a brief description of this event...</p>
-						<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
-					</div>
-				</div>
-				<div class="col">
-					<div class="bg-white p-2">
-						<h2>This is the event title or headline</h2>
-						<div style="height:200px;background:lightgray;">
-							Optional image to to grab attention
-						</div>
-						<p>This is the beginning of a brief description of this event...</p>
-						<p><span class="font-weight-bold">Date:</span> 10/31/22</p>
 					</div>
 				</div>
 			</div>
