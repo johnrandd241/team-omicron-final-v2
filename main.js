@@ -1,19 +1,20 @@
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
-function search(text) {
-    // obtain stuff from database (based on cur_section and search text) and programatically spawn it in
-    switch (cur_section) {
-        case 'events':
+function search(keywords) {
+    // obtain stuff from database (based on cur_section and search text)
+    // programatically create the html that displays the post (the response from the database)
+    // render the elements into the page
+}
 
-        case 'people':
+// runs when message tab is clicked
+function messages() {
+    
+}
 
-        case 'records':
+// runs when profile tab is clicked
+function profile() {
 
-        default:
-            // should not be possible to search from these sections
-            break;
-    }
 }
 
 window.onload = function() {
@@ -32,18 +33,30 @@ window.onload = function() {
             link_elem.classList.add('active');
             // update the current section
             cur_section = link_elem.id.split('-')[0];
-            // now set body content to be the default search for this tab
-            search('');
             // now depending on which tab we switched to, we might have to hide/show the search form
             let search_form = document.getElementById('search-form');
             if (['events', 'people', 'records'].includes(cur_section)) {
                 // show search form
                 search_form.style.display = 'block';
-                console.log('showing search form');
             } else {
                 // hide search form
                 search_form.style.display = 'none';
-                console.log('hiding search form');
+            }
+            // now we do whatever we need to based on the section we are in
+            switch (cur_section) {
+                case 'messages':
+                    // do whatever we need for the messages
+                    messages();
+                    break;
+                case 'profile':
+                    // do whatever we need for the profile
+                    profile();
+                    break;
+                default:
+                    // must be events, people, or records, which are basically all the same
+                    // jsut do a default search to sort by date
+                    search('');
+                    break;
             }
         });
     });

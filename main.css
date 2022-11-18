@@ -17,3 +17,7 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+#nav-list a:hover {
+    cursor: pointer;
+}
