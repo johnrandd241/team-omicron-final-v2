@@ -6,10 +6,11 @@ export function renderChat(div, chatID){
         div.appendChild(empty);
         return;
     }
+    let msg={};
     //Request chat data from database
     const getChat = new PQ({text:'SELECT * FROM chatTable where ID = $chatID'});
     db.one(getChat)
-        .then(chat => {/*found*/})
+        .then(chat => {msg=JSON.parse(chat);})
         .catch(error =>{//handle errors
         });
     
@@ -34,18 +35,21 @@ export function renderChat(div, chatID){
         bubble.appendChild(uinfo);
         bubble.appendChild(msgC);
     }
+
 }
 
 function renderConvos(div){
+    let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
     const getConvos = new PQ('SELECT messages FROM UserTable WHERE Username = $curUser');
     db.any(getConvos)
-        .then(convos => {/*found*/})
+        .then(convo => {convo=JSON.parse(convos);})
         .catch(error =>{//handle errors
         });
     for(let c in convos){
         let item = document.createElement('li');
+        item.id = c.friend;
         //item.classList.add('')
         let card =  document.createElement('div');
         card.classList.add('d-flex bd-highlight');
@@ -75,7 +79,48 @@ export function message(div, chatID){
     curchat.classList.add("card-body msg_card_body");
     renderChat(curchat, chatID);
 
+    let card = document.createElement('div');
+    card.classList.add('card');
+    card.appendChild(curchat);
+    //Message entry field
+    let input = document.createElement('div');
+    input.classList.add('card-footer');
+    let ingroup = document.createElement('div');
+    ingroup.classList.add('input-group');
+    let msgEntry = document.createElement('textarea');
+    msgEntry.classList.add('form-control type_msg');
+    msgEntry.placeholder = "Type a message";
+    ingroup.appendChild(msgEntry);
+    let send = document.createElement('div');
+    send.classList.add('input-group-append');
+    let butt = document.createElement('span');
+    butt.classList.add('input-group-text send_btn');
+    let innerButt = document.createElement('i');
+    innerButt.classList.add('fas fa-location-arrow');
+    butt.appendChild(innerButt);
+    send.appendChild(butt);
+    ingroup.appendChild(send);
+    input.appendChild(ingroup);
+    card.appendChild(input);
+    //End msg entry field creation and addition to main div
+    //Current Chat styling div finalization
+    let RHS = document.createElement('div');
+    RHS.classList.add("col-md-8 col-xl-6 chat");
+    RHS.appendChild(card);
+    
+    //List of chats style finalization
+    let LHS = document.createElement('div');
+    LHS.classList.add('col-md-4 col-xl-3 chat');
+    let LHS2 = document.createElement('div');
+    LHS2.classList.add('card mb-sm-3 mb-md-0 contacts_card');
+    LHS2.appendChild(chats);
+    LHS.appendChild(LHS2);
 
-    div.appendChild(chats);
-    div.appendChild(curChat);
+    //Div to split screen into chats and currently opened chat
+    let split = document.createElement('div');
+    split.classList.add('row justify-content-center h-100');
+    split.appendChild(LHS);
+    split.appendChild(RHS);
+    div.classList.add('constiner-fluid h-100');
+    div.appendChild(split);
 }
