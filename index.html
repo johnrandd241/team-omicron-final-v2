@@ -17,6 +17,9 @@
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
 			<div class="container-fluid">
 				<ul class="navbar-nav">
+					<!-- when you click on one of the events, people, or records tab, a request 
+						is sent asking for all posts of that type, and they are displayed onto 
+						the page according to date posted -->
 					<li class="nav-item">
 						<a class="nav-link active" href="/events">Events</a>
 					</li>
@@ -30,11 +33,16 @@
 						<!-- must be logged in to use the messages tab -->
 						<a class="nav-link" href="/messages">Messages</a>
 					</li>
+					<li class="nav-item">
+						<form class="form-inline">
+							<div class="input-group">
+								<input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search">
+								<!-- when you click the search button,  -->
+								<button class="btn btn-outline-success" id="search-button">Search</button>
+							</div>
+						</form>
+					</li>
 				</ul>
-				<form class="form-inline my-2 my-lg-0">
-					<input class="form-control mr-sm-2" type="search" placeholder="Search">
-					<button class="btn btn-outline-success my-2 my-sm-0">Search</button>
-				</form>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 
