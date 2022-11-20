@@ -21,3 +21,11 @@
 #nav-list a:hover {
     cursor: pointer;
 }
+
+.post-title-header:hover {
+    cursor: pointer;   
+}
+
+img.profile-pic {
+    width: 100%;
+}
