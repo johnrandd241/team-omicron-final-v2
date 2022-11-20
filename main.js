@@ -1,11 +1,14 @@
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 2;
-const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: 'ch4rl3sd4rw1n', date: '10/5/22', id: 129839753759869};
-const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'Charles Darwin', img_src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Charles_Darwin_seated_crop.jpg', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [123, 456, 789, 1234], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']}
+const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: 'ch4rl3sd4rw1n', date: '10/5/22', id: 129839753759869, type: 'event'};
+const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'Charles Darwin', img_src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Charles_Darwin_seated_crop.jpg', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [123, 456, 789, 1234], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']};
+
+let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
 
 // given the unique id for a user, get the user object from the database
 // id is the username
 function getUserFromID(user_id) {
+    // fethc from the datanbase
     return DUMMY_USER;
 }
 
@@ -147,6 +150,11 @@ function profile(user_id) {
     user_data.posts.forEach(post_id => {
         history_col.appendChild(getColumnForPost(getPostById(post_id)));
     });
+    if (user_data.posts.length === 0) {
+        let no_posts = document.createElement('p');
+        no_posts.innerHTML = 'This user has no posts';
+        history_col.appendChild(no_posts);
+    }
     row.appendChild(history_col);
     container.appendChild(row);
     document.getElementById('page').textContent = '';
@@ -191,5 +199,5 @@ window.onload = function() {
     });
 
     // sort posts by date into the page
-    // search('');
+    search('');
 };
