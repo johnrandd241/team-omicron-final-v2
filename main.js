@@ -1,7 +1,7 @@
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 2;
-const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: '123', date: '10/5/22', id: 129839753759869};
-const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'Charles Darwin', img_src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Charles_Darwin_seated_crop.jpg', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']}
+const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: 'ch4rl3sd4rw1n', date: '10/5/22', id: 129839753759869};
+const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'Charles Darwin', img_src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Charles_Darwin_seated_crop.jpg', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [123, 456, 789, 1234], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']}
 
 // given the unique id for a user, get the user object from the database
 // id is the username
@@ -58,9 +58,6 @@ function search(keywords) {
         cur_row.classList.add('row'); // specify that it is a row
         cur_row.classList.add('gx-5'); // set the sizing
         // go through them POSTS_PER_ROW at a time (i think 2 posts per row is good)
-        for (post_data in arr.slice(0, POSTS_PER_ROW)) {
-            console.log(post_data);
-        }
         arr.slice(0, POSTS_PER_ROW).forEach(post_data => {
             // create the column cell for the post
             cur_row.appendChild(getColumnForPost(post_data));
@@ -90,7 +87,7 @@ function toggleSearchBar() {
 
 // runs when message tab is clicked
 function messages() {
-
+    document.getElementById('page').innerHTML = 'to be implemented by connor';
 }
 
 // runs when profile tab is clicked
@@ -143,7 +140,8 @@ function profile(user_id) {
     sub_personal_right.appendChild(photo);
     sub_personal_row.appendChild(sub_personal_left);
     sub_personal_row.appendChild(sub_personal_right);
-    personal_col.appendChild(sub_personal_row);
+    sub_personal.appendChild(sub_personal_row);
+    personal_col.appendChild(sub_personal);
     row.appendChild(personal_col);
     history_col.appendChild(history_header);
     user_data.posts.forEach(post_id => {
