@@ -1,11 +1,19 @@
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
-const POSTS_PER_ROW = 3;
-const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: '123', date: '10/5/22'};
+const POSTS_PER_ROW = 2;
+const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: '123', date: '10/5/22', id: 129839753759869};
+const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'charles darwin', img_src: 'test.png', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']}
 
 // given the unique id for a user, get the user object from the database
+// id is the username
 function getUserFromID(user_id) {
-    return {id: user_id, name: 'dummy data', friends: [], posts: [], messages: []};
+    return DUMMY_USER;
 }
+
+function getPostById(post_id) {
+    return DUMMY_POST;
+}
+
+
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
 function search(keywords) {
@@ -13,7 +21,7 @@ function search(keywords) {
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
     // at this point, all of the 'posts' should be in some kind of array, all we gotta do now is render them
-    let arr = [DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST]; 
+    let arr = [DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST]; 
     // create the base element for the posts (this container holds the rows and columns and what not)
     let container = document.createElement('div');
     container.classList.add('container'); // specify the fact it is a container
@@ -61,8 +69,8 @@ function messages() {
 }
 
 // runs when profile tab is clicked
-function profile() {
-
+function profile(user_id) {
+    // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
 }
 
 window.onload = function() {
@@ -82,7 +90,7 @@ window.onload = function() {
             // update the current section
             cur_section = link_elem.id.split('-')[0];
             // now depending on which tab we switched to, we might have to hide/show the search form
-            let search_form = document.getElementById('search-form');
+            let search_form = document.getElementById('search-nav');
             if (['events', 'people', 'records'].includes(cur_section)) {
                 // show search form
                 search_form.style.display = 'block';

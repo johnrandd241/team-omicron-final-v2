@@ -37,15 +37,6 @@
 						<!-- must be logged in to use the messages tab -->
 						<a class="nav-link" id="profile-link">Profile</a>
 					</li>
-					<li class="nav-item" id="search-form">
-						<form class="form-inline">
-							<div class="input-group">
-								<input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search">
-								<!-- when you click the search button,  -->
-								<button class="btn btn-outline-success" id="search-button">Search</button>
-							</div>
-						</form>
-					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
@@ -59,6 +50,21 @@
 						<!--added form action for server function-->
 						<a class="nav-link" href="/register">Register</a>
 						<!--added form action for server function-->
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<nav class="navbar navbar-expand-sm bg-secondary navbar-dark" id="search-nav">
+			<div class="container-fluid">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item" id="search-form">
+						<form class="form-inline">
+							<div class="input-group">
+								<input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search">
+								<!-- when you click the search button,  -->
+								<button class="btn btn-outline-success bg-light" id="search-button">Search</button>
+							</div>
+						</form>
 					</li>
 				</ul>
 			</div>
