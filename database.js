@@ -51,21 +51,3 @@ export function createComment(logged, session, log_id, text) {
 export function getAllPosts() {
     // literally just returns all the posts from the database, i will filter through them in the search() function in main.js
 }
-
-const { Client } = require('pg');
-
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-
-client.connect();
-
-client.query('SELECT * FROM users;', (err, res) => {
-    if (err) throw err;
-    console.log('Connection SUccess\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-    console.log(JSON.stringify(res));
-    client.end();
-});

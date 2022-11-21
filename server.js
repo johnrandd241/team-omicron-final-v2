@@ -28,6 +28,7 @@ client.connect();
 
 client.query('SELECT * FROM users;', (err, res) => {
     if (err) throw err;
+    console.log('Connection SUccess\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
     console.log(JSON.stringify(res));
     client.end();
 });
