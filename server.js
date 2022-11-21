@@ -43,17 +43,6 @@ client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => 
 });
 module.exports = client;
 
-/* //Loads and initializes pg library
-const pgp = require('pg-promise')({
-    //Initialization
-});
-//Prepares connection
-const cn = 'postgres://username:password@host:port/database';
-//Creates new database instance
-const db = pgp(cn);
-//Exports database object
-module.exports = db; */
-
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
 });
