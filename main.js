@@ -1,5 +1,5 @@
 import * as Database from './database.js';
-import db from './server.js';
+import {db} from './server.js';
 
 console.log(Database.DUMMY_POST);
 
