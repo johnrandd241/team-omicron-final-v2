@@ -41,7 +41,7 @@ const cn = 'postgres://username:password@host:port/database';
 //Creates new database instance
 const db = pgp(cn);
 //Exports database object
-module.exports.db = db;
+module.exports = db;
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
