@@ -1,6 +1,6 @@
-import * as client from './database.js';
-//import * as client from './server.js';
-
+import { ParameterizedQuery } from 'pg-promise';
+import {getDB} from './db';
+const {db, pgp} = getDB();
 console.log(Database.DUMMY_POST);
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
@@ -156,7 +156,7 @@ function profile(user_id) {
 
 window.onload = function() {
     // when search button is pressed
-    /* document.getElementById('search-button').addEventListener('click', function() {
+    document.getElementById('search-button').addEventListener('click', function() {
         // what section to search?
         search(document.getElementById('search-text').value);
     });
@@ -192,12 +192,10 @@ window.onload = function() {
     });
 
     // sort posts by date into the page
-    search(''); */
+    search('');
 
     console.log('got here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
-    client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => {
-        if (err) throw err;
-        console.log(JSON.stringify(res));
-        client.end();
-    });
+    db.one(new ParameterizedQuery('SELECT * FROM users WHERE username=\'Tester1\''))
+        .then(res => {console.log(JSON.parse(res));})
+        .catch(err => {/*handle errors*/});
 }
