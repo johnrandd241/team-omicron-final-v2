@@ -52,7 +52,7 @@ export function getAllPosts() {
     // literally just returns all the posts from the database, i will filter through them in the search() function in main.js
 }
 
-const { Client } = require('pg');
+/* const { Client } = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -69,4 +69,4 @@ client.query('SELECT table_schema,table_name FROM information_schema.tables;', (
     console.log(JSON.stringify(row));
   }
   client.end();
-});
+}); */
