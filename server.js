@@ -26,7 +26,7 @@ const client = new Client({
 
 client.connect();
 
-client.query('SELECT * FROM users;', (err, res) => {
+client.query('SELECT * FROM users WHERE username = "Tester1";', (err, res) => {
     if (err) throw err;
     console.log(JSON.stringify(res));
     client.end();
