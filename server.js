@@ -15,6 +15,15 @@ app.use(express.static(__dirname));
 //const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.on('ready', () => {
+    mainWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
+    });
+});
+
 const { Client } = require('pg');
 
 const client = new Client({
@@ -32,7 +41,7 @@ client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => 
     client.end();
 });
 
-//Loads and initializes pg library
+/* //Loads and initializes pg library
 const pgp = require('pg-promise')({
     //Initialization
 });
@@ -41,16 +50,7 @@ const cn = 'postgres://username:password@host:port/database';
 //Creates new database instance
 const db = pgp(cn);
 //Exports database object
-module.exports = db;
-
-app.on('ready', () => {
-    mainWindow = new BrowserWindow({
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-        }
-    });
-});
+module.exports = db; */
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");

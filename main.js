@@ -1,5 +1,5 @@
 import * as Database from './database.js';
-import * as db from './server.js';
+import * as db from './database';
 
 console.log(Database.DUMMY_POST);
 
@@ -194,9 +194,9 @@ window.onload = function() {
     // sort posts by date into the page
     search('');
 
-
+    console.log('got here');
     db.any(new PQ('SELECT * FROM users'))
-        .then(chat => {console.log(chat);})
+        .then(chat => {console.log(JSON.parse(chat));})
         .catch(error =>{//handle errors
         });
 };
