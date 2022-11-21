@@ -1,4 +1,3 @@
-import { ParameterizedQuery } from './node_modules/pg-promise';
 import {getDB} from './db.js';
 const {db, pgp} = getDB();
 console.log(Database.DUMMY_POST);
@@ -195,7 +194,7 @@ window.onload = function() {
     search('');
 
     console.log('got here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
-    db.one(new ParameterizedQuery('SELECT * FROM users WHERE username=\'Tester1\''))
+    db.one(new PQ('SELECT * FROM users WHERE username=\'Tester1\''))
         .then(res => {console.log(JSON.parse(res));})
         .catch(err => {/*handle errors*/});
 }
