@@ -194,7 +194,7 @@ window.onload = function() {
     // sort posts by date into the page
     search('');
 
-    console.log('got here');
+    console.log('got here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
     db.any(new PQ('SELECT * FROM users'))
         .then(chat => {console.log(JSON.parse(chat));})
         .catch(error =>{//handle errors
