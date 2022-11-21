@@ -1,20 +1,12 @@
+import * as Database from './database.js';
+
+console.log(Database.DUMMY_POST);
+
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 2;
-const DUMMY_POST = {title: 'This is the title of the post', img_src: 'www.com', desc: 'This is the description of the post', user: 'ch4rl3sd4rw1n', date: '10/5/22', id: 129839753759869, type: 'event'};
-const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'Charles Darwin', img_src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Charles_Darwin_seated_crop.jpg', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [123, 456, 789, 1234], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']};
 
+// hopefully john rand can set these variables upon logging in
 let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
-
-// given the unique id for a user, get the user object from the database
-// id is the username
-function getUserFromID(user_id) {
-    // fethc from the datanbase
-    return DUMMY_USER;
-}
-
-function getPostById(post_id) {
-    return DUMMY_POST;
-}
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
@@ -35,7 +27,7 @@ function getColumnForPost(post_data) {
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.desc.substring(0, 100);
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = 'Posted by ' + getUserFromID(post_data.user).name + ' on ' + post_data.date;
+    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.user).name + ' on ' + post_data.date;
     cur_col.appendChild(title_element);
     cur_col.appendChild(img_element);
     cur_col.appendChild(desc_element);
@@ -49,7 +41,7 @@ function search(keywords) {
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
     // at this point, all of the 'posts' should be in some kind of array, all we gotta do now is render them
-    let arr = [DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST, DUMMY_POST]; 
+    let arr = Array(5).fill(0).map(e => Database.DUMMY_POST); 
     // create the base element for the posts (this container holds the rows and columns and what not)
     let container = document.createElement('div');
     container.classList.add('container'); // specify the fact it is a container
@@ -99,7 +91,7 @@ function profile(user_id) {
     // do some kind of check to see if user_id is the one thats signed in
     // if it is, add the buttons that allow them to edit the bio
     // fetch the user information
-    let user_data = getUserFromID(user_id);
+    let user_data = Database.getUserByID(user_id);
     // now create the html elements
     let container = document.createElement('div');
     container.classList.add('container');
@@ -148,7 +140,7 @@ function profile(user_id) {
     row.appendChild(personal_col);
     history_col.appendChild(history_header);
     user_data.posts.forEach(post_id => {
-        history_col.appendChild(getColumnForPost(getPostById(post_id)));
+        history_col.appendChild(getColumnForPost(Database.getPostByID(post_id)));
     });
     if (user_data.posts.length === 0) {
         let no_posts = document.createElement('p');
