@@ -9,5 +9,5 @@ const cn = 'postgres://username:password@host:port/database';
 const db = pgp(cn);
 
 module.exports = {
-    pgp, db
+    db
 };

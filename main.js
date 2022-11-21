@@ -1,5 +1,4 @@
-import {getDB} from './db.js';
-const {db, pgp} = getDB();
+import {db} from './db.js';
 console.log(Database.DUMMY_POST);
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
