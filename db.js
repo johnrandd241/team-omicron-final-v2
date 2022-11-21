@@ -7,5 +7,3 @@ const pgp = require('pg-promise')(initOptions);
 const cn = 'postgres://username:password@host:port/database';
 //Create Database object
 export const db = pgp(cn);
-
-//module.exports = db;
