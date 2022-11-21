@@ -28,10 +28,20 @@ client.connect();
 
 client.query('SELECT * FROM users;', (err, res) => {
     if (err) throw err;
-    console.log('Connection SUccess\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
     console.log(JSON.stringify(res));
     client.end();
 });
+
+//Loads and initializes pg library
+const pgp = require('pg-promise')({
+    //Initialization
+});
+//Prepares connection
+const cn = 'postgres://username:password@host:port/database';
+//Creates new database instance
+const db = pgp(cn);
+//Exports database object
+module.exports = db;
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
