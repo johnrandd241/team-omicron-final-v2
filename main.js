@@ -1,4 +1,4 @@
-import { ParameterizedQuery } from './node_modules/pg-promise/lib/types/parameterized-query.js';
+import { ParameterizedQuery } from 'pg-promise';
 import {getDB} from './db.js';
 const {db, pgp} = getDB();
 console.log(Database.DUMMY_POST);
