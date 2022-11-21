@@ -156,7 +156,7 @@ function profile(user_id) {
 
 window.onload = function() {
     // when search button is pressed
-    document.getElementById('search-button').addEventListener('click', function() {
+    /* document.getElementById('search-button').addEventListener('click', function() {
         // what section to search?
         search(document.getElementById('search-text').value);
     });
@@ -192,7 +192,7 @@ window.onload = function() {
     });
 
     // sort posts by date into the page
-    search('');
+    search(''); */
 
     console.log('got here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
     db.any(new PQ('SELECT * FROM users'))
