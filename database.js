@@ -47,3 +47,7 @@ export function createComment(logged, session, log_id, text) {
     // vailidate the logged user (check the session matches the stuff on back end)
     // add the text to the message log with log_id
 }
+
+export function getAllPosts() {
+    // literally just returns all the posts from the database, i will filter through them in the search() function in main.js
+}
