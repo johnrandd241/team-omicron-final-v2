@@ -53,7 +53,7 @@ export function getAllPosts() {
     // literally just returns all the posts from the database, i will filter through them in the search() function in main.js
 }
 
-//Loads and initializes pg library
+/* //Loads and initializes pg library
 const pgp = require('pg-promise')({
     //Initialization
 });
@@ -62,4 +62,4 @@ const cn = 'postgres://username:password@host:port/database';
 //Creates new database instance
 const db = pgp(cn);
 //Exports database object
-module.exports = db;
+module.exports = db; */

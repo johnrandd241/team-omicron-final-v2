@@ -1,5 +1,5 @@
 import * as Database from './database.js';
-import * as db from './database.js';
+import * as client from './server.js';
 
 console.log(Database.DUMMY_POST);
 
@@ -195,8 +195,9 @@ window.onload = function() {
     search(''); */
 
     console.log('got here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
-    db.any(new PQ('SELECT * FROM users'))
-        .then(chat => {console.log(JSON.parse(chat));})
-        .catch(error =>{//handle errors
-        });
-};
+    client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => {
+        if (err) throw err;
+        console.log(JSON.stringify(res));
+        client.end();
+    });
+}
