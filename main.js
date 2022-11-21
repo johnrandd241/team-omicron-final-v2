@@ -6,7 +6,7 @@ let cur_section = 'events'; // we open the events section by default, this varia
 const POSTS_PER_ROW = 2;
 
 // hopefully john rand can set these variables upon logging in
-let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
+export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
@@ -191,7 +191,7 @@ window.onload = function() {
     });
 
     // sort posts by date into the page
-    search('');
+    //search('');
 
     console.log('got here\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
     db.one(new PQ('SELECT * FROM users WHERE username=\'Tester1\''))
