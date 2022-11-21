@@ -107,7 +107,7 @@ function postCreator() {
 
 // runs when profile tab is clicked
 function profile(user_id) {
-    let is_own = true; // user_id === logged_user; // is true if you are viewing your own profile
+    let is_own = user_id === logged_user; // is true if you are viewing your own profile
     // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
     // do some kind of check to see if user_id is the one thats signed in
     // if it is, add the buttons that allow them to edit the bio
