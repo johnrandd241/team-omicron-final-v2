@@ -16,6 +16,7 @@ function getColumnForPost(post_data) {
     title_element.addEventListener('click', () => {
         cur_section = 'postview';
         toggleSearchBar();
+        deactivateNavs();
         viewPost(post_data.id);
     });
     title_element.innerHTML = post_data.title;
@@ -106,6 +107,7 @@ function postCreator() {
 
 // runs when profile tab is clicked
 function profile(user_id) {
+    let is_own = true; // user_id === logged_user; // is true if you are viewing your own profile
     // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
     // do some kind of check to see if user_id is the one thats signed in
     // if it is, add the buttons that allow them to edit the bio
@@ -133,8 +135,15 @@ function profile(user_id) {
     let header3 = document.createElement('h3');
     header3.classList.add('text-muted');
     header3.innerHTML = '@' + user_data.username;
-    let biography = document.createElement('p');
-    biography.innerHTML = user_data.bio;
+    let biography;
+    if (is_own) {
+        biography = document.createElement('textarea');
+        biography.style.width = '100%';
+        biography.value = user_data.bio;
+    } else {
+        biography = document.createElement('p');
+        biography.innerHTML = user_data.bio;  
+    }
     let sub_personal_right = document.createElement('div');
     sub_personal_right.classList.add('col');
     sub_personal_right.classList.add('p-2');
@@ -147,6 +156,7 @@ function profile(user_id) {
     post_creator_p.addEventListener('click', () => {
         cur_section = 'postCreator';
         toggleSearchBar();
+        deactivateNavs();
         postCreator();
     });
     let friends_header = document.createElement('h2');
@@ -156,6 +166,20 @@ function profile(user_id) {
         let friend_item = document.createElement('p');
         friend_item.classList.add('hoverline');
         friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
+        if (is_own) {
+            let unfriend_button = document.createElement('input');
+            unfriend_button.type = 'button';
+            unfriend_button.value = 'Remove';
+            unfriend_button.addEventListener('click', () => {
+                Database.removeFriend(logged_user, session_id, friend_data.username);
+            });
+            friend_item.appendChild(unfriend_button);
+        }
+        friend_item.addEventListener('click', () => {
+            cur_section = 'profile';
+            toggleSearchBar();
+            profile(friend_data.username);
+        });
         friends.appendChild(friend_item);
     });
     if (user_data.friends.length === 0) {
@@ -176,6 +200,12 @@ function profile(user_id) {
     sub_personal_left.appendChild(header2);
     sub_personal_left.appendChild(header3);
     sub_personal_left.appendChild(biography);
+    if (is_own) {
+        let submit_bio_button = document.createElement('input');
+        submit_bio_button.type = 'button';
+        submit_bio_button.value = 'Update';
+        sub_personal_left.appendChild(submit_bio_button);
+    }
     sub_personal_right.appendChild(photo);
     sub_personal_row.appendChild(sub_personal_left);
     sub_personal_row.appendChild(sub_personal_right);
@@ -202,6 +232,10 @@ function profile(user_id) {
     document.getElementById('page').appendChild(container);
 }
 
+function deactivateNavs() {
+    document.getElementById('nav-list').querySelectorAll('a').forEach(e => e.classList.remove('active'));
+}
+
 window.onload = function() {
     // when search button is pressed
     document.getElementById('search-button').addEventListener('click', function() {
@@ -213,7 +247,7 @@ window.onload = function() {
     document.getElementById('nav-list').querySelectorAll('a').forEach(link_elem => {
         link_elem.addEventListener('click', function() {
             // deactivate the current active link (achieved by deactivating all of them)
-            document.getElementById('nav-list').querySelectorAll('a').forEach(e => e.classList.remove('active'));
+            deactivateNavs();
             // set the clicked link to active
             link_elem.classList.add('active');
             // update the current section

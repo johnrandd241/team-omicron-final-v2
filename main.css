@@ -18,22 +18,13 @@
     background-repeat: no-repeat;
 }
 
-#nav-list a:hover {
+#nav-list a:hover, .hoverline:hover {
     cursor: pointer;
 }
 
 .hoverline {
     text-decoration: underline;
 }
-
-.hoverline:hover {
-    cursor: pointer;
-}
-
-img.profile-pic {
-    width: 100%;
-}
-
-img.post-image {
+img.profile-pic, img.post-image {
     width: 100%;
 }
