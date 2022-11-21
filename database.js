@@ -63,3 +63,20 @@ const cn = 'postgres://username:password@host:port/database';
 const db = pgp(cn);
 //Exports database object
 module.exports = db; */
+
+
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+  
+  client.connect();
+  
+  client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => {
+      if (err) throw err;
+      console.log(JSON.stringify(res));
+      client.end();
+  });
+  module.exports = client;

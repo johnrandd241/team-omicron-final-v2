@@ -37,6 +37,7 @@ client.connect();
 
 client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => {
     if (err) throw err;
+    console.log("\n\n\n\n\n\n\n\n\n\n\n");
     console.log(JSON.stringify(res));
     client.end();
 });
