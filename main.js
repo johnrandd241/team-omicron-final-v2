@@ -24,6 +24,8 @@ function getColumnForPost(post_data) {
     title_element.innerHTML = post_data.title;
     let img_element = document.createElement('img');
     img_element.src = post_data.img_src;
+    img_element.classList.add('post-image');
+    img_element.classList.add('img-responsive');
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.desc.substring(0, 100);
     let meta_element = document.createElement('p');

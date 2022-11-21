@@ -1,7 +1,6 @@
 {
   "name": "team-omicron-final-v2",
   "version": "1.0.0",
-  "type": "module",
   
   "directories": {
     "doc": "docs"
