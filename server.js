@@ -13,7 +13,35 @@ if (port == null || port == "") {
 app.listen(port);
 app.use(express.static(__dirname));
 //const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.on('ready', () => {
+    mainWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
+    });
+});
+
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
+
+client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => {
+    if (err) throw err;
+    //console.log("\n\n\n\n\n\n\n\n\n\n\n");
+    console.log(JSON.stringify(res));
+    client.end();
+});
+module.exports = client;
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");

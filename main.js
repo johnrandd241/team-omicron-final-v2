@@ -1,10 +1,11 @@
+// import {db} from './db.js';
 import * as Database from './database.js';
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 
 // hopefully john rand can set these variables upon logging in
-let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
+export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
