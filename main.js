@@ -1,9 +1,7 @@
 import * as Database from './database.js';
 
-console.log(Database.DUMMY_POST);
-
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
-const POSTS_PER_ROW = 2;
+const POSTS_PER_ROW = 3;
 
 // hopefully john rand can set these variables upon logging in
 let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
@@ -14,7 +12,7 @@ function getColumnForPost(post_data) {
     cur_col.classList.add('p-' + POSTS_PER_ROW);
     cur_col.classList.add('bg-white');
     let title_element = document.createElement('h2');
-    title_element.classList.add('post-title-header');
+    title_element.classList.add('hoverline');
     title_element.addEventListener('click', () => {
         cur_section = 'postview';
         toggleSearchBar();
@@ -102,6 +100,10 @@ function messages() {
     document.getElementById('page').innerHTML = 'to be implemented by connor';
 }
 
+function postCreator() {
+    document.getElementById('page').textContent = 'post creator';
+}
+
 // runs when profile tab is clicked
 function profile(user_id) {
     // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
@@ -142,6 +144,7 @@ function profile(user_id) {
     friends.appendChild(friends_header);
     user_data.friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
         let friend_item = document.createElement('p');
+        friend_item.classList.add('hoverline');
         friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
         friends.appendChild(friend_item);
     });
@@ -157,8 +160,18 @@ function profile(user_id) {
     history_col.classList.add('col');
     history_col.classList.add('p-2');
     history_col.classList.add('bg-white');
+    let post_creator_head = document.createElement('h2');
+    post_creator_head.innerHTML = 'Create';
+    let post_creator_p = document.createElement('p');
+    post_creator_p.innerHTML = 'Click here to go to the post creator';
+    post_creator_p.classList.add('hoverline');
+    post_creator_p.addEventListener('click', () => {
+        cur_section = 'postCreator';
+        toggleSearchBar();
+        postCreator();
+    });
     let history_header = document.createElement('h2');
-    history_header.innerHTML = 'Post History';
+    history_header.innerHTML = 'History';
     photo.src = user_data.img_src;
     sub_personal_left.appendChild(header2);
     sub_personal_left.appendChild(header3);
@@ -170,9 +183,13 @@ function profile(user_id) {
     personal_col.appendChild(sub_personal);
     personal_col.appendChild(friends);
     row.appendChild(personal_col);
+    history_col.appendChild(post_creator_head);
+    history_col.appendChild(post_creator_p);
     history_col.appendChild(history_header);
     user_data.posts.forEach(post_id => {
-        history_col.appendChild(getColumnForPost(Database.getPostByID(post_id)));
+        [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
+            history_col.appendChild(childElem);
+        });
     });
     if (user_data.posts.length === 0) {
         let no_posts = document.createElement('p');

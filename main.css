@@ -22,8 +22,12 @@
     cursor: pointer;
 }
 
-.post-title-header:hover {
-    cursor: pointer;   
+.hoverline {
+    text-decoration: underline;
+}
+
+.hoverline:hover {
+    cursor: pointer;
 }
 
 img.profile-pic {
