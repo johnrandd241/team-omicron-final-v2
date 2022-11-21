@@ -40,6 +40,7 @@ client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => 
     console.log(JSON.stringify(res));
     client.end();
 });
+module.exports = client;
 
 /* //Loads and initializes pg library
 const pgp = require('pg-promise')({
