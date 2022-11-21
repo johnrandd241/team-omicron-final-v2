@@ -19,7 +19,6 @@ function getColumnForPost(post_data) {
         cur_section = 'postview';
         toggleSearchBar();
         viewPost(post_data.id);
-        alert('looking at post ' + post_data.id);
     });
     title_element.innerHTML = post_data.title;
     let img_element = document.createElement('img');
@@ -27,7 +26,7 @@ function getColumnForPost(post_data) {
     img_element.classList.add('post-image');
     img_element.classList.add('img-responsive');
     let desc_element = document.createElement('p');
-    desc_element.innerHTML = post_data.desc.substring(0, 100);
+    desc_element.innerHTML = post_data.desc; // .substring(0, 100);
     let meta_element = document.createElement('p');
     meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.user).name + ' on ' + post_data.date;
     cur_col.appendChild(title_element);
@@ -67,7 +66,23 @@ function search(keywords) {
 }
 
 function viewPost(post_id) {
-
+    let container = document.createElement('div');
+    container.classList.add('container');
+    container.classList.add('mt-5');
+    let primary_row = document.createElement('div');
+    primary_row.classList.add('row');
+    let comments = document.createElement('div');
+    comments.classList.add('col');
+    comments.classList.add('bg-white');
+    let comments_header = document.createElement('h2');
+    comments_header.innerHTML = 'Comments';
+    // TODO STILL: write in all the comments on the post, we just have to fetch these from the Database and then probably fill them into p elements or something
+    comments.appendChild(comments_header);
+    primary_row.appendChild(getColumnForPost(Database.getPostByID(post_id)));
+    primary_row.appendChild(comments);
+    container.appendChild(primary_row);
+    document.getElementById('page').textContent = '';
+    document.getElementById('page').appendChild(container);
 }
 
 function toggleSearchBar() {
@@ -121,6 +136,20 @@ function profile(user_id) {
     let sub_personal_right = document.createElement('div');
     sub_personal_right.classList.add('col');
     sub_personal_right.classList.add('p-2');
+    let friends = document.createElement('div');
+    let friends_header = document.createElement('h2');
+    friends_header.innerHTML = "Friends";
+    friends.appendChild(friends_header);
+    user_data.friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
+        let friend_item = document.createElement('p');
+        friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
+        friends.appendChild(friend_item);
+    });
+    if (user_data.friends.length === 0) {
+        let no_friends = document.createElement('p');
+        no_friends.innerHTML = 'This user has no friends';
+        friends.appendChild(no_friends);
+    }
     let photo = document.createElement('img');
     photo.classList.add('img-responsive');
     photo.classList.add('profile-pic');
@@ -139,6 +168,7 @@ function profile(user_id) {
     sub_personal_row.appendChild(sub_personal_right);
     sub_personal.appendChild(sub_personal_row);
     personal_col.appendChild(sub_personal);
+    personal_col.appendChild(friends);
     row.appendChild(personal_col);
     history_col.appendChild(history_header);
     user_data.posts.forEach(post_id => {
@@ -181,7 +211,7 @@ window.onload = function() {
                 case 'profile':
                     // do whatever we need for the profile
                     // go to the current signed in user (this should only even be visible if youre signed in)
-                    profile();
+                    profile(logged_user);
                     break;
                 default:
                     // must be events, people, or records, which are basically all the same
