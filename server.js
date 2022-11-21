@@ -41,7 +41,7 @@ const cn = 'postgres://username:password@host:port/database';
 //Creates new database instance
 const db = pgp(cn);
 //Exports database object
-export {db};
+module.exports.db = db;
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
