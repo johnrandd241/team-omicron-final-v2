@@ -139,6 +139,16 @@ function profile(user_id) {
     sub_personal_right.classList.add('col');
     sub_personal_right.classList.add('p-2');
     let friends = document.createElement('div');
+    let post_creator_head = document.createElement('h2');
+    post_creator_head.innerHTML = 'Create';
+    let post_creator_p = document.createElement('p');
+    post_creator_p.innerHTML = 'Click here to go to the post creator';
+    post_creator_p.classList.add('hoverline');
+    post_creator_p.addEventListener('click', () => {
+        cur_section = 'postCreator';
+        toggleSearchBar();
+        postCreator();
+    });
     let friends_header = document.createElement('h2');
     friends_header.innerHTML = "Friends";
     friends.appendChild(friends_header);
@@ -160,16 +170,6 @@ function profile(user_id) {
     history_col.classList.add('col');
     history_col.classList.add('p-2');
     history_col.classList.add('bg-white');
-    let post_creator_head = document.createElement('h2');
-    post_creator_head.innerHTML = 'Create';
-    let post_creator_p = document.createElement('p');
-    post_creator_p.innerHTML = 'Click here to go to the post creator';
-    post_creator_p.classList.add('hoverline');
-    post_creator_p.addEventListener('click', () => {
-        cur_section = 'postCreator';
-        toggleSearchBar();
-        postCreator();
-    });
     let history_header = document.createElement('h2');
     history_header.innerHTML = 'History';
     photo.src = user_data.img_src;
@@ -181,10 +181,10 @@ function profile(user_id) {
     sub_personal_row.appendChild(sub_personal_right);
     sub_personal.appendChild(sub_personal_row);
     personal_col.appendChild(sub_personal);
+    personal_col.appendChild(post_creator_head);
+    personal_col.appendChild(post_creator_p);
     personal_col.appendChild(friends);
     row.appendChild(personal_col);
-    history_col.appendChild(post_creator_head);
-    history_col.appendChild(post_creator_p);
     history_col.appendChild(history_header);
     user_data.posts.forEach(post_id => {
         [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
