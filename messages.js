@@ -1,5 +1,5 @@
 import db from database.js;
-export function renderChat(div, chatID){
+export async function renderChat(div, chatID){
     if(typeof(chatID) === "undefined"){
         let empty = document.createElement('div');
         empty.innerHTML = "Please Select a chat from the list on the left";
@@ -8,11 +8,8 @@ export function renderChat(div, chatID){
     }
     let msg={};
     //Request chat data from database
-    const getChat = new PQ({text:'SELECT * FROM chatTable where ID = $chatID'});
-    db.one(getChat)
-        .then(chat => {msg=JSON.parse(chat);})
-        .catch(error =>{//handle errors
-        });
+    const response = await fetch("/query", 'SELECT * FROM chatTable where ID = $chatID');
+    chat = response.json()["Response"];
     
     for(let msg in chat){
         let bubble = document.createElement('div');
@@ -38,15 +35,12 @@ export function renderChat(div, chatID){
 
 }
 
-function renderConvos(div){
+async function renderConvos(div){
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const getConvos = new PQ('SELECT messages FROM UserTable WHERE Username = $curUser');
-    db.any(getConvos)
-        .then(convo => {convo=JSON.parse(convos);})
-        .catch(error =>{//handle errors
-        });
+    const response = await fetch("/query", 'SELECT messages FROM UserTable WHERE Username = $curUser');
+    convos = response.json()["Response"];
     for(let c in convos){
         let item = document.createElement('li');
         item.id = c.friend;
