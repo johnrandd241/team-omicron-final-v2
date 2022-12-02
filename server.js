@@ -24,24 +24,27 @@ app.on('ready', () => {
     });
 });
 
-const { Client } = require('pg');
-
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+// Loading and initializing the library:
+const pgp = require('pg-promise')({
+    // Initialization Options
 });
+// Preparing the connection details:
+const cn = 'postgres://username:password@host:port/database';
+// Creating a new database instance from the connection details:
+const db = pgp(cn);
+// Exporting the database object for shared use:
+module.exports = db;
 
-client.connect();
-
-client.query('SELECT * FROM users WHERE username = \'Tester1\';', (err, res) => {
-    if (err) throw err;
-    //console.log("\n\n\n\n\n\n\n\n\n\n\n");
-    console.log(JSON.stringify(res));
-    client.end();
+app.get("/query", (req, res)=>{
+    const q = req.params;
+    db.any(q)
+    .then(resp => {
+        res.json({"Response":resp});
+    })
+    .catch(error => {
+        // error;
+    });
 });
-module.exports = client;
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
