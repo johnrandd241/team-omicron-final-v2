@@ -1,5 +1,6 @@
 // import {db} from './db.js';
-import * as Database from './database.js';
+import { renderChat } from "./messages";
+import {message} from './messages.js';
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
@@ -98,9 +99,6 @@ function toggleSearchBar() {
 }
 
 // runs when message tab is clicked
-function messages() {
-    document.getElementById('page').innerHTML = 'to be implemented by connor';
-}
 
 function postCreator() {
     document.getElementById('page').textContent = 'post creator';
@@ -258,7 +256,7 @@ window.onload = function() {
             switch (cur_section) {
                 case 'messages':
                     // do whatever we need for the messages
-                    messages();
+                    message();
                     break;
                 case 'profile':
                     // do whatever we need for the profile
