@@ -1,5 +1,5 @@
 // import {db} from './db.js';
-import { renderChat } from "./messages";
+import { renderChat } from "./messages.js";
 import {message} from './messages.js';
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
