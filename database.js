@@ -34,7 +34,9 @@ export function addFriend(logged, session, to_add) {
     // to_remove is the username of the friend to be added
 }
 
-export function createPost(logged, session, title, desc, tags, img_src) {
+export function createPost(logged, session, title, desc, tags, img_src, type) {
+    console.log('creating post with this information');
+    console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
     // verify user is legit
     // create new row in post table with this info
     // note that date is not provided

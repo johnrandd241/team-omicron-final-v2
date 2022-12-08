@@ -1,6 +1,6 @@
-import db from database.js;
+// import db from database.js;
 export async function renderChat(div, chatID){
-    if(typeof(chatID) === "undefined"){
+    if(typeof(chatID) === "undefined") {
         let empty = document.createElement('div');
         empty.innerHTML = "Please Select a chat from the list on the left";
         div.appendChild(empty);
