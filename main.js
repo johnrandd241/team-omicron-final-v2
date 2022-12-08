@@ -4,7 +4,6 @@ import {message} from './messages.js';
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
-
 // hopefully john rand can set these variables upon logging in
 export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
 
@@ -275,3 +274,6 @@ window.onload = function() {
     // sort posts by date into the page
     search('');
 };
+
+//for login/register
+

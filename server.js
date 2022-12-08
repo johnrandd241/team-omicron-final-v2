@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(express.json({extended: true, limit: '1mb'}));
 
 //this section is for heroku, i believe it finds a port for the the deployment
 //on heroku, then runs or something, otherwise itll run locally on localhost:8000 in your browser
@@ -46,12 +49,19 @@ app.get("/query", (req, res)=>{
     });
 });
 
+
+
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/login", (req, res) => {
     res.sendFile(__dirname + "/login-page.html");
+});
+
+app.post("/login", (req, res) => {
+    res.redirect("/events");
+    //res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/register", (req, res) => {
@@ -62,17 +72,16 @@ app.get("/profile", (req, res) => {
     res.sendFile(__dirname + "/profile.html");
 });
 
-app.post('/login', (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
-    res.sendFile(__dirname + "/profile.html");
-  });
+
+
 
   app.post('/register', (req, res) => {
     let email = req.body.email;
     let username = req.body.username;
     let password = req.body.password;
+    console.log(email);
     res.sendFile(__dirname + "/profile.html");
+    
   });
 
 app.post('/user/addFriend', (req, res) => {
