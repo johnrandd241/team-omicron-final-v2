@@ -32,7 +32,6 @@ export async function renderChat(div, chatID){
         bubble.appendChild(uinfo);
         bubble.appendChild(msgC);
     }
-
 }
 
 async function renderConvos(div){
