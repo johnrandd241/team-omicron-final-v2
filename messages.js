@@ -1,54 +1,7 @@
-import { logged_user } from "./main.js";
-export async function message(chatID){
-    let div = document.getElementById('page');
-    div.innerHTML = "";
-    div.setAttribute("height", "100%");
-    div.setAttribute("margin", "0");
-    div.setAttribute("background", "#7F7FD5");
-    div.setAttribute("background", "-webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5)");
-    div.setAttribute("background","linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5)");
+// import db from database.js;
 
-    let chats = document.createElement('div');
-    chats.setAttribute("id","chats");
-    chats.classList.add('card-body','contacts_body');
-    
-    let convos = {};
-    let list = document.createElement('ul');
-    list.classList.add('contacts');
-    const response = await fetch("/GetMsgFromUser?body=$logged_user");
-    if(!response.ok){
-        console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
-        chats.innerHTML = "Error API called failed!\nPlease try again later.";
-    }
-    convos = response.json()["Response"];
-    for(let c in convos){
-        let item = document.createElement('li');
-        item.id = c.friend;
-        //item.classList.add('')
-        let card =  document.createElement('div');
-        card.classList.add('d-flex','bd-highlight');
-        let pic = document.createElement('div');
-        pic.classList.add('img_cont');
-        let image = document.createElement('img');
-        image.src = './stockUserPhoto.jpeg';
-        pic.appendChild(image);
-        card.appendChild(pic);
-        let friend = document.createElement('div');
-        friend.classList.add('user_info');
-        let name = document.createElement('span');
-        name.innerHTML = c.friend;
-        friend.appendChild(name);
-        card.appendChild(friend);
-        item.appendChild(card);
-        chats.appendChild(item);
-    }
-
-    let curchat = document.createElement('div');
-    curchat.classList.add("card-body", "msg_card_body");
-    curchat.setAttribute('id', 'curchat');
-    
-    console.log(div);
-    if(typeof(chatID) === "undefined"){
+export async function renderChat(div, chatID){
+    if(typeof(chatID) === "undefined") {
         let empty = document.createElement('div');
         empty.innerHTML = "Please Select a chat from the list on the left";
         curchat.appendChild(empty);
@@ -84,6 +37,45 @@ export async function message(chatID){
         bubble.appendChild(msgC);
         curchat.appendChild(bubble);
     }
+}
+
+async function renderConvos(div){
+    let convos = {};
+    let list = document.createElement('ul');
+    list.classList.add('contacts');
+    const response = await fetch("/query", 'SELECT messages FROM UserTable WHERE Username = $curUser');
+    convos = response.json()["Response"];
+    for(let c in convos){
+        let item = document.createElement('li');
+        item.id = c.friend;
+        //item.classList.add('')
+        let card =  document.createElement('div');
+        card.classList.add('d-flex bd-highlight');
+        let pic = document.createElement('div');
+        pic.classList.add('img_cont');
+        let image = document.createElement('img');
+        image.src = './stockUserPhoto.jpeg';
+        pic.appendChild(image);
+        card.appendChild(pic);
+        let friend = document.createElement('div');
+        friend.classList.add('user_info');
+        let name = document.createElement('span');
+        name.innerHTML = c.friend;
+        friend.appendChild(name);
+        card.appendChild(friend);
+        item.appendChild(card);
+        div.appendChild(item);
+    }
+}
+
+
+export function message(div, chatID){
+    let chats = document.createElement('div');
+    chats.classList.add('card-body contacts_body');
+    renderConvos(chats);
+    let curchat = document.createElement('div');
+    curchat.classList.add("card-body msg_card_body");
+    renderChat(curchat, chatID);
 
     let card = document.createElement('div');
     card.classList.add('card');

@@ -14,12 +14,14 @@ function getColumnForPost(post_data) {
     cur_col.classList.add('bg-white');
     let title_element = document.createElement('h2');
     title_element.classList.add('hoverline');
-    title_element.addEventListener('click', () => {
-        cur_section = 'postview';
-        toggleSearchBar();
-        deactivateNavs();
-        viewPost(post_data.id);
-    });
+    if (post_data.id != 0) {
+        title_element.addEventListener('click', () => {
+            cur_section = 'postview';
+            toggleSearchBar();
+            deactivateNavs();
+            viewPost(post_data.id);
+        });
+    }
     title_element.innerHTML = post_data.title;
     let img_element = document.createElement('img');
     img_element.src = post_data.img_src;
@@ -29,6 +31,14 @@ function getColumnForPost(post_data) {
     desc_element.innerHTML = post_data.desc; // .substring(0, 100);
     let meta_element = document.createElement('p');
     meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.user).name + ' on ' + post_data.date;
+    meta_element.style.textDecoration = 'underline';
+    if (post_data.id != 0) {
+        meta_element.addEventListener('click', () => {
+            cur_section = 'profile';
+            toggleSearchBar();
+            profile(post_data.user);
+        });
+    }
     cur_col.appendChild(title_element);
     cur_col.appendChild(img_element);
     cur_col.appendChild(desc_element);
@@ -100,11 +110,119 @@ function toggleSearchBar() {
 // runs when message tab is clicked
 
 function postCreator() {
-    document.getElementById('page').textContent = 'post creator';
+    document.getElementById('page').textContent = '';
+    let editor_table = document.createElement('div');
+    editor_table.classList.add('container');
+    editor_table.classList.add('mt-5');
+    let row = document.createElement('div');
+    row.classList.add('row');
+    let editor_column = document.createElement('div');
+    editor_column.classList.add('col');
+    let editor_header = document.createElement('h2');
+    editor_header.innerHTML = 'Editor';
+    editor_column.appendChild(editor_header);
+    editor_column.classList.add('col');
+    editor_column.classList.add('bg-white');
+    let form_element = document.createElement('form');
+    let form_div = document.createElement('div');
+    form_div.classList.add('form-group');
+    let title_label = document.createElement('label');
+    title_label.innerHTML = 'Title';
+    let title_input = document.createElement('input');
+    title_input.type = 'text';
+    title_input.id = 'postMakerTitle';
+    title_input.classList.add('form-control');
+    let desc_label = document.createElement('label');
+    desc_label.innerHTML = 'Description';
+    let desc_input = document.createElement('textarea');
+    desc_input.id = 'postMakerDesc';
+    desc_input.classList.add('form-control');
+    let url_label = document.createElement('label');
+    url_label.innerHTML = 'Image URL';
+    let url_input = document.createElement('input');
+    url_input.classList.add('form-control');
+    url_input.type = 'text';
+    url_input.id = 'postMakerUrl';
+    let tags_label = document.createElement('label');
+    tags_label.innerHTML = 'Tags (comma separated)';
+    let tags_input = document.createElement('input');
+    tags_input.classList.add('form-control');
+    tags_input.type = 'text';
+    tags_input.id = 'postMakerTags';
+    let category_label = document.createElement('label');
+    category_label.innerHTML = 'Category';
+    let category_select = document.createElement('select');
+    category_select.classList.add('form-control');
+    category_select.id = 'postMakerType';
+    let event_option = document.createElement('option');
+    event_option.innerHTML = 'Events';
+    event_option.value = 'events';
+    category_select.appendChild(event_option);
+    let people_option = document.createElement('option');
+    people_option.innerHTML = 'People';
+    people_option.value = 'people';
+    category_select.appendChild(people_option);
+    let record_option = document.createElement('option');
+    record_option.innerHTML = 'Records';
+    record_option.value = 'record';
+    category_select.appendChild(record_option);
+    let submit_button = document.createElement('button');
+    submit_button.type = 'button';
+    submit_button.innerHTML = 'Submit';
+    form_element.onsubmit = "return false";
+    form_div.appendChild(title_label);
+    form_div.appendChild(title_input);
+    form_div.appendChild(desc_label);
+    form_div.appendChild(desc_input);
+    form_div.appendChild(url_label);
+    form_div.appendChild(url_input);
+    form_div.appendChild(tags_label);
+    form_div.appendChild(tags_input);
+    form_div.appendChild(category_label);
+    form_div.appendChild(category_select);
+    form_element.appendChild(form_div);
+    form_element.appendChild(submit_button);
+    editor_column.appendChild(form_element);
+    row.appendChild(editor_column);
+    let preview_header = document.createElement('h2');
+    preview_header.innerHTML = 'Preview';
+    let preview_col = document.createElement('div');
+    preview_col.classList.add('col');
+    preview_col.classList.add('bg-white');
+    preview_col.appendChild(preview_header);
+    let sample = getColumnForPost({title: '', desc: '', img_src: '', user: logged_user, tags: '', date: '', type: '', id: 0});
+    preview_col.appendChild(sample);
+    row.appendChild(preview_col);
+    editor_table.appendChild(row);
+    document.getElementById('page').appendChild(editor_table);
+    submit_button.addEventListener('click', () => {
+        if (title_input.value.length === 0 || desc_input.value.length === 0) {
+            alert('Make sure to at least include a title and description');
+            return;
+        }
+        Database.createPost(logged_user, session_id, title_input.value, desc_input.value, tags_input.value, url_input.value, category_select.options[category_select.selectedIndex].value);
+        cur_section = 'profile';
+        toggleSearchBar();
+        profile(logged_user);
+    });
+    let update_preview = () => {
+        preview_col.innerHTML = '';
+        preview_col.appendChild(preview_header);
+        let d = new Date, dformat = [d.getMonth()+1,
+               d.getDate(),
+               d.getFullYear()].join('/')+' '+
+              [d.getHours(),
+               d.getMinutes(),
+               d.getSeconds()].join(':');
+        preview_col.appendChild(getColumnForPost({title: title_input.value, desc: desc_input.value, img_src: url_input.value, user: logged_user, tags: tags_input.value, date: dformat, type: category_select.options[category_select.selectedIndex].value, id: 0}));
+    };
+    [...form_element.children].forEach(e => e.addEventListener('change', update_preview));
+    update_preview();
 }
 
 // runs when profile tab is clicked
 function profile(user_id) {
+    console.log('viewing profile ' + user_id + ' as ' + logged_user);
     let is_own = user_id === logged_user; // is true if you are viewing your own profile
     // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
     // do some kind of check to see if user_id is the one thats signed in
@@ -136,6 +254,9 @@ function profile(user_id) {
     let biography;
     if (is_own) {
         biography = document.createElement('textarea');
+        biography.addEventListener('input', () => {
+            // send updated biography back to server
+        });
         biography.style.width = '100%';
         biography.value = user_data.bio;
     } else {
@@ -197,20 +318,35 @@ function profile(user_id) {
     photo.src = user_data.img_src;
     sub_personal_left.appendChild(header2);
     sub_personal_left.appendChild(header3);
+    let bio_label = document.createElement('span');
+    bio_label.innerHTML = 'Biography:';
+    sub_personal_left.appendChild(bio_label);
     sub_personal_left.appendChild(biography);
     if (is_own) {
-        let submit_bio_button = document.createElement('input');
-        submit_bio_button.type = 'button';
-        submit_bio_button.value = 'Update';
-        sub_personal_left.appendChild(submit_bio_button);
+        // let submit_bio_button = document.createElement('input');
+        // submit_bio_button.type = 'button';
+        // submit_bio_button.value = 'Update';
+        // sub_personal_left.appendChild(submit_bio_button);
+        let profile_pic_text = document.createElement('span');
+        profile_pic_text.innerHTML = 'Profile picture URL:';
+        sub_personal_left.appendChild(profile_pic_text);
+        let profile_pic_input = document.createElement('input');
+        profile_pic_input.addEventListener('input', () => {
+            // send updated profile picture back to server
+        });
+        profile_pic_input.value = user_data.img_src;
+        profile_pic_input.type = 'text';
+        sub_personal_left.appendChild(profile_pic_input);
     }
     sub_personal_right.appendChild(photo);
     sub_personal_row.appendChild(sub_personal_left);
     sub_personal_row.appendChild(sub_personal_right);
     sub_personal.appendChild(sub_personal_row);
     personal_col.appendChild(sub_personal);
-    personal_col.appendChild(post_creator_head);
-    personal_col.appendChild(post_creator_p);
+    if (is_own) {
+        personal_col.appendChild(post_creator_head);
+        personal_col.appendChild(post_creator_p);
+    }
     personal_col.appendChild(friends);
     row.appendChild(personal_col);
     history_col.appendChild(history_header);
