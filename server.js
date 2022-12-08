@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // - John Rand
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 8000;
+  port = 8800;
 }
 app.listen(port);
 app.use(express.static(__dirname));
@@ -35,20 +35,9 @@ const db = pgp(cn);
 // Exporting the database object for shared use:
 module.exports = db;
 
-app.get("/query", (req, res)=>{
-    const q = req.params;
-    db.any(q)
-    .then(resp => {
-        res.json({"Response":resp});
-    })
-    .catch(error => {
-        // error;
-    });
-});
-
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.params;
-    const q = "SELECT messages FROM UserTable WHERE Username = $user";
+    const q = "SELECT messages FROM UserTable WHERE Username = $user;";
     console.log(q);
     db.any(q)
     .then(resp => {
@@ -61,17 +50,39 @@ app.get("/GetMsgFromUser", (req, res)=>{
 
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.params;
-    const q = "SELECT * FROM chatTable where ID = $chatID";
+    const q = "SELECT * FROM chatTable where ID = $chatID;";
     console.log(q);
     db.any(q)
     .then(resp => {
-        res.json({"Response":resp});
+        res.json({"Response":resp.rows});
     })
     .catch(error => {
         // error;
     });
 });
 
+app.get("/posts", (req, res)=>{
+    const q = "SELECT * FROM posts ORDER BY post.creationDate DESC;";
+    db.any(q)
+    .then(resp => {
+        res.json({"Response":resp.rows});
+    })
+    .catch(error => {
+        // error;
+    });
+});
+
+app.get("/users", (req, res)=>{
+    const q = "SELECT * FROM users;";
+    db.any(q)
+    .then(resp => {
+        console.log(resp.rows);
+        res.json({"Response":resp.rows});
+    })
+    .catch(error => {
+        // error;
+    });
+});
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
 });
