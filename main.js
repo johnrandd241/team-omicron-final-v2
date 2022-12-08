@@ -233,8 +233,10 @@ function profile(user_id) {
 function deactivateNavs() {
     document.getElementById('nav-list').querySelectorAll('a').forEach(e => e.classList.remove('active'));
 }
-
-window.onload = function() {
+//Async only for purpose of testing API calls
+window.onload = async function() {
+    //API Test
+    console.log(await fetch("/posts"));
     // when search button is pressed
     document.getElementById('search-button').addEventListener('click', function() {
         // what section to search?
@@ -255,7 +257,7 @@ window.onload = function() {
             switch (cur_section) {
                 case 'messages':
                     // do whatever we need for the messages
-                    message(document.getElementById('page'), null);
+                    document.getElementById('page')=message(null);
                     break;
                 case 'profile':
                     // do whatever we need for the profile
