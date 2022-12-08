@@ -46,6 +46,32 @@ app.get("/query", (req, res)=>{
     });
 });
 
+app.get("/GetMsgFromUser", (req, res)=>{
+    const user = req.params;
+    const q = "SELECT messages FROM UserTable WHERE Username = $user";
+    console.log(q);
+    db.any(q)
+    .then(resp => {
+        res.json({"Response":resp});
+    })
+    .catch(error => {
+        // error;
+    });
+});
+
+app.get("/GetMsgFromID", (req, res)=>{
+    const chatID = req.params;
+    const q = "SELECT * FROM chatTable where ID = $chatID";
+    console.log(q);
+    db.any(q)
+    .then(resp => {
+        res.json({"Response":resp});
+    })
+    .catch(error => {
+        // error;
+    });
+});
+
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
 });

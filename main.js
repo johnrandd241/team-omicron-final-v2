@@ -1,6 +1,5 @@
-// import {db} from './db.js';
-import { renderChat } from "./messages.js";
 import {message} from './messages.js';
+import * as Database from './database.js'
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
@@ -256,7 +255,7 @@ window.onload = function() {
             switch (cur_section) {
                 case 'messages':
                     // do whatever we need for the messages
-                    message();
+                    message(document.getElementById('page'), null);
                     break;
                 case 'profile':
                     // do whatever we need for the profile
