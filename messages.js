@@ -1,4 +1,5 @@
-import db from database.js;
+// import db from database.js;
+
 export async function renderChat(div, chatID){
     if(typeof(chatID) === "undefined"){
         let empty = document.createElement('div');
