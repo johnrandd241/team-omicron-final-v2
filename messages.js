@@ -1,4 +1,5 @@
-import db from database.js;
+import { logged_user } from "./main.js";
+
 export async function renderChat(div, chatID){
     if(typeof(chatID) === "undefined"){
         let empty = document.createElement('div');
@@ -8,13 +9,13 @@ export async function renderChat(div, chatID){
     }
     let msg={};
     //Request chat data from database
-    const response = await fetch("/query", 'SELECT * FROM chatTable where ID = $chatID');
+    const response = await fetch("/GetMsgFromID", chatID);
     chat = response.json()["Response"];
     
     for(let msg in chat){
         let bubble = document.createElement('div');
         bubble.classList.add("d-flex mb-4");
-        if(curUser/*some global for ID of whos signed in*/ === msg.user){
+        if(logged_user === msg.user){
             bubble.classList.add('justify-content-start');
         }else{
             bubble.classList.add('justify-content-end');
@@ -36,10 +37,11 @@ export async function renderChat(div, chatID){
 }
 
 async function renderConvos(div){
+    div = document.createElement('div');
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const response = await fetch("/query", 'SELECT messages FROM UserTable WHERE Username = $curUser');
+    const response = await fetch("/GetMsgFromUser?body=$logged_user");
     convos = response.json()["Response"];
     for(let c in convos){
         let item = document.createElement('li');
@@ -66,6 +68,7 @@ async function renderConvos(div){
 
 
 export function message(div, chatID){
+    div = document.createElement('div');
     let chats = document.createElement('div');
     chats.classList.add('card-body contacts_body');
     renderConvos(chats);
