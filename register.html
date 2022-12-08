@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="login-page.css">
-  <script defer src="register.html"></script>
+  <script defer src="register.js"></script>
 </head>
 
 <body>
@@ -14,12 +14,13 @@
     <h1 id="login-header">Register</h1>
     
 
-    <form action="/register" method="post">
-    
-      <input type="text" name="email" id="email"class="login-form-field" placeholder="Enter Email">
-      <input type="text" name="username" id="username" class="login-form-field" placeholder="Create Username">
-      <input type="password" name="password" id="password" class="login-form-field" placeholder="Create Password">
-      <input type="submit" value="Register" id="login-form-register" class="login-form-register">
+    <form>
+      <input type="text" name="fName" id="fName"class="login-form-field" placeholder="Enter First Name"required>
+      <input type="text" name="lName" id="lName"class="login-form-field" placeholder="Enter Last Name"required>
+      <input type="text" name="email" id="email"class="login-form-field" placeholder="Enter Email"required>
+      <input type="text" name="username" id="username" class="login-form-field" placeholder="Create Username"required>
+      <input type="password" name="password" id="password" class="login-form-field" placeholder="Create Password"required>
+      <input type="submit" value="Register" id="registerButton" class="login-form-register"required>
     </form>
   
   </main>

@@ -49,40 +49,99 @@ app.get("/query", (req, res)=>{
     });
 });
 
+let username = null;
+let password = null;
+let fName = null;
+let lName = null;
+let email = null;
+let isAuth = false;
 
-
-app.get("/events", (req, res) => {// tag is /events due to it being the homepage
-    res.sendFile(__dirname + "/index.html");
-});
-
+//Gets login page
 app.get("/login", (req, res) => {
     res.sendFile(__dirname + "/login-page.html");
 });
+//Gets current data for client files to use
+app.get("/sendLoginCred", (req, res) => {
+    res.json({"username": username, 
+               "isAuth": isAuth});
+});
+//Authorizes user
+app.post("/login/auth", (req, res) => {
+    username = req.body.username;
+    password = req.body.password;
+    
 
-app.post("/login", (req, res) => {
-    res.redirect("/events");
-    //res.sendFile(__dirname + "/index.html");
+        //if not null
+        if(username !== null && password !== null){
+            //check in db if it matches
+            if(username === 'admin'){
+                isAuth = true;
+            //if not in db, reset user and pass values and redirect to login
+            }else{
+                username = null;
+                password = null;
+            }
+        //if null 
+        }else{
+            username = null;
+            password = null;
+        }
+        res.json({"username": username, 
+         "isAuth": isAuth});
+        console.log(username + password + isAuth);
+
 });
 
 app.get("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
 });
 
-app.get("/profile", (req, res) => {
-    res.sendFile(__dirname + "/profile.html");
+app.post("/register/auth", (req, res) => {
+    fName = req.body.fName;
+    lName = req.body.lName;
+    email = req.body.email;
+    username = req.body.username;
+    password = req.body.password;
+    
+
+        //if not null
+        if(username !== null && password !== null &&
+            fName !== null && lName !== null && email !== null){
+            //check in db if it matches
+            if(username === 'admin'){
+                isAuth = true;
+            //if not in db, reset user and pass values and redirect to login
+            }else{
+                fName = null;
+                lName = null;
+                email = null;
+                username = null;
+                password = null;
+            }
+        //if null 
+        }else{
+            fName = null;
+            lName = null;
+            email = null;
+            username = null;
+            password = null;
+        }
+        res.json({"username": username, 
+         "isAuth": isAuth});
+
+        console.log(username + password + isAuth);
+});
+
+app.get("/events", (req, res) => {// tag is /events due to it being the homepage
+    res.sendFile(__dirname + "/index.html");
 });
 
 
 
 
-  app.post('/register', (req, res) => {
-    let email = req.body.email;
-    let username = req.body.username;
-    let password = req.body.password;
-    console.log(email);
+app.get("/profile", (req, res) => {
     res.sendFile(__dirname + "/profile.html");
-    
-  });
+});
 
 app.post('/user/addFriend', (req, res) => {
     // the request needs proof that this is indeed the user they claim to be
@@ -106,43 +165,6 @@ app.get('/content/search', (req, res) => {
 
 });
 
-//for login page to redirect & such
- /*
-//to redirect from index to login page
-app.post("/login", (req, res) => {
-    //let password = req.body.password-field;
-    //res.send(username + password + ' Submitted Successfully!');
-    //console.log(username);
-    res.sendFile(__dirname + "/login-page.html");
-    //let username = req.body.username-field;
-    //let username = res.body.username-field;
-});
-
-app.post("/userprofile", (req, res) => {
-    //let username = req.body.username-field;
-    //let password = req.body.password-field;
-    //res.send(username + password + ' Submitted Successfully!');
-
-    res.sendFile(__dirname + "/profile.html");
-});
-
-//to redirect from index to register page
-app.post("/register", (req, res) => {
-    res.sendFile(__dirname + "/register.html");
-});
-
-app.post("/userprofilenew", (req, res) => { //added in at end of /userprofile the profile name itself
-    //let username = req.body.username-field;
-    //let password = req.body.password-field;
-    //res.send(username + password + ' Submitted Successfully!');
-
-    res.sendFile(__dirname + "/profile.html");
-});
-
-app.post("/logout", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
-});
-*/
 
 
 

@@ -1,7 +1,8 @@
 // import {db} from './db.js';
-import { renderChat } from "./messages.js";
-import {message} from './messages.js';
-
+//import fetch from 'node-fetch';
+//import { renderChat } from "./messages.js";
+//import {message} from './messages.js';
+import  {checkUserLogin} from './user.js';
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
@@ -235,6 +236,9 @@ function deactivateNavs() {
 }
 
 window.onload = function() {
+    console.log('cakked');
+    checkUserLogin();
+    
     // when search button is pressed
     document.getElementById('search-button').addEventListener('click', function() {
         // what section to search?
@@ -275,5 +279,5 @@ window.onload = function() {
     search('');
 };
 
-//for login/register
 
+//for login/register
