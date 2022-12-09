@@ -20,7 +20,7 @@ export async function message(chatID){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
     }
-    convos = await response.json()["Response"];
+    convos = response[Response];
     for(let c in convos){
         let item = document.createElement('li');
         item.id = c.friend;
@@ -59,7 +59,7 @@ export async function message(chatID){
         console.log("API call failed. Exiting function renderChat. Setting Div Text to Error.");
         curchat.innerHTML = "Error API called failed!\nPlease try again later.";
     }
-    let chat = await response2.json()["Response"];
+    let chat = response2[Response];
     
     for(let msg in chat){
         let bubble = document.createElement('div');
