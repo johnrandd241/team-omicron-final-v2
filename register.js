@@ -23,6 +23,8 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
             console.log('try')
 
             const result = await sent.json();
+            console.log('aftres');
+            console.log(result);
             DO().then(function(result){
                 console.log('do')
 
