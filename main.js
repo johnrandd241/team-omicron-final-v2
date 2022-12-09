@@ -373,7 +373,9 @@ function deactivateNavs() {
     document.getElementById('nav-list').querySelectorAll('a').forEach(e => e.classList.remove('active'));
 }
 
-window.onload = function() {
+window.onload = async function() {
+    let f = await fetch('/users');
+    console.log(f.Response);
     currentUser = loadUser();
     renderLogout();
     // when search button is pressed

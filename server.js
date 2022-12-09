@@ -47,13 +47,11 @@ module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    console.log(user);
     const q = `SELECT messages FROM users WHERE Username = ${user};`;
-    console.log(q);
     db.any(q)
     .then(resp => {
         console.log(resp);
-        res.json({Response:JSON.stringify(resp)});
+        res.json(resp);
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
@@ -64,12 +62,11 @@ app.get("/GetMsgFromUser", (req, res)=>{
 
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.query.chatID;
-    console.log(chatID);
     const q = `SELECT * FROM messagelog where mlogid = ${chatID};`;
     console.log(q);
     db.any(q)
     .then(resp => {
-        res.json({Response:JSON.stringify(resp)});
+        res.json(resp);
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
@@ -82,7 +79,7 @@ app.get("/posts", (req, res)=>{
     const q = `SELECT * FROM post ORDER BY post.creationDate DESC;`;
     db.any(q)
     .then(resp => {
-        res.json({Response:JSON.stringify(resp)});
+        res.json(resp);
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
@@ -95,8 +92,8 @@ app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
     db.any(q)
     .then(resp => {
-        console.log(JSON.stringify(resp));
-        res.json({Response:JSON.stringify(resp)});
+        console.log(resp);
+        res.json(resp);
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
