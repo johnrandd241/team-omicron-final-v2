@@ -260,12 +260,12 @@ app.get("/register", (req, res) => {
 
 app.post("/register/auth", (req, res) => {
     console.log("called reg");
-    const q = "SELECT EXISTS(SELECT username, email FROM users WHERE username = '" + req.body.username + "' OR email = '" + req.body.email + "';";
+    const q = "SELECT EXISTS(SELECT username, email FROM users WHERE username = '" + req.body.username + "' OR email = '" + req.body.email + "');";
     db.any(q)
     .then(resp => {//if q returns 1 it means username or email already exist
                     // in user table, so 
         console.log(resp);
-        if(resp[0] === 1){
+        if(!resp){
             console.log("username or email already exists");
             user.username = null;
             user.password = null;
