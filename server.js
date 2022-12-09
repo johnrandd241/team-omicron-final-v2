@@ -61,10 +61,19 @@ app.get("/GetMsgFromUser", (req, res)=>{
     });
 });
 
+app.get('/CreateCommentSection', (req, res)=>{
+    const logid = req.query.logid;
+    const postid = req.query.postid;
+    const q = `INSERT INTO logs (logID) VALUES (${logid}); 
+                INSERT INTO commentlog(clogid) VALUES (${logid});
+                UPDATE posts
+                SET comments = ${logid}
+                WHERE postid = ${postid};`
+});
+
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.query.chatID;
     const q = `SELECT * FROM messagelog where mlogid = ${chatID};`;
-    console.log(q);
     db.any(q)
     .then(resp => {
         res.json(resp);
@@ -103,7 +112,6 @@ app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
     db.any(q)
     .then(resp => {
-        console.log(resp);
         res.json(resp);
     })
     .catch(error => {
