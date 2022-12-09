@@ -9,7 +9,7 @@ console.log(currentUser);
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
-export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
+export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'sbrommage1';
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
@@ -252,10 +252,10 @@ function profile(user_id) {
     sub_personal_left.classList.add('col');
     sub_personal_left.classList.add('p-2');
     let header2 = document.createElement('h2');
-    header2.innerHTML = user_data.name;
+    header2.innerHTML = user_data.nameofuser; // name => nameofuser
     let header3 = document.createElement('h3');
     header3.classList.add('text-muted');
-    header3.innerHTML = '@' + user_data.username;
+    header3.innerHTML = '@' + user_data.username; // good
     let biography;
     if (is_own) {
         biography = document.createElement('textarea');
@@ -263,10 +263,10 @@ function profile(user_id) {
             // send updated biography back to server
         });
         biography.style.width = '100%';
-        biography.value = user_data.bio;
+        biography.value = user_data.bio; // good
     } else {
         biography = document.createElement('p');
-        biography.innerHTML = user_data.bio;  
+        biography.innerHTML = user_data.bio; // good
     }
     let sub_personal_right = document.createElement('div');
     sub_personal_right.classList.add('col');
@@ -286,7 +286,9 @@ function profile(user_id) {
     let friends_header = document.createElement('h2');
     friends_header.innerHTML = "Friends";
     friends.appendChild(friends_header);
-    user_data.friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
+    let user_friends = user_data.friends; // good
+    user_friends ??= [];
+    user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
         let friend_item = document.createElement('p');
         friend_item.classList.add('hoverline');
         friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
@@ -306,7 +308,7 @@ function profile(user_id) {
         });
         friends.appendChild(friend_item);
     });
-    if (user_data.friends.length === 0) {
+    if (user_friends.length === 0) {
         let no_friends = document.createElement('p');
         no_friends.innerHTML = 'This user has no friends';
         friends.appendChild(no_friends);
@@ -320,7 +322,7 @@ function profile(user_id) {
     history_col.classList.add('bg-white');
     let history_header = document.createElement('h2');
     history_header.innerHTML = 'History';
-    photo.src = user_data.img_src;
+    photo.src = user_data.imgurl; // img_src => imgurl
     sub_personal_left.appendChild(header2);
     sub_personal_left.appendChild(header3);
     let bio_label = document.createElement('span');
@@ -339,7 +341,7 @@ function profile(user_id) {
         profile_pic_input.addEventListener('input', () => {
             // send updated profile picture back to server
         });
-        profile_pic_input.value = user_data.img_src;
+        profile_pic_input.value = user_data.imgurl; // img_src => imgurl
         profile_pic_input.type = 'text';
         sub_personal_left.appendChild(profile_pic_input);
     }

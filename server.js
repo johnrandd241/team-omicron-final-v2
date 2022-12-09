@@ -85,6 +85,8 @@ app.get("/GetMsgFromID", (req, res)=>{
     });
 });
 
+
+
 app.get("/posts", (req, res)=>{
     const q = `SELECT * FROM post ORDER BY post.creationDate DESC;`;
     db.any(q)
@@ -110,6 +112,20 @@ app.get("/posts/create", (req, res) => {
 
 app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
+    db.any(q)
+    .then(resp => {
+        res.json(resp);
+    })
+    .catch(error => {
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        res.end();
+    });
+});
+
+
+app.get("/users/get", (req, res) => {
+    const q = `SELECT * FROM users WHERE username=${res.params['userid']};`;
     db.any(q)
     .then(resp => {
         res.json(resp);
@@ -167,17 +183,17 @@ app.get("/sendAllCred", (req, res) => {
 app.post("/login/auth", (req, res) => {
     //user.username = req.body.username;
     //user.password = req.body.password;
-
-    const q = "SELECT * FROM users WHERE username = " + req.body.username + " and pword = " + req.body.password + ";";
+    
+    const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
+    console.log(q);
+    if(user.username !== null && user.password !== null){
     db.any(q)
     .then(resp => {//successfully returns user variables
-        user.isAuth = true;
-        user.fName = resp.
-        user.lName,
-        user.email,
-        user.username,
-        user.password,
         console.log(resp);
+        user.isAuth = true;
+        user.email = resp.email;
+        user.username = resp.username;
+        user.password = resp.pword;
         res.json({"username": user.username, 
         "isAuth": user.isAuth});
         //res.json(resp);
@@ -189,6 +205,7 @@ app.post("/login/auth", (req, res) => {
         user.password = null;
         //res.end();
     });
+    }
     /*
         //if not null
         if(user.username !== null && user.password !== null){
