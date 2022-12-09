@@ -70,7 +70,7 @@ app.get("/GetMsgFromID", (req, res)=>{
     console.log(q);
     db.any(q)
     .then(resp => {
-        res.json({"Response":resp.rows});
+        res.json({"Response":resp});
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
@@ -83,7 +83,7 @@ app.get("/posts", (req, res)=>{
     const q = `SELECT * FROM post ORDER BY post.creationDate DESC;`;
     db.any(q)
     .then(resp => {
-        res.json({"Response":resp.rows});
+        res.json({"Response":resp});
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
@@ -97,7 +97,7 @@ app.get("/users", (req, res)=>{
     db.any(q)
     .then(resp => {
         console.log(resp.rows);
-        res.json({"Response":resp.rows});
+        res.json({"Response":resp});
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
