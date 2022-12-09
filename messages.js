@@ -22,7 +22,7 @@ export async function message(chatID){
                 chats.innerHTML = "Error API called failed!\nPlease try again later.";
             }
         });
-    convos = response.JSON();
+    convos = response.json();
     for(let c in convos){
         let item = document.createElement('li');
         item.id = c.friend;
