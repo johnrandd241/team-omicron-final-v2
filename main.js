@@ -435,7 +435,44 @@ function removeUser(){
 function renderLogout(){
     let logLI = document.getElementById('loginLI');
     let regLI = document.getElementById('registerLI');
+    if(regLI.hasChildNodes && currentUser.isAuth === true){
+        let logBut = document.getElementById('loginButton');
+        let regBut = document.getElementById('registerButton');
+        logLI.removeChild(logBut);
+        regLI.removeChild(regBut);
+        //<a class="nav-link" id="loginButton" href="/login">Login</a>
+        const logoutButton = document.createElement('a');
+        logoutButton.classList.add("nav-link");
+        logoutButton.setAttribute("id", "logoutButton");
+        logoutButton.setAttribute("href", "/logout");
+        logoutButton.innerHTML = 'Logout';
 
+        logoutButton.addEventListener("click", function () {
+            alert("Logged out  of " + currentUser.username);
+            removeUser();
+            currentUser = loadUser();
+            renderLogout();
+        });
+        logLI.appendChild(logoutButton);
+    }else{
+        let logOutBut = document.getElementById('logoutButton');
+        logLI.removeChild(logOutBut);
+
+        const loginButton = document.createElement('a');
+        loginButton.classList.add("nav-link");
+        loginButton.setAttribute("id", "loginButton");
+        loginButton.setAttribute("href", "/login");
+        loginButton.innerHTML = 'Login';
+
+        const registerButton = document.createElement('a');
+        registerButton.classList.add("nav-link");
+        registerButton.setAttribute("id", "registerButton");
+        registerButton.setAttribute("href", "/register");
+        registerButton.innerHTML = 'Register';
+        logLI.appendChild(loginButton);
+        regLI.appendChild(registerButton);
+    }
+/*
     if(currentUser.isAuth === true){
         let logBut = document.getElementById('loginButton');
         let regBut = document.getElementById('registerButton');
@@ -473,6 +510,7 @@ function renderLogout(){
         logLI.appendChild(loginButton);
         regLI.appendChild(registerButton);
     }
+    */
 }
 
 
