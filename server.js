@@ -170,12 +170,12 @@ app.get("/login", (req, res) => {
 
 app.get("/logout", (req, res) => {
     user = {"user":{
-        "fName": lName,
-        "lName": lName,
-        'email': email,
-        "username": username,
-        "password": password, 
-        "isAuth": isAuth          
+        "fName": null,
+        "lName": null,
+        'email': null,
+        "username": null,
+        "password": null, 
+        "isAuth": false          
     }};
     res.redirect("/events");
 });
