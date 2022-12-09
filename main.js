@@ -9,7 +9,7 @@ console.log(currentUser);
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
-export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'usernameofuserloggedin';
+export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'sbrommage1';
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
@@ -286,7 +286,9 @@ function profile(user_id) {
     let friends_header = document.createElement('h2');
     friends_header.innerHTML = "Friends";
     friends.appendChild(friends_header);
-    user_data.friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
+    let user_friends = user_data.friends;
+    user_friends ??= [];
+    user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
         let friend_item = document.createElement('p');
         friend_item.classList.add('hoverline');
         friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
@@ -306,7 +308,7 @@ function profile(user_id) {
         });
         friends.appendChild(friend_item);
     });
-    if (user_data.friends.length === 0) {
+    if (user_friends.length === 0) {
         let no_friends = document.createElement('p');
         no_friends.innerHTML = 'This user has no friends';
         friends.appendChild(no_friends);
