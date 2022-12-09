@@ -93,7 +93,9 @@ app.get("/posts", (req, res)=>{
 });
 
 app.get("/testing", (req, res) => {
-    res.json({text:"this string is a test"});
+    db.any("SELECT * FROM users").then(resp => {
+        res.json({text:JSON.stringify(resp)});
+    });
 });
 
 app.get("/users", (req, res)=>{
