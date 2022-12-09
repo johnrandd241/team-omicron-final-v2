@@ -170,12 +170,12 @@ app.get("/login", (req, res) => {
 
 app.get("/logout", (req, res) => {
     user = {"user":{
-        "fName": lName,
-        "lName": lName,
-        'email': email,
-        "username": username,
-        "password": password, 
-        "isAuth": isAuth          
+        "fName": null,
+        "lName": null,
+        'email': null,
+        "username": null,
+        "password": null, 
+        "isAuth": false          
     }};
     res.redirect("/events");
 });
@@ -195,10 +195,10 @@ app.post("/login/auth", (req, res) => {
     
     const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
     console.log(q);
-    if(user.username !== null && user.password !== null){
+    //if(user.username !== null && user.password !== null){
     db.any(q)
     .then(resp => {//successfully returns user variables
-        console.log(resp[0]);
+        console.log(resp[0].username);
         user.isAuth = true;
         user.email = resp[0].email;
         user.username = resp[0].username;
@@ -214,7 +214,7 @@ app.post("/login/auth", (req, res) => {
         user.password = null;
         //res.end();
     });
-    }
+    
     /*
         //if not null
         if(user.username !== null && user.password !== null){
