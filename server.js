@@ -37,7 +37,7 @@ module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.params;
-    const q = "SELECT messages FROM UserTable WHERE Username = $user;";
+    const q = "SELECT messages FROM UserTable WHERE Username = ${user};";
     console.log(q);
     db.any(q)
     .then(resp => {
@@ -50,7 +50,7 @@ app.get("/GetMsgFromUser", (req, res)=>{
 
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.params;
-    const q = "SELECT * FROM chatTable where ID = $chatID;";
+    const q = "SELECT * FROM chatTable where ID = ${chatID};";
     console.log(q);
     db.any(q)
     .then(resp => {
