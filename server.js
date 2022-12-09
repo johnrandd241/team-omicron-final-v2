@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 console.log(bodyParser.urlencoded({ extended: false }));
-console.log(url.parse(bodyParser.urlencoded({ extended: false })));
 
 //this section is for heroku, i believe it finds a port for the the deployment
 //on heroku, then runs or something, otherwise itll run locally on localhost:8000 in your browser
