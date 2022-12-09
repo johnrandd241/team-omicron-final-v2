@@ -437,43 +437,84 @@ function removeUser(){
 function renderLogout(){
     let logLI = document.getElementById('loginLI');
     let regLI = document.getElementById('registerLI');
-    if(regLI.hasChildNodes && currentUser.isAuth === true){
-        let logBut = document.getElementById('loginButton');
-        let regBut = document.getElementById('registerButton');
-        logLI.removeChild(logBut);
-        regLI.removeChild(regBut);
-        //<a class="nav-link" id="loginButton" href="/login">Login</a>
-        const logoutButton = document.createElement('a');
-        logoutButton.classList.add("nav-link");
-        logoutButton.setAttribute("id", "logoutButton");
-        logoutButton.setAttribute("href", "/logout");
-        logoutButton.innerHTML = 'Logout';
+    if(currentUser.isAuth === true){//if  logged in 
+        //checks if the buttons do exists and remove them
+        if(document.getElementById('loginButton') != undefined &&
+             document.getElementById('registerButton') != undefined){
 
-        logoutButton.addEventListener("click", function () {
-            alert("Logged out  of " + currentUser.username);
-            removeUser();
-            currentUser = loadUser();
-            renderLogout();
-        });
-        logLI.appendChild(logoutButton);
+            let logBut = document.getElementById('loginButton');
+            let regBut = document.getElementById('registerButton');
+            logLI.removeChild(logBut);
+            regLI.removeChild(regBut);
+            //<a class="nav-link" id="loginButton" href="/login">Login</a>
+            const logoutButton = document.createElement('a');
+            logoutButton.classList.add("nav-link");
+            logoutButton.setAttribute("id", "logoutButton");
+            logoutButton.setAttribute("href", "/logout");
+            logoutButton.innerHTML = 'Logout';
+
+            logoutButton.addEventListener("click", function () {
+                alert("Logged out  of " + currentUser.username);
+                removeUser();
+                currentUser = loadUser();
+                renderLogout();
+            });
+            logLI.appendChild(logoutButton);
+            //if they dont exist, dont remove them
+        }else{
+            const logoutButton = document.createElement('a');
+            logoutButton.classList.add("nav-link");
+            logoutButton.setAttribute("id", "logoutButton");
+            logoutButton.setAttribute("href", "/logout");
+            logoutButton.innerHTML = 'Logout';
+
+            logoutButton.addEventListener("click", function () {
+                alert("Logged out  of " + currentUser.username);
+                removeUser();
+                currentUser = loadUser();
+                renderLogout();
+            });
+            logLI.appendChild(logoutButton);
+        }
+        //if not logged in
     }else{
-        let logOutBut = document.getElementById('logoutButton');
-        logLI.removeChild(logOutBut);
+        //if the logout button does exist
+        if(document.getElementById('logoutButton')!= undefined){
+            let logOutBut = document.getElementById('logoutButton');
+            logLI.removeChild(logOutBut);
 
-        const loginButton = document.createElement('a');
-        loginButton.classList.add("nav-link");
-        loginButton.setAttribute("id", "loginButton");
-        loginButton.setAttribute("href", "/login");
-        loginButton.innerHTML = 'Login';
+            const loginButton = document.createElement('a');
+            loginButton.classList.add("nav-link");
+            loginButton.setAttribute("id", "loginButton");
+            loginButton.setAttribute("href", "/login");
+            loginButton.innerHTML = 'Login';
 
-        const registerButton = document.createElement('a');
-        registerButton.classList.add("nav-link");
-        registerButton.setAttribute("id", "registerButton");
-        registerButton.setAttribute("href", "/register");
-        registerButton.innerHTML = 'Register';
-        logLI.appendChild(loginButton);
-        regLI.appendChild(registerButton);
+            const registerButton = document.createElement('a');
+            registerButton.classList.add("nav-link");
+            registerButton.setAttribute("id", "registerButton");
+            registerButton.setAttribute("href", "/register");
+            registerButton.innerHTML = 'Register';
+            logLI.appendChild(loginButton);
+            regLI.appendChild(registerButton);
+            //if the button doesnt exist
+        }else{
+            const loginButton = document.createElement('a');
+            loginButton.classList.add("nav-link");
+            loginButton.setAttribute("id", "loginButton");
+            loginButton.setAttribute("href", "/login");
+            loginButton.innerHTML = 'Login';
+
+            const registerButton = document.createElement('a');
+            registerButton.classList.add("nav-link");
+            registerButton.setAttribute("id", "registerButton");
+            registerButton.setAttribute("href", "/register");
+            registerButton.innerHTML = 'Register';
+            logLI.appendChild(loginButton);
+            regLI.appendChild(registerButton);
+        }
+        }
     }
+    
 /*
     if(currentUser.isAuth === true){
         let logBut = document.getElementById('loginButton');
@@ -513,7 +554,7 @@ function renderLogout(){
         regLI.appendChild(registerButton);
     }
     */
-}
+    
 
 
 //for login/register
