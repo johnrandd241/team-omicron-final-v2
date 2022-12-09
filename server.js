@@ -30,7 +30,11 @@ const pgp = require('pg-promise')({
     // Initialization Options
 });
 // Preparing the connection details:
-const cn = 'postgres://username:password@host:port/database';
+const host = 'ec2-34-230-153-41.compute-1.amazonaws.com';
+const ports = 5432;
+const username = 'vuoyxzmwyzkavq';
+const password = 'a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20';
+const cn = `postgres://${username}:${password}@${host}:${ports}/${database}`;
 // Creating a new database instance from the connection details:
 const db = pgp(cn);
 // Exporting the database object for shared use:
