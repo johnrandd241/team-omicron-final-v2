@@ -15,12 +15,14 @@ export async function message(chatID){
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const response = await fetch(`/GetMsgFromUser?user=${logged_user}`);
-    if(!response.ok){
-        console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
-        chats.innerHTML = "Error API called failed!\nPlease try again later.";
-    }
-    convos = response[Response];
+    const response = await fetch(`/GetMsgFromUser?user=${logged_user}`)
+        .then(resp=>{
+            if(!resp.ok){
+                console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
+                chats.innerHTML = "Error API called failed!\nPlease try again later.";
+            }
+            convos = response.json();
+        });
     for(let c in convos){
         let item = document.createElement('li');
         item.id = c.friend;
@@ -54,12 +56,14 @@ export async function message(chatID){
         return;
     }
     //Request chat data from database
-    const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
-    if(!response2.ok){
-        console.log("API call failed. Exiting function renderChat. Setting Div Text to Error.");
-        curchat.innerHTML = "Error API called failed!\nPlease try again later.";
-    }
-    let chat = response2[Response];
+    const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`)
+        .then(resp=>{
+            if(!resp.ok){
+                console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
+                chats.innerHTML = "Error API called failed!\nPlease try again later.";
+            }
+            chat = response.json();
+        });
     
     for(let msg in chat){
         let bubble = document.createElement('div');
