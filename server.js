@@ -92,6 +92,10 @@ app.get("/posts", (req, res)=>{
     });
 });
 
+app.get("/testing", (req, res) => {
+    res.send("this string is a test");
+});
+
 app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
     db.any(q)
