@@ -1,6 +1,7 @@
 // import {db} from './db.js';
 import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
+import * as Database from './database.js';
 
 let currentUser = loadUser();
 console.log(currentUser);
