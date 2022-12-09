@@ -374,6 +374,8 @@ function deactivateNavs() {
 }
 
 window.onload = function() {
+    currentUser = loadUser();
+    renderLogout();
     // when search button is pressed
     document.getElementById('search-button').addEventListener('click', function() {
         // what section to search?

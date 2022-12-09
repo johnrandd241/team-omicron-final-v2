@@ -90,7 +90,21 @@ app.get("/posts", (req, res)=>{
         res.end();
     });
 });
-
+let username = null;
+let password = null;
+let fName = null;
+let lName = null;
+let email = null;
+let isAuth = false;
+let user = {"user":{
+                "fName": lName,
+                "lName": lName,
+                'email': email,
+                "username": username,
+                "password": password, 
+                "isAuth": isAuth          
+}};
+//Gets login page
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
 });
