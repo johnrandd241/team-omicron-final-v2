@@ -5,10 +5,12 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
     let email = document.getElementById("email").value;
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
-
+    console.log('head')
     const data = {fullName, email, username, password};
     //sends data to server
     const handleFormData = async () => {
+        console.log('asuync')
+
         const sent = await fetch('/register/auth', {
              method: 'POST',
              headers: {
@@ -18,8 +20,12 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
          })
  
          try {
+            console.log('try')
+
             const result = await sent.json();
             DO().then(function(result){
+                console.log('do')
+
                 if(result.isAuth){
                     let theUser = JSON.parse(window.localStorage.getItem('user'));
                     theUser.username = result.username;
