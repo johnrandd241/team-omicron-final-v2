@@ -15,7 +15,7 @@ export async function message(chatID){
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const response = await fetch("/GetMsgFromUser?body=$logged_user");
+    const response = await fetch(`/GetMsgFromUser?body=${logged_user}`);
     if(!response.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
@@ -47,7 +47,6 @@ export async function message(chatID){
     curchat.classList.add("card-body", "msg_card_body");
     curchat.setAttribute('id', 'curchat');
     
-    console.log(div);
     if(typeof(chatID) === "undefined"){
         let empty = document.createElement('div');
         empty.innerHTML = "Please Select a chat from the list on the left";
@@ -127,10 +126,8 @@ export async function message(chatID){
     split.classList.add('row','justify-content-center', 'h-100');
     split.appendChild(LHS);
     split.appendChild(RHS);
-    console.log("\n\n\n\n\n\n\n\n\n\n\n\n$split");
     div.classList.add('constiner-fluid','h-100');
     div.appendChild(split);
-    console.log(div);
 }
 
 

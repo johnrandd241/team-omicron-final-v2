@@ -41,10 +41,12 @@ app.get("/GetMsgFromUser", (req, res)=>{
     console.log(q);
     db.any(q)
     .then(resp => {
+        console.log(resp);
         res.json({"Response":resp});
     })
     .catch(error => {
-        // error;
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
     });
 });
 
@@ -57,7 +59,8 @@ app.get("/GetMsgFromID", (req, res)=>{
         res.json({"Response":resp.rows});
     })
     .catch(error => {
-        // error;
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
     });
 });
 
@@ -68,7 +71,8 @@ app.get("/posts", (req, res)=>{
         res.json({"Response":resp.rows});
     })
     .catch(error => {
-        // error;
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
     });
 });
 
@@ -80,7 +84,8 @@ app.get("/users", (req, res)=>{
         res.json({"Response":resp.rows});
     })
     .catch(error => {
-        // error;
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
     });
 });
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
