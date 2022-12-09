@@ -76,6 +76,8 @@ app.get("/GetMsgFromID", (req, res)=>{
     });
 });
 
+
+
 app.get("/posts", (req, res)=>{
     const q = `SELECT * FROM post ORDER BY post.creationDate DESC;`;
     db.any(q)
@@ -112,6 +114,15 @@ app.get("/users", (req, res)=>{
         res.end();
     });
 });
+
+app.get("/users/get", (req, res) => {
+    const q = `SELECT * FROM users WHERE userid=${res.params['userid']};`;
+    db.any(q)
+    .then(resp => {
+        res.json(resp);
+    });
+});
+
 let username = null;
 let password = null;
 let fName = null;

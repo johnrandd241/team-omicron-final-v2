@@ -461,7 +461,6 @@ function renderLogout(){
     }else{
         let logOutBut = document.getElementById('logoutButton');
         logLI.removeChild(logOutBut);
-
         const loginButton = document.createElement('a');
         loginButton.classList.add("nav-link");
         loginButton.setAttribute("id", "loginButton");

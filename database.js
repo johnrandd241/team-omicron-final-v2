@@ -13,9 +13,13 @@ export function getPostByID(post_id) {
     return DUMMY_POST;
 }
 
-export function getUserByID(user_id) {
+export async function getUserByID(user_id) {
     // returns something like DUMMY_USER
-    return DUMMY_USER;
+    let data = await fetch("/users/get?" + URLSearchParams({
+        userid: user_id
+    }));
+    let resp = await data.json();
+    return resp;
 }
 
 export function getMessageLogByID(log_id) {
