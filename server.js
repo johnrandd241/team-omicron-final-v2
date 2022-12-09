@@ -89,6 +89,16 @@ app.get("/posts", (req, res)=>{
     });
 });
 
+app.get("/posts/create", (req, res) => {
+    const q = `INSERT INTO post (comments, creationdate, imgurl, postdescription, postid, posttype, tags, title, userid) VALUES (${req.params['comments']}, GETDATE(), ${req.params['imgurl']}, ${req.params['postdescription']}, ${req.params['postid']}, ${req.params['posttype']}, ${req.params['tags']}, ${req.params['title']}, ${req.params['userid']});`;
+    db.none(q).then(resp => {
+        console.log('post created');
+    }).catch(error => {
+        console.log('error while making post' + error);
+    });
+    res.send({});
+});
+
 app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
     db.any(q)
