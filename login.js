@@ -27,7 +27,17 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
      //takes promise from above and gets data from server
      //to check if user is validated
      DO().then(function(result){
+        console.log(result);
         if(result.isAuth){
+            let theUser = JSON.parse(window.localStorage.getItem('user'));
+            theUser.username = result.username;
+            theUser.password = result.password;
+            theUser.email = result.email;
+            theUser.fName = result.fName;
+            theUser.lName = result.lName;
+            theUser.isAuth = result.isAuth;
+
+            window.localStorage.setItem('user', JSON.stringify(theUser));
             window.alert("Signed in as " + result.username);
             window.location.replace("/events");
         }
@@ -38,7 +48,7 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
     });
 });
 async function DO(){
-    const res = await fetch("/sendLoginCred");
+    const res = await fetch("/sendAllCred");
 
     const data = await res.json();
 

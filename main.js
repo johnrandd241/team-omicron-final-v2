@@ -2,7 +2,11 @@
 //import fetch from 'node-fetch';
 //import { renderChat } from "./messages.js";
 //import {message} from './messages.js';
-import  {checkUserLogin} from './user.js';
+import  {checkUserLogin, createUser, user} from './user.js';
+
+let currentUser = loadUser();
+console.log(currentUser);
+
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
@@ -236,8 +240,10 @@ function deactivateNavs() {
 }
 
 window.onload = function() {
-    console.log('cakked');
-    checkUserLogin();
+    currentUser = loadUser();
+    renderLogout();
+
+    //console.log(currentUser.username);
     
     // when search button is pressed
     document.getElementById('search-button').addEventListener('click', function() {
@@ -278,6 +284,65 @@ window.onload = function() {
     // sort posts by date into the page
     search('');
 };
+
+function loadUser(){
+    let inStor = window.localStorage.getItem('user');
+    if(inStor === null){
+        let newUser = new user(null, null, null, null, null, false);
+        window.localStorage.setItem('user', JSON.stringify(newUser));
+        return newUser;
+    }else{
+        let userFromStorage = JSON.parse(inStor);
+        return userFromStorage;
+    }
+}
+
+function removeUser(){
+    window.localStorage.clear('user');
+}
+
+function renderLogout(){
+    let logLI = document.getElementById('loginLI');
+    let regLI = document.getElementById('registerLI');
+
+    if(currentUser.isAuth === true){
+        let logBut = document.getElementById('loginButton');
+        let regBut = document.getElementById('registerButton');
+        logLI.removeChild(logBut);
+        regLI.removeChild(regBut);
+        //<a class="nav-link" id="loginButton" href="/login">Login</a>
+        const logoutButton = document.createElement('a');
+        logoutButton.classList.add("nav-link");
+        logoutButton.setAttribute("id", "logoutButton");
+        logoutButton.setAttribute("href", "/logout");
+        logoutButton.innerHTML = 'Logout';
+
+        logoutButton.addEventListener("click", function () {
+            alert("Logged out  of " + currentUser.username);
+            removeUser();
+            currentUser = loadUser();
+            renderLogout();
+        });
+        logLI.appendChild(logoutButton);
+    }else{
+        let logOutBut = document.getElementById('logoutButton');
+        logLI.removeChild(logOutBut);
+
+        const loginButton = document.createElement('a');
+        loginButton.classList.add("nav-link");
+        loginButton.setAttribute("id", "loginButton");
+        loginButton.setAttribute("href", "/login");
+        loginButton.innerHTML = 'Login';
+
+        const registerButton = document.createElement('a');
+        registerButton.classList.add("nav-link");
+        registerButton.setAttribute("id", "registerButton");
+        registerButton.setAttribute("href", "/register");
+        registerButton.innerHTML = 'Register';
+        logLI.appendChild(loginButton);
+        regLI.appendChild(registerButton);
+    }
+}
 
 
 //for login/register

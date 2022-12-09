@@ -30,6 +30,15 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
      //to check if user is validated
      DO().then(function(result){
         if(result.isAuth){
+            let theUser = JSON.parse(window.localStorage.getItem('user'));
+            theUser.username = result.username;
+            theUser.password = result.password;
+            theUser.email = result.email;
+            theUser.fName = result.fName;
+            theUser.lName = result.lName;
+            theUser.isAuth = result.isAuth;
+
+            window.localStorage.setItem('user', JSON.stringify(theUser));
             window.alert("Registered as " + result.username);
             window.location.replace("/events");
         }
@@ -40,7 +49,7 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
     });
 });
 async function DO(){
-    const res = await fetch("/sendLoginCred");
+    const res = await fetch("/sendAllCred");
 
     const data = await res.json();
 

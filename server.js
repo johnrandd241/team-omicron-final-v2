@@ -55,40 +55,63 @@ let fName = null;
 let lName = null;
 let email = null;
 let isAuth = false;
-
+let user = {"user":{
+                "fName": lName,
+                "lName": lName,
+                'email': email,
+                "username": username,
+                "password": password, 
+                "isAuth": isAuth          
+}};
 //Gets login page
 app.get("/login", (req, res) => {
     res.sendFile(__dirname + "/login-page.html");
 });
+
+app.get("/logout", (req, res) => {
+    user = {"user":{
+        "fName": lName,
+        "lName": lName,
+        'email': email,
+        "username": username,
+        "password": password, 
+        "isAuth": isAuth          
+    }};
+    res.redirect("/events");
+});
+
 //Gets current data for client files to use
 app.get("/sendLoginCred", (req, res) => {
-    res.json({"username": username, 
-               "isAuth": isAuth});
+    res.json({"username": user.username, 
+               "isAuth": user.isAuth});
+});
+app.get("/sendAllCred", (req, res) => {
+    res.json(user);
 });
 //Authorizes user
 app.post("/login/auth", (req, res) => {
-    username = req.body.username;
-    password = req.body.password;
-    
+    user.username = req.body.username;
+    user.password = req.body.password;
+    console.log(user.username);
 
         //if not null
-        if(username !== null && password !== null){
+        if(user.username !== null && user.password !== null){
             //check in db if it matches
-            if(username === 'admin'){
-                isAuth = true;
+            if(user.username === 'admin'){
+                //get all user fields from db and update user var
+                user.isAuth = true;
             //if not in db, reset user and pass values and redirect to login
             }else{
-                username = null;
-                password = null;
+                user.username = null;
+                user.password = null;
             }
         //if null 
         }else{
-            username = null;
-            password = null;
+            user.username = null;
+            user.password = null;
         }
-        res.json({"username": username, 
-         "isAuth": isAuth});
-        console.log(username + password + isAuth);
+        //res.json({"username": user.username, 
+         //"isAuth": user.isAuth});
 
 });
 
@@ -97,47 +120,40 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register/auth", (req, res) => {
-    fName = req.body.fName;
-    lName = req.body.lName;
-    email = req.body.email;
-    username = req.body.username;
-    password = req.body.password;
+    user.fName = req.body.fName;
+    user.lName = req.body.lName;
+    user.email = req.body.email;
+    user.username = req.body.username;
+    user.password = req.body.password;
     
 
         //if not null
-        if(username !== null && password !== null &&
-            fName !== null && lName !== null && email !== null){
+        if(user.username !== null && user.password !== null &&
+            user.fName !== null && user.lName !== null && user.email !== null){
             //check in db if it matches
-            if(username === 'admin'){
-                isAuth = true;
+            if(user.username === 'admin'){
+                user.isAuth = true;
             //if not in db, reset user and pass values and redirect to login
             }else{
-                fName = null;
-                lName = null;
-                email = null;
-                username = null;
-                password = null;
+                user.fName = null;
+                user.lName = null;
+                user.email = null;
+                user.username = null;
+                user.password = null;
             }
         //if null 
         }else{
-            fName = null;
-            lName = null;
-            email = null;
-            username = null;
-            password = null;
+            user.fName = null;
+            user.lName = null;
+            user.email = null;
+            user.username = null;
+            user.password = null;
         }
-        res.json({"username": username, 
-         "isAuth": isAuth});
-
-        console.log(username + password + isAuth);
 });
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
 });
-
-
-
 
 app.get("/profile", (req, res) => {
     res.sendFile(__dirname + "/profile.html");
