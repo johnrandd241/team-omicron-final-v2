@@ -69,6 +69,15 @@ app.get('/CreateCommentSection', (req, res)=>{
                 UPDATE posts
                 SET comments = ${logid}
                 WHERE postid = ${postid};`
+    bd.none(q)
+    .then(resp => {
+        res.json(resp);
+    })
+    .catch(error => {
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        res.end();
+    });
 });
 
 app.get("/GetMsgFromID", (req, res)=>{
