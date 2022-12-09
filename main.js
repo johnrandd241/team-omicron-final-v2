@@ -17,29 +17,29 @@ function getColumnForPost(post_data) {
     cur_col.classList.add('bg-white');
     let title_element = document.createElement('h2');
     title_element.classList.add('hoverline');
-    if (post_data.id != 0) {
+    if (post_data.postid != 0) { // id changed to postid
         title_element.addEventListener('click', () => {
             cur_section = 'postview';
             toggleSearchBar();
             deactivateNavs();
-            viewPost(post_data.id);
+            viewPost(post_data.postid); // id changed to postid
         });
     }
-    title_element.innerHTML = post_data.title;
+    title_element.innerHTML = post_data.title; // title same
     let img_element = document.createElement('img');
-    img_element.src = post_data.img_src;
+    img_element.src = post_data.imgurl; // img_src changed to imgurl
     img_element.classList.add('post-image');
     img_element.classList.add('img-responsive');
     let desc_element = document.createElement('p');
-    desc_element.innerHTML = post_data.desc; // .substring(0, 100);
+    desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.user).name + ' on ' + post_data.date;
+    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.userid).name + ' on ' + post_data.creationdate; // creationdate changed to date
     meta_element.style.textDecoration = 'underline';
-    if (post_data.id != 0) {
+    if (post_data.postid != 0) {
         meta_element.addEventListener('click', () => {
             cur_section = 'profile';
             toggleSearchBar();
-            profile(post_data.user);
+            profile(post_data.userid); // changed user to userid
         });
     }
     cur_col.appendChild(title_element);
@@ -50,12 +50,13 @@ function getColumnForPost(post_data) {
 }
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
-function search(keywords) {
+async function search(keywords) {
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
     // at this point, all of the 'posts' should be in some kind of array, all we gotta do now is render them
-    let arr = Array(5).fill(0).map(e => Database.DUMMY_POST); 
+    let data = await fetch("/posts");
+    let arr = await data.json(); // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
     // create the base element for the posts (this container holds the rows and columns and what not)
     let container = document.createElement('div');
     container.classList.add('container'); // specify the fact it is a container

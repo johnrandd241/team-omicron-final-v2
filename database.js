@@ -1,4 +1,4 @@
-export const DUMMY_POST = {title: 'Barbecuing my dog (recently deceased)', img_src: 'https://live.staticflickr.com/8055/8394570455_832f8777cb_b.jpg', desc: 'This is the description of the post', user: 'ch4rl3sd4rw1n', date: '10/5/22', id: 129839753759869, type: 'event'};
+export const DUMMY_POST = {title: 'Barbecuing my dog (recxently deceased)', img_src: 'https://live.staticflickr.com/8055/8394570455_832f8777cb_b.jpg', desc: 'This is the description of the post', user: 'ch4rl3sd4rw1n', date: '10/5/22', id: 129839753759869, type: 'event'};
 export const DUMMY_USER = {username: 'ch4rl3sd4rw1n', name: 'Charles Darwin', img_src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Charles_Darwin_seated_crop.jpg', bio: 'this is my biography, i have no family no friends no money no home no gall bladder and im starving and my dog died', posts: [123, 456, 789, 1234], friends: ['lemonman1', 'eggace4848', 'Hyn7eff']};
 // import {db} from './db.js';
 
@@ -34,9 +34,22 @@ export function addFriend(logged, session, to_add) {
     // to_remove is the username of the friend to be added
 }
 
-export function createPost(logged, session, title, desc, tags, img_src, type) {
-    console.log('creating post with this information');
-    console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
+export async function createPost(logged, session, tit, desc, tagz, img_src, type) {
+    // console.log('creating post with this information');
+    // console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
+
+    let unique_id = Date.now();
+    let data = await fetch("posts/create?" + URLSearchParams({
+        comments: unique_id,
+        creationdate: null,  // creationdate set inside SQL
+        imgurl: img_src,
+        postdescription: desc,
+        postid: unique_id,
+        posttype: type,
+        tags: tagz,
+        title: tit,
+        userid: logged
+    }));
     // verify user is legit
     // create new row in post table with this info
     // note that date is not provided
@@ -54,5 +67,5 @@ export function createComment(logged, session, log_id, text) {
 
 export function getAllPosts() {
     // literally just returns all the posts from the database, i will filter through them in the search() function in main.js
-    
+
 }
