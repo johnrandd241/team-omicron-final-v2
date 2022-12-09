@@ -1,6 +1,7 @@
 // import {db} from './db.js';
 import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
+import * as Database from './database.js';
 
 let currentUser = loadUser();
 console.log(currentUser);
@@ -17,29 +18,29 @@ function getColumnForPost(post_data) {
     cur_col.classList.add('bg-white');
     let title_element = document.createElement('h2');
     title_element.classList.add('hoverline');
-    if (post_data.id != 0) {
+    if (post_data.postid != 0) { // id changed to postid
         title_element.addEventListener('click', () => {
             cur_section = 'postview';
             toggleSearchBar();
             deactivateNavs();
-            viewPost(post_data.id);
+            viewPost(post_data.postid); // id changed to postid
         });
     }
-    title_element.innerHTML = post_data.title;
+    title_element.innerHTML = post_data.title; // title same
     let img_element = document.createElement('img');
-    img_element.src = post_data.img_src;
+    img_element.src = post_data.imgurl; // img_src changed to imgurl
     img_element.classList.add('post-image');
     img_element.classList.add('img-responsive');
     let desc_element = document.createElement('p');
-    desc_element.innerHTML = post_data.desc; // .substring(0, 100);
+    desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.user).name + ' on ' + post_data.date;
+    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.userid).name + ' on ' + post_data.creationdate; // creationdate changed to date
     meta_element.style.textDecoration = 'underline';
-    if (post_data.id != 0) {
+    if (post_data.postid != 0) {
         meta_element.addEventListener('click', () => {
             cur_section = 'profile';
             toggleSearchBar();
-            profile(post_data.user);
+            profile(post_data.userid); // changed user to userid
         });
     }
     cur_col.appendChild(title_element);
@@ -50,12 +51,13 @@ function getColumnForPost(post_data) {
 }
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
-function search(keywords) {
+async function search(keywords) {
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
     // at this point, all of the 'posts' should be in some kind of array, all we gotta do now is render them
-    let arr = Array(5).fill(0).map(e => Database.DUMMY_POST); 
+    let data = await fetch("/posts");
+    let arr = await data.json(); // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
     // create the base element for the posts (this container holds the rows and columns and what not)
     let container = document.createElement('div');
     container.classList.add('container'); // specify the fact it is a container
@@ -437,43 +439,84 @@ function removeUser(){
 function renderLogout(){
     let logLI = document.getElementById('loginLI');
     let regLI = document.getElementById('registerLI');
-    if(regLI.hasChildNodes && currentUser.isAuth === true){
-        let logBut = document.getElementById('loginButton');
-        let regBut = document.getElementById('registerButton');
-        logLI.removeChild(logBut);
-        regLI.removeChild(regBut);
-        //<a class="nav-link" id="loginButton" href="/login">Login</a>
-        const logoutButton = document.createElement('a');
-        logoutButton.classList.add("nav-link");
-        logoutButton.setAttribute("id", "logoutButton");
-        logoutButton.setAttribute("href", "/logout");
-        logoutButton.innerHTML = 'Logout';
+    if(currentUser.isAuth === true){//if  logged in 
+        //checks if the buttons do exists and remove them
+        if(document.getElementById('loginButton') != undefined &&
+             document.getElementById('registerButton') != undefined){
 
-        logoutButton.addEventListener("click", function () {
-            alert("Logged out  of " + currentUser.username);
-            removeUser();
-            currentUser = loadUser();
-            renderLogout();
-        });
-        logLI.appendChild(logoutButton);
+            let logBut = document.getElementById('loginButton');
+            let regBut = document.getElementById('registerButton');
+            logLI.removeChild(logBut);
+            regLI.removeChild(regBut);
+            //<a class="nav-link" id="loginButton" href="/login">Login</a>
+            const logoutButton = document.createElement('a');
+            logoutButton.classList.add("nav-link");
+            logoutButton.setAttribute("id", "logoutButton");
+            logoutButton.setAttribute("href", "/logout");
+            logoutButton.innerHTML = 'Logout';
+
+            logoutButton.addEventListener("click", function () {
+                alert("Logged out  of " + currentUser.username);
+                removeUser();
+                currentUser = loadUser();
+                renderLogout();
+            });
+            logLI.appendChild(logoutButton);
+            //if they dont exist, dont remove them
+        }else{
+            const logoutButton = document.createElement('a');
+            logoutButton.classList.add("nav-link");
+            logoutButton.setAttribute("id", "logoutButton");
+            logoutButton.setAttribute("href", "/logout");
+            logoutButton.innerHTML = 'Logout';
+
+            logoutButton.addEventListener("click", function () {
+                alert("Logged out  of " + currentUser.username);
+                removeUser();
+                currentUser = loadUser();
+                renderLogout();
+            });
+            logLI.appendChild(logoutButton);
+        }
+        //if not logged in
     }else{
-        let logOutBut = document.getElementById('logoutButton');
-        logLI.removeChild(logOutBut);
+        //if the logout button does exist
+        if(document.getElementById('logoutButton')!= undefined){
+            let logOutBut = document.getElementById('logoutButton');
+            logLI.removeChild(logOutBut);
 
-        const loginButton = document.createElement('a');
-        loginButton.classList.add("nav-link");
-        loginButton.setAttribute("id", "loginButton");
-        loginButton.setAttribute("href", "/login");
-        loginButton.innerHTML = 'Login';
+            const loginButton = document.createElement('a');
+            loginButton.classList.add("nav-link");
+            loginButton.setAttribute("id", "loginButton");
+            loginButton.setAttribute("href", "/login");
+            loginButton.innerHTML = 'Login';
 
-        const registerButton = document.createElement('a');
-        registerButton.classList.add("nav-link");
-        registerButton.setAttribute("id", "registerButton");
-        registerButton.setAttribute("href", "/register");
-        registerButton.innerHTML = 'Register';
-        logLI.appendChild(loginButton);
-        regLI.appendChild(registerButton);
+            const registerButton = document.createElement('a');
+            registerButton.classList.add("nav-link");
+            registerButton.setAttribute("id", "registerButton");
+            registerButton.setAttribute("href", "/register");
+            registerButton.innerHTML = 'Register';
+            logLI.appendChild(loginButton);
+            regLI.appendChild(registerButton);
+            //if the button doesnt exist
+        }else{
+            const loginButton = document.createElement('a');
+            loginButton.classList.add("nav-link");
+            loginButton.setAttribute("id", "loginButton");
+            loginButton.setAttribute("href", "/login");
+            loginButton.innerHTML = 'Login';
+
+            const registerButton = document.createElement('a');
+            registerButton.classList.add("nav-link");
+            registerButton.setAttribute("id", "registerButton");
+            registerButton.setAttribute("href", "/register");
+            registerButton.innerHTML = 'Register';
+            logLI.appendChild(loginButton);
+            regLI.appendChild(registerButton);
+        }
+        }
     }
+    
 /*
     if(currentUser.isAuth === true){
         let logBut = document.getElementById('loginButton');
@@ -513,7 +556,7 @@ function renderLogout(){
         regLI.appendChild(registerButton);
     }
     */
-}
+    
 
 
 //for login/register
