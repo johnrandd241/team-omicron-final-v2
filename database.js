@@ -19,7 +19,7 @@ export async function getUserByID(user_id) {
         userid: user_id
     }));
     let resp = await data.json();
-    return resp;
+    return resp[0];
 }
 
 export function getMessageLogByID(log_id) {
