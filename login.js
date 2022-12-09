@@ -21,7 +21,6 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
          try {
              const result = await sent.json();
              DO().then(function(result){
-                console.log(result);
                 if(result.isAuth){
                     let theUser = JSON.parse(window.localStorage.getItem('user'));
                     theUser.username = result.username;
@@ -43,8 +42,7 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
                     window.location.replace("/login");
                 }
             });
-             console.log(result);
-
+            
          } catch (error) {
              console.log(error);
 

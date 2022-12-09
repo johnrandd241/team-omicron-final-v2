@@ -148,8 +148,6 @@ app.get("/users/get", (req, res) => {
 
 let username = null;
 let password = null;
-let fName = null;
-let lName = null;
 let email = null;
 let isAuth = false;
 let fullName = null;
@@ -203,7 +201,6 @@ app.post("/login/auth", (req, res) => {
     //user.password = req.body.password;
     
     const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
-    console.log(q);
     //if(user.username !== null && user.password !== null){
     db.any(q)
     .then(resp => {//successfully returns user variables
@@ -262,35 +259,49 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register/auth", (req, res) => {
-    user.fName = req.body.fName;
-    user.lName = req.body.lName;
-    user.email = req.body.email;
-    user.username = req.body.username;
-    user.password = req.body.password;
-    
 
-        //if not null
-        if(user.username !== null && user.password !== null &&
-            user.fName !== null && user.lName !== null && user.email !== null){
-            //check in db if it matches
-            if(user.username === 'admin'){
-                user.isAuth = true;
-            //if not in db, reset user and pass values and redirect to login
-            }else{
-                user.fName = null;
-                user.lName = null;
-                user.email = null;
-                user.username = null;
-                user.password = null;
-            }
-        //if null 
-        }else{
-            user.fName = null;
-            user.lName = null;
-            user.email = null;
+    const q = "SELECT EXISTS(SELECT username, email FROM users WHERE username = '" + req.body.username + "' OR email = '" + req.body.email + "';";
+    db.any(q)
+    .then(resp => {//if q returns 1 it means username or email already exist
+                    // in user table, so 
+        if(resp[0] === 1){
+            console.log("username or email already exists");
             user.username = null;
             user.password = null;
+        }else{//if it doesnt exist, proceed with creating data
+            const createUser = "INSERT INTO users (username, password, fullName, email) VALUES (?,?,?,?);";
+            db.query(createUser,[req.body.username, req.body.password, req.body.fullName, req.body.email] ,(err, rows) =>{
+                if (err) throw err;
+                    console.log("Row inserted with id = "
+                         + rows.insertId);
+                         user.isAuth = true;
+                         user.email = req.body.email;
+                         user.username = req.body.username;
+                         user.password = req.body.password;
+                         user.fullName = req.body.fullName;
+
+                });
+
+                res.json({"username": user.username, 
+                     "isAuth": user.isAuth,
+                    'email': user.email,
+                    "password": user.password, 
+                    "fullName": user.fullName,
+                    "bio": user.bio,
+                    "friends": user.friends,
+                    "imgurl": user.imgurl
+                    });
         }
+    })
+    .catch(error => {//unsuccessfully finds user with specified credentials
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        user.username = null;
+        user.password = null;
+        //res.end();
+    });
+    
+
 });
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
