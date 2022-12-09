@@ -56,6 +56,7 @@ export async function message(chatID){
         return;
     }
     //Request chat data from database
+    let chat ={};
     const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`)
         .then(resp=>{
             if(!resp.ok){
