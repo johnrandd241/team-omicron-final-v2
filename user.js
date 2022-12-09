@@ -3,10 +3,12 @@ export class user{
     constructor(fName, lName, email, username, password, isAuth){
         this.fName = fName;
         this.lName = lName;
+        this.fullName = this.fName + ' ' + this.lName;
         this.email = email;
         this.username = username;
         this.password = password;
         this.isAuth = isAuth;
+        
     }
 }
 

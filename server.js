@@ -61,10 +61,19 @@ app.get("/GetMsgFromUser", (req, res)=>{
     });
 });
 
+app.get('/CreateCommentSection', (req, res)=>{
+    const logid = req.query.logid;
+    const postid = req.query.postid;
+    const q = `INSERT INTO logs (logID) VALUES (${logid}); 
+                INSERT INTO commentlog(clogid) VALUES (${logid});
+                UPDATE posts
+                SET comments = ${logid}
+                WHERE postid = ${postid};`
+});
+
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.query.chatID;
     const q = `SELECT * FROM messagelog where mlogid = ${chatID};`;
-    console.log(q);
     db.any(q)
     .then(resp => {
         res.json(resp);
@@ -105,7 +114,6 @@ app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
     db.any(q)
     .then(resp => {
-        console.log(resp);
         res.json(resp);
     })
     .catch(error => {
@@ -114,6 +122,7 @@ app.get("/users", (req, res)=>{
         res.end();
     });
 });
+
 
 app.get("/users/get", (req, res) => {
     const q = `SELECT * FROM users WHERE userid=${res.params['userid']};`;
@@ -167,11 +176,31 @@ app.get("/sendAllCred", (req, res) => {
 });
 //Authorizes user
 app.post("/login/auth", (req, res) => {
-    console.log(req.body)
-    user.username = req.body.username;
-    user.password = req.body.password;
-    console.log(user.username);
+    //user.username = req.body.username;
+    //user.password = req.body.password;
 
+    const q = "SELECT * FROM users WHERE username = " + req.body.username + " and pword = " + req.body.password + ";";
+    db.any(q)
+    .then(resp => {//successfully returns user variables
+        user.isAuth = true;
+        user.fName = resp.
+        user.lName,
+        user.email,
+        user.username,
+        user.password,
+        console.log(resp);
+        res.json({"username": user.username, 
+        "isAuth": user.isAuth});
+        //res.json(resp);
+    })
+    .catch(error => {//unsuccessfully finds user with specified credentials
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        user.username = null;
+        user.password = null;
+        //res.end();
+    });
+    /*
         //if not null
         if(user.username !== null && user.password !== null){
             //check in db if it matches
@@ -190,7 +219,7 @@ app.post("/login/auth", (req, res) => {
         }
         res.json({"username": user.username, 
          "isAuth": user.isAuth});
-
+        */
 });
 
 app.get("/register", (req, res) => {
