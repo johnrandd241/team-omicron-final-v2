@@ -27,9 +27,12 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
                     theUser.username = result.username;
                     theUser.password = result.password;
                     theUser.email = result.email;
-                    theUser.fName = result.fName;
-                    theUser.lName = result.lName;
+                    theUser.fullName = result.fullName;
                     theUser.isAuth = result.isAuth;
+                    theUser.bio = result.bio;
+                    theUser.friends = result.friends;
+                    theUser.imgurl = result.imgurl;
+
         
                     window.localStorage.setItem('user', JSON.stringify(theUser));
                     window.alert("Signed in as " + result.username);

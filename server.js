@@ -152,13 +152,20 @@ let fName = null;
 let lName = null;
 let email = null;
 let isAuth = false;
+let fullName = null;
+let bio = null;
+let friends = [];
+let imgurl = null;
+
 let user = {"user":{
-                "fName": fName,
-                "lName": lName,
                 'email': email,
                 "username": username,
                 "password": password, 
-                "isAuth": isAuth          
+                "isAuth": isAuth,
+                "fullName": fullName,
+                "bio": bio,
+                "friends": friends,
+                "imgurl": imgurl
 }};
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
@@ -170,12 +177,14 @@ app.get("/login", (req, res) => {
 
 app.get("/logout", (req, res) => {
     user = {"user":{
-        "fName": null,
-        "lName": null,
         'email': null,
         "username": null,
         "password": null, 
-        "isAuth": false          
+        "isAuth": false, 
+        "fullName": null,
+        "bio": null,
+        "friends": null,
+        "imgurl": null        
     }};
     res.redirect("/events");
 });
@@ -198,14 +207,25 @@ app.post("/login/auth", (req, res) => {
     //if(user.username !== null && user.password !== null){
     db.any(q)
     .then(resp => {//successfully returns user variables
-        console.log(resp[0].username);
+        //console.log(resp[0].username);
         user.isAuth = true;
         user.email = resp[0].email;
         user.username = resp[0].username;
         user.password = resp[0].pword;
+        user.fullName = resp[0].nameofuser;
+        user.bio = resp[0].bio;
+        user.friends = resp[0].friends;
+        user.imgurl = resp[0].imgurl;
+
         res.json({"username": user.username, 
-        "isAuth": user.isAuth});
-        //res.json(resp);
+                  "isAuth": user.isAuth,
+                  'email': user.email,
+                  "password": user.password, 
+                  "fullName": user.fullName,
+                  "bio": user.bio,
+                  "friends": user.friends,
+                  "imgurl": user.imgurl
+                 });
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");

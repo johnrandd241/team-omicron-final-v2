@@ -425,7 +425,7 @@ window.onload = async function() {
 function loadUser(){
     let inStor = window.localStorage.getItem('user');
     if(inStor === null){
-        let newUser = new user(null, null, null, null, null, false);
+        let newUser = new user();
         window.localStorage.setItem('user', JSON.stringify(newUser));
         return newUser;
     }else{
