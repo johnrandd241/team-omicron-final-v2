@@ -178,8 +178,8 @@ app.get("/sendAllCred", (req, res) => {
 app.post("/login/auth", (req, res) => {
     //user.username = req.body.username;
     //user.password = req.body.password;
-
-    const q = "SELECT * FROM users WHERE username = " + req.body.username + " and pword = " + req.body.password + ";";
+    
+    const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
     console.log(q);
     db.any(q)
     .then(resp => {//successfully returns user variables
