@@ -393,7 +393,7 @@ window.onload = async function() {
             switch (cur_section) {
                 case 'messages':
                     // do whatever we need for the messages
-                    document.getElementById('page')=message(null);
+                    message(null);
                     break;
                 case 'profile':
                     // do whatever we need for the profile
