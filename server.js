@@ -265,7 +265,7 @@ app.post("/register/auth", (req, res) => {
     .then(resp => {//if q returns 1 it means username or email already exist
                     // in user table, so 
         console.log(resp);
-        if(resp){
+        if(resp[0].exists){
             console.log("username or email already exists");
             user.username = null;
             user.password = null;
