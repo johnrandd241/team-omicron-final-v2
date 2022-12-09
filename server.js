@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //this section is for heroku, i believe it finds a port for the the deployment
 //on heroku, then runs or something, otherwise itll run locally on localhost:8000 in your browser
@@ -108,7 +109,7 @@ let lName = null;
 let email = null;
 let isAuth = false;
 let user = {"user":{
-                "fName": lName,
+                "fName": fName,
                 "lName": lName,
                 'email': email,
                 "username": username,
@@ -145,6 +146,7 @@ app.get("/sendAllCred", (req, res) => {
 });
 //Authorizes user
 app.post("/login/auth", (req, res) => {
+    console.log(req.body)
     user.username = req.body.username;
     user.password = req.body.password;
     console.log(user.username);
@@ -165,8 +167,8 @@ app.post("/login/auth", (req, res) => {
             user.username = null;
             user.password = null;
         }
-        //res.json({"username": user.username, 
-         //"isAuth": user.isAuth});
+        res.json({"username": user.username, 
+         "isAuth": user.isAuth});
 
 });
 

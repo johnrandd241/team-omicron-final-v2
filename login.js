@@ -5,9 +5,12 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
+    let result = null;
     const data = {username, password};
     //sends data to server
+    
     const handleFormData = async () => {
+
         const sent = await fetch('/login/auth', {
              method: 'POST',
              headers: {
@@ -15,19 +18,23 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
              },
              body: JSON.stringify(data)
          })
- 
+
          try {
-            const res = await sent.json();
+             result = await sent.json();
+             console.log(result);
+
          } catch (error) {
              console.log(error);
+
          }
      };
-
+     //console.log(result);
      handleFormData();
+     
      //takes promise from above and gets data from server
      //to check if user is validated
      DO().then(function(result){
-        console.log(result);
+        //console.log(result);
         if(result.isAuth){
             let theUser = JSON.parse(window.localStorage.getItem('user'));
             theUser.username = result.username;
