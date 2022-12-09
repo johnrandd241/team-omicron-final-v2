@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+console.log(bodyParser.urlencoded({ extended: false }));
+console.log(url.parse(bodyParser.urlencoded({ extended: false })));
 
 //this section is for heroku, i believe it finds a port for the the deployment
 //on heroku, then runs or something, otherwise itll run locally on localhost:8000 in your browser
@@ -47,6 +49,7 @@ app.get("/GetMsgFromUser", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
+        res.end();
     });
 });
 
@@ -61,6 +64,7 @@ app.get("/GetMsgFromID", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
+        res.end();
     });
 });
 
@@ -73,6 +77,7 @@ app.get("/posts", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
+        res.end();
     });
 });
 
@@ -86,6 +91,7 @@ app.get("/users", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
+        res.end();
     });
 });
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
