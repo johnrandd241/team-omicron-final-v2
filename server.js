@@ -47,7 +47,8 @@ const db = pgp(cn);
 module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
-    const user = req.params;
+    const user = req.body;
+    console.log(user);
     const q = `SELECT messages FROM users WHERE Username = ${user};`;
     console.log(q);
     db.any(q)
@@ -63,7 +64,8 @@ app.get("/GetMsgFromUser", (req, res)=>{
 });
 
 app.get("/GetMsgFromID", (req, res)=>{
-    const chatID = req.params;
+    const chatID = req.query.chatID;
+    console.log(chatID);
     const q = `SELECT * FROM messagelog where ID = ${chatID};`;
     console.log(q);
     db.any(q)
