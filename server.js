@@ -191,9 +191,9 @@ app.post("/login/auth", (req, res) => {
     .then(resp => {//successfully returns user variables
         console.log(resp);
         user.isAuth = true;
-        user.email = resp.email;
-        user.username = resp.username;
-        user.password = resp.pword;
+        user.email = resp[0].email;
+        user.username = resp[0].username;
+        user.password = resp[0].pword;
         res.json({"username": user.username, 
         "isAuth": user.isAuth});
         //res.json(resp);
