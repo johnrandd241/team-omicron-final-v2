@@ -30,12 +30,17 @@ const pgp = require('pg-promise')({
     // Initialization Options
 });
 // Preparing the connection details:
-const host = 'ec2-34-230-153-41.compute-1.amazonaws.com';
-const ports = 5432;
-const username = 'vuoyxzmwyzkavq';
-const password = 'a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20';
-const database = 'd4l2404nskei9g';
-const cn = "postgres://vuoyxzmwyzkavq:a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20@ec2-34-230-153-41.compute-1.amazonaws.com:5432/d4l2404nskei9g?ssl=true";
+const cn = {
+    host:'ec2-34-230-153-41.compute-1.amazonaws.com',
+    ports:5432,
+    user:'vuoyxzmwyzkavq',
+    password:'a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20',
+    database:'d4l2404nskei9g',
+    ssl: {
+        rejectUnauthorized:false
+    }
+};
+//const cn = "postgres://vuoyxzmwyzkavq:a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20@ec2-34-230-153-41.compute-1.amazonaws.com:5432/d4l2404nskei9g?ssl=true";
 // Creating a new database instance from the connection details:
 const db = pgp(cn);
 // Exporting the database object for shared use:
