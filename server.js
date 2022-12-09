@@ -125,7 +125,7 @@ app.get("/users", (req, res)=>{
 
 
 app.get("/users/get", (req, res) => {
-    const q = `SELECT * FROM users WHERE username=${res.params['userid']};`;
+    const q = `SELECT * FROM users WHERE username=${req.params['userid']};`;
     db.any(q)
     .then(resp => {
         res.json(resp);
