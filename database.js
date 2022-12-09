@@ -15,7 +15,7 @@ export function getPostByID(post_id) {
 
 export async function getUserByID(user_id) {
     // returns something like DUMMY_USER
-    let data = await fetch("/users/get?" + URLSearchParams({
+    let data = await fetch("/users/get?" + new URLSearchParams({
         userid: user_id
     }));
     let resp = await data.json();
@@ -43,7 +43,7 @@ export async function createPost(logged, session, tit, desc, tagz, img_src, type
     // console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
 
     let unique_id = Date.now();
-    let data = await fetch("posts/create?" + URLSearchParams({
+    let data = await fetch("posts/create?" + new URLSearchParams({
         comments: unique_id,
         creationdate: null,  // creationdate set inside SQL
         imgurl: img_src,
