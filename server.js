@@ -270,28 +270,37 @@ app.post("/register/auth", (req, res) => {
             user.username = null;
             user.password = null;
         }else{//if it doesnt exist, proceed with creating data
-            const createUser = "INSERT INTO users (username, password, fullName, email) VALUES (?,?,?,?);";
-            db.query(createUser,[req.body.username, req.body.password, req.body.fullName, req.body.email] ,(err, rows) =>{
-                if (err) throw err;
-                    console.log("Row inserted with id = "
-                         + rows.insertId);
-                         user.isAuth = true;
-                         user.email = req.body.email;
-                         user.username = req.body.username;
-                         user.password = req.body.password;
-                         user.fullName = req.body.fullName;
-
-                });
+            const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
+            db.any(createUser)
+            .then(resp => {
+                user.isAuth = true;
+                user.email = req.body.email;
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.fullName = req.body.fullName;
 
                 res.json({"username": user.username, 
-                     "isAuth": user.isAuth,
-                    'email': user.email,
-                    "password": user.password, 
-                    "fullName": user.fullName,
-                    "bio": user.bio,
-                    "friends": user.friends,
-                    "imgurl": user.imgurl
-                    });
+                "isAuth": user.isAuth,
+               'email': user.email,
+               "password": user.password, 
+               "fullName": user.fullName,
+               "bio": user.bio,
+               "friends": user.friends,
+               "imgurl": user.imgurl
+               });
+            })    
+            .catch(error => {//unsuccessfully finds user with specified credentials
+            console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+            console.log(error);
+            user.username = null;
+            user.password = null;
+            //res.end();
+    });
+
+
+                
+
+
         }
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
