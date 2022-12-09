@@ -270,6 +270,7 @@ app.post("/register/auth", (req, res) => {
             user.username = null;
             user.password = null;
         }else{//if it doesnt exist, proceed with creating data
+            console.log("made it past user checker");
             const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
             db.any(createUser)
             .then(resp => {
