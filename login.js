@@ -34,7 +34,7 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
      //takes promise from above and gets data from server
      //to check if user is validated
      DO().then(function(result){
-        //console.log(result);
+        console.log(result);
         if(result.isAuth){
             let theUser = JSON.parse(window.localStorage.getItem('user'));
             theUser.username = result.username;
