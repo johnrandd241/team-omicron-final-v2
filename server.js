@@ -2,16 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
-var cookieParser = require('cookie-parser');
-app.use(cookieParser());
-app.use(express.json({extended: true, limit: '1mb'}));
 
 //this section is for heroku, i believe it finds a port for the the deployment
 //on heroku, then runs or something, otherwise itll run locally on localhost:8000 in your browser
 // - John Rand
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 8000;
+  port = 8800;
 }
 app.listen(port);
 app.use(express.static(__dirname));
@@ -32,38 +29,72 @@ const pgp = require('pg-promise')({
     // Initialization Options
 });
 // Preparing the connection details:
-const cn = 'postgres://username:password@host:port/database';
+const cn = {
+    host:'ec2-34-230-153-41.compute-1.amazonaws.com',
+    ports:5432,
+    user:'vuoyxzmwyzkavq',
+    password:'a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20',
+    database:'d4l2404nskei9g',
+    ssl: {
+        rejectUnauthorized:false
+    }
+};
+//const cn = "postgres://vuoyxzmwyzkavq:a4f5cc059f60dedb000bd8f405ca897fe3809c3632303a5d0df28cac882e4b20@ec2-34-230-153-41.compute-1.amazonaws.com:5432/d4l2404nskei9g?ssl=true";
 // Creating a new database instance from the connection details:
 const db = pgp(cn);
 // Exporting the database object for shared use:
 module.exports = db;
 
-app.get("/query", (req, res)=>{
-    const q = req.params;
+app.get("/GetMsgFromUser", (req, res)=>{
+    const user = req.query.user;
+    console.log(user);
+    const q = `SELECT messages FROM users WHERE Username = ${user};`;
+    console.log(q);
     db.any(q)
     .then(resp => {
+        console.log(resp);
         res.json({"Response":resp});
     })
     .catch(error => {
-        // error;
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        res.end();
     });
 });
 
-let username = null;
-let password = null;
-let fName = null;
-let lName = null;
-let email = null;
-let isAuth = false;
-let user = {"user":{
-                "fName": lName,
-                "lName": lName,
-                'email': email,
-                "username": username,
-                "password": password, 
-                "isAuth": isAuth          
-}};
-//Gets login page
+app.get("/GetMsgFromID", (req, res)=>{
+    const chatID = req.query.chatID;
+    console.log(chatID);
+    const q = `SELECT * FROM messagelog where mlogid = ${chatID};`;
+    console.log(q);
+    db.any(q)
+    .then(resp => {
+        res.json({"Response":resp.rows});
+    })
+    .catch(error => {
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        res.end();
+    });
+});
+
+app.get("/posts", (req, res)=>{
+    const q = `SELECT * FROM post ORDER BY post.creationDate DESC;`;
+    db.any(q)
+    .then(resp => {
+        res.json({"Response":resp.rows});
+    })
+    .catch(error => {
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        res.end();
+    });
+});
+
+app.get("/events", (req, res) => {// tag is /events due to it being the homepage
+    res.sendFile(__dirname + "/index.html");
+});
+
 app.get("/login", (req, res) => {
     res.sendFile(__dirname + "/login-page.html");
 });
