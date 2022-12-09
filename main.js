@@ -286,7 +286,9 @@ function profile(user_id) {
     let friends_header = document.createElement('h2');
     friends_header.innerHTML = "Friends";
     friends.appendChild(friends_header);
-    user_data.friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
+    let user_friends = user_data.friends;
+    user_friends ??= [];
+    user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
         let friend_item = document.createElement('p');
         friend_item.classList.add('hoverline');
         friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
@@ -306,7 +308,7 @@ function profile(user_id) {
         });
         friends.appendChild(friend_item);
     });
-    if (user_data.friends.length === 0) {
+    if (user_friends.length === 0) {
         let no_friends = document.createElement('p');
         no_friends.innerHTML = 'This user has no friends';
         friends.appendChild(no_friends);
