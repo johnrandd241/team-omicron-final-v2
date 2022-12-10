@@ -430,21 +430,20 @@ window.onload = async function() {
     // add functionality to when nav links are clicked
     document.getElementById('nav-list').querySelectorAll('a').forEach(link_elem => {
         link_elem.addEventListener('click', function() {
-            // deactivate the current active link (achieved by deactivating all of them)
-            deactivateNavs();
-            // set the clicked link to active
-            link_elem.classList.add('active');
-            // update the current section
-            if (currentUser.isAuth) {
+            let switch_tab = () => {
+                link_elem.classList.add('active');
                 cur_section = link_elem.id.split('-')[0];
                 toggleSearchBar();
+            };
+            // update the current section
+            let clicked = link_elem.id.split('-')[0];
+            if (currentUser.isAuth || (clicked !== "profile" && clicked !== "messages")) {
+                switch_tab();
             }
             // now we do whatever we need to based on the section we are in
             switch (link_elem.id.split('-')[0]) {
                 case 'messages':
                     if (currentUser.isAuth) {
-                        cur_section = link_elem.id.split('-')[0];
-                        toggleSearchBar();
                         // do whatever we need for the messages
                         message(null);
                     } else {
@@ -453,14 +452,10 @@ window.onload = async function() {
                     break;
                 case 'profile':
                     if (currentUser.isAuth) {
-                        // do whatever we need for the profile
-                        // go to the current signed in user (this should only even be visible if youre signed in)
                         profile(currentUser.username);
-                        toggleSearchBar();
                     } else {
                         alert("Sign in to use this feature");
                     }
-
                     break;
                 default:
                     // must be events, people, or records, which are basically all the same
