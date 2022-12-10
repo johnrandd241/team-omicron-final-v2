@@ -232,6 +232,7 @@ app.post("/login/auth", (req, res) => {
 
         user.username = null;
         user.password = null;
+        user.isAuth = false;
         res.json({"username": user.username, 
         "isAuth": user.isAuth,
         'email': user.email,
