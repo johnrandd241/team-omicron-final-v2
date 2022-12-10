@@ -363,7 +363,10 @@ async function profile(user_id) {
             profile_pic_text.innerHTML = 'Profile picture URL:';
             sub_personal_left.appendChild(profile_pic_text);
             let profile_pic_input = document.createElement('input');
-            profile_pic_input.addEventListener('input', () => {
+            profile_pic_input.addEventListener('input', async () => {
+                (await fetch("users/changeprofile?" + new URLSearchParams({
+                    imgurl: profile_pic_input
+                })));
                 // send updated profile picture back to server
             });
             profile_pic_input.value = user_data.imgurl; // img_src => imgurl

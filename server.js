@@ -48,9 +48,11 @@ module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    const q = `SELECT messages FROM users WHERE Username = ${user};`;
+    const q = `SELECT messages FROM users WHERE username = ${user};`;
+    console.log("attempting this query: " + q);
     db.any(q)
     .then(resp => {
+        console.log("got this response (THTHTHT): ");
         console.log(resp);
         res.json(resp);
     })
@@ -166,6 +168,10 @@ app.get("/users/get", (req, res) => {
         console.log(error);
         res.end();
     });
+});
+
+app.get("/users/changeprofile", (req, res) => {
+    const q = `UPDATE users SET imgurl='${req.query['']}'`;
 });
 
 let username = null;
