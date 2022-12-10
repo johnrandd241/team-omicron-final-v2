@@ -230,6 +230,15 @@ app.post("/login/auth", (req, res) => {
         console.log(error);
         user.username = null;
         user.password = null;
+        res.json({"username": user.username, 
+        "isAuth": user.isAuth,
+        'email': user.email,
+        "password": user.password, 
+        "fullName": user.fullName,
+        "bio": user.bio,
+        "friends": user.friends,
+        "imgurl": user.imgurl
+       });
         //res.end();
     });
     
