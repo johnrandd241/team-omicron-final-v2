@@ -275,9 +275,10 @@ app.post("/register/auth", (req, res) => {
             //here lies issue, must be the call to the db
             //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';
             const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES (?,?,?,?)'" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
-            
-            bd.none(createUser)
+
+            db.none(createUser)
             .then(resp => {
+                console.log(resp);
                 res.json(resp);
             })
             .catch(error => {
