@@ -238,7 +238,7 @@ app.post("/login/auth", (req, res) => {
         console.log(error);
         user.username = null;
         user.password = null;
-        res.end();
+        //res.end();
     });
     
     /*
