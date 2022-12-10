@@ -48,7 +48,7 @@ module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    const q = `SELECT messages FROM users WHERE username = ${user};`;
+    const q = `SELECT messages FROM users WHERE username = '${user}';`;
     console.log("attempting this query: " + q);
     db.any(q)
     .then(resp => {
@@ -57,9 +57,9 @@ app.get("/GetMsgFromUser", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/GetMsgFromUser) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 //--------------------------------
@@ -69,30 +69,30 @@ app.get('/CreateCommentSection', (req, res)=>{
     const q = `INSERT INTO logs (logID) VALUES (${logid}); 
                 INSERT INTO commentlog(clogid) VALUES (${logid});
                 UPDATE post
-                SET comments = ${logid}
-                WHERE postid = ${postid};`
+                SET comments = '${logid}'
+                WHERE postid = '${postid}';`
     db.none(q)
     .then(resp => {
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/CreateCommentSection) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.query.chatID;
-    const q = `SELECT * FROM messagelog where mlogid = ${chatID};`;
+    const q = `SELECT * FROM messagelog where mlogid = '${chatID}';`;
     db.any(q)
     .then(resp => {
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/GetMsgFromID) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 
@@ -105,9 +105,9 @@ app.get("/posts", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/posts) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 
@@ -131,23 +131,23 @@ app.get("/users", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/Users) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 
 app.get("/posts/get", (req, res)=>{
-    const q = `SELECT * FROM post WHERE postid=${req.query.postid};`;
+    const q = `SELECT * FROM post WHERE postid='${req.query.postid}';`;
     console.log("querying this: " + q);
     db.any(q)
     .then(resp => {
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/post/get) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 
@@ -164,14 +164,30 @@ app.get("/users/get", (req, res) => {
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/users/get) Dumping Error now...\n");
         console.log(error);
         res.end();
     });
 });
 
 app.get("/users/changeprofile", (req, res) => {
-    const q = `UPDATE users SET imgurl='${req.query['']}'`;
+    const q = `UPDATE users SET imgurl='${req.query['imgurl']}' WHERE username='${req.query['userid']}'`;
+    db.none(q)
+    .then(resp => {
+        console.log("updated profile picture");
+        console.log(resp);
+    });
+    res.end();
+});
+
+app.get("/users/changebio", (req, res) => {
+    const q = `UPDATE users SET bio='${req.query['bio']}' WHERE username='${req.query['userid']}'`;
+    db.none(q)
+    .then(resp => {
+        console.log("updated bio");
+        console.log(resp);
+    });
+    res.end();
 });
 
 let username = null;
@@ -238,7 +254,7 @@ app.post("/login/auth", (req, res) => {
         user.imgurl = resp[0].imgurl;
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/login/auth) Dumping Error now...\n");
         console.log(error);
         console.log(user);
 
