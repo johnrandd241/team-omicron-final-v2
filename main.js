@@ -465,6 +465,7 @@ window.onload = async function() {
                     break;
                 case 'profile':
                     if (currentUser.isAuth) {
+                        link_elem.classList.add('active');
                         profile(currentUser.username);
                     } else {
                         alert("Sign in to use this feature");
