@@ -60,7 +60,7 @@ app.get("/GetMsgFromUser", (req, res)=>{
         res.end();
     });
 });
-
+//--------------------------------
 app.get('/CreateCommentSection', (req, res)=>{
     const logid = req.query.logid;
     const postid = req.query.postid;
@@ -257,7 +257,8 @@ app.post("/login/auth", (req, res) => {
 app.get("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
 });
-
+//`INSERT INTO logs (logID) VALUES (${logid}); 
+   //             INSERT INTO commentlog(clogid) VALUES (${logid});
 app.post("/register/auth", (req, res) => {
     console.log("called reg");
     const q = "SELECT EXISTS(SELECT username, email FROM users WHERE username = '" + req.body.username + "' OR email = '" + req.body.email + "');";
@@ -271,7 +272,20 @@ app.post("/register/auth", (req, res) => {
             user.password = null;
         }else{//if it doesnt exist, proceed with creating data
             console.log("made it past user checker");
-            const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
+            //here lies issue, must be the call to the db
+            //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';
+            const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES (?,?,?,?)'" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
+            
+            bd.none(createUser)
+            .then(resp => {
+                res.json(resp);
+            })
+            .catch(error => {
+                console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+                console.log(error);
+                res.end();
+            });
+/*
             db.any(createUser)
             .then(resp => {
                 user.isAuth = true;
@@ -299,7 +313,7 @@ app.post("/register/auth", (req, res) => {
     });
 
 
-                
+          */      
 
 
         }
