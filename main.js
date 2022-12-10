@@ -441,9 +441,14 @@ window.onload = async function() {
                     message(null);
                     break;
                 case 'profile':
-                    // do whatever we need for the profile
-                    // go to the current signed in user (this should only even be visible if youre signed in)
-                    profile(currentUser.username);
+                    if (currentUser.isAuth) {
+                        // do whatever we need for the profile
+                        // go to the current signed in user (this should only even be visible if youre signed in)
+                        profile(currentUser.username);
+                    } else {
+                        alert("Sign in to use this feature");
+                    }
+
                     break;
                 default:
                     // must be events, people, or records, which are basically all the same

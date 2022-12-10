@@ -391,11 +391,3 @@ app.post('/content/removePost', (req, res) => {
 app.get('/content/search', (req, res) => {
 
 });
-
-
-
-
-
-
-
-
