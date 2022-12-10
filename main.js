@@ -64,27 +64,29 @@ async function search(keywords) {
     // render the elements into the page
     // at this point, all of the 'posts' should be in some kind of array, all we gotta do now is render them
     let data = await fetch("/posts");
-    let arr = await data.json(); // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
-    // create the base element for the posts (this container holds the rows and columns and what not)
-    let container = document.createElement('div');
-    container.classList.add('container'); // specify the fact it is a container
-    container.classList.add('mt-5'); // set the size
-    // while there are still posts to render
-    while (arr.length > 0) {
-        // create the element for this row of posts
-        let cur_row = document.createElement('div');
-        cur_row.classList.add('row'); // specify that it is a row
-        cur_row.classList.add('gx-5'); // set the sizing
-        // go through them POSTS_PER_ROW at a time (i think 2 posts per row is good)
-        arr.slice(0, POSTS_PER_ROW).forEach(post_data => {
-            // create the column cell for the post
-            cur_row.appendChild(getColumnForPost(post_data));
-            arr.shift();
-        });
-        container.appendChild(cur_row);
-    }
-    document.getElementById('page').textContent = '';
-    document.getElementById('page').appendChild(container);
+    data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
+        arr = arr.filter(e => cur_section.startsWith(e.posttype));
+        // create the base element for the posts (this container holds the rows and columns and what not)
+        let container = document.createElement('div');
+        container.classList.add('container'); // specify the fact it is a container
+        container.classList.add('mt-5'); // set the size
+        // while there are still posts to render
+        while (arr.length > 0) {
+            // create the element for this row of posts
+            let cur_row = document.createElement('div');
+            cur_row.classList.add('row'); // specify that it is a row
+            cur_row.classList.add('gx-5'); // set the sizing
+            // go through them POSTS_PER_ROW at a time (i think 2 posts per row is good)
+            arr.slice(0, POSTS_PER_ROW).forEach(post_data => {
+                // create the column cell for the post
+                cur_row.appendChild(getColumnForPost(post_data));
+                arr.shift();
+            });
+            container.appendChild(cur_row);
+        }
+        document.getElementById('page').textContent = '';
+        document.getElementById('page').appendChild(container);
+    });
 }
 
 async function viewPost(post_id) {
