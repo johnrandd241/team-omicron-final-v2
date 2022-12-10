@@ -48,7 +48,7 @@ export async function message(chatID){
     curchat.classList.add("card-body", "msg_card_body");
     curchat.setAttribute('id', 'curchat');
     
-    if(typeof(chatID) === "undefined"){
+    if(typeof(chatID) == "undefined"){
         let empty = document.createElement('div');
         empty.innerHTML = "Please Select a chat from the list on the left";
         curchat.appendChild(empty);
