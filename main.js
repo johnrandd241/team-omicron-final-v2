@@ -285,6 +285,7 @@ async function profile(user_id) {
         if (is_own) {
             biography = document.createElement('textarea');
             biography.addEventListener('input', () => {
+
                 // send updated biography back to server
             });
             biography.style.width = '100%';
@@ -368,6 +369,7 @@ async function profile(user_id) {
                     imgurl: profile_pic_input.value,
                     userid: logged_user
                 })));
+                console.log("attempting to change profile pic to " + profile_pic_input.value);
                 photo.src = profile_pic_input.value;
                 // send updated profile picture back to server
             });
