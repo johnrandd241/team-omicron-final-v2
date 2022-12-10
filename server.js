@@ -184,7 +184,7 @@ app.get("/users/addfriend", (req, res) => {
     let current_friends = db.any(`SELECT friends FROM users WHERE username='${req.query["into"]}'`).then(resp => {
         let updated_friends = resp[0];
         updated_friends.push(req.query["who"]);
-        const q = `UPDATE users SET friends=${updated_friends}$ WHERE username='${req.query["userid"]}'`;
+        const q = `UPDATE users SET friends=${updated_friends}$ WHERE username='${req.query["into"]}'`;
         console.log("updating friends as with query: " + q);
         db.none(q);
     });
