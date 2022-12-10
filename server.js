@@ -134,10 +134,10 @@ app.get("/users", (req, res)=>{
 
 
 app.get("/users/get", (req, res) => {
-    const q = `SELECT * FROM users WHERE username=${req.params['userid']};`;
+    const q = `SELECT * FROM users WHERE username='${req.params['userid']}';`;
     db.any(q)
     .then(resp => {
-        res.json({text:JSON.stringify(resp)});
+        res.json(resp);
     })
     .catch(error => {
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
