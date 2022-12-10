@@ -176,7 +176,7 @@ function postCreator() {
     category_select.id = 'postMakerType';
     let event_option = document.createElement('option');
     event_option.innerHTML = 'Events';
-    event_option.value = 'events';
+    event_option.value = 'event';
     category_select.appendChild(event_option);
     let people_option = document.createElement('option');
     people_option.innerHTML = 'People';

@@ -116,7 +116,7 @@ app.get("/posts/create", (req, res) => {
     db.none(q).then(resp => {
         console.log('post created');
     }).catch(error => {
-        console.log('error while making post' + error);
+        console.log('error while making post ' + error);
     });
     res.send({});
 });
