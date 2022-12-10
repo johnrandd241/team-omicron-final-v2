@@ -279,28 +279,7 @@ app.post("/register/auth", (req, res) => {
             user.password = null;
         }else{//if it doesnt exist, proceed with creating data
             console.log("made it past user checker");
-            //here lies issue, must be the call to the db
-            //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';
-            const createUser = "INSERT INTO users (username, pword, nameofuser, email) VALUES ('" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"');";
-
-            db.none(createUser)
-            .then(resp => {
-                user.isAuth = true;
-                user.email = req.body.email;
-                user.username = req.body.username;
-                user.password = req.body.password;
-                user.fullName = req.body.fullName;
-                user.bio = user.bio;
-                user.friends = user.friends;
-                user.imgurl = user.imgurl;
-        
-            })
-            .catch(error => {
-                console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
-                console.log(error);
-
-            });
-/*
+            const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
             db.any(createUser)
             .then(resp => {
                 user.isAuth = true;
