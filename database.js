@@ -51,19 +51,24 @@ export function addFriend(logged, session, to_add) {
 export async function createPost(logged, session, tit, desc, tagz, img_src, type) {
     // console.log('creating post with this information');
     // console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
-
     let unique_id = Date.now() % 2000000000;
-    let data = await fetch("posts/create?" + new URLSearchParams({
-        comments: unique_id,
-        creationdate: null,  // creationdate set inside SQL
-        imgurl: img_src,
-        postdescription: desc,
-        postid: unique_id,
-        posttype: type,
-        tags: tagz,
-        title: tit,
-        userid: logged
-    }));
+    // create the comment section
+    (await fetch("/CreateCommentSection?" + new URLSearchParams({
+        logid: unique_id,
+        postid: unique_id
+    }))).json().then(async resp => { // then publish the post
+        let data = await fetch("posts/create?" + new URLSearchParams({
+            comments: unique_id,
+            creationdate: null,  // creationdate set inside SQL
+            imgurl: img_src,
+            postdescription: desc,
+            postid: unique_id,
+            posttype: type,
+            tags: tagz,
+            title: tit,
+            userid: logged
+        }));
+    });
     // verify user is legit
     // create new row in post table with this info
     // note that date is not provided
