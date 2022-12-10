@@ -234,6 +234,7 @@ function profile(user_id) {
     // if it is, add the buttons that allow them to edit the bio
     // fetch the user information
     let user_data = Database.getUserByID(user_id);
+    console.log('obtained this user data from database: ' + user_data);
     // now create the html elements
     let container = document.createElement('div');
     container.classList.add('container');
