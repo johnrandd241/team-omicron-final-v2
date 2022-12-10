@@ -17,7 +17,10 @@ export async function getUserByID(user_id) {
     // returns something like DUMMY_USER
     let data = await fetch("/users/get?" + new URLSearchParams({
         userid: user_id
-    }));
+    })).catch(error => {
+        console.log("error while fetching user data");
+        console.log(error);
+    });
     let resp = await data.json();
     return resp[0];
 }
