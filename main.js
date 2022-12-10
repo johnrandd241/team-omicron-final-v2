@@ -34,7 +34,7 @@ function getColumnForPost(post_data) {
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.userid).name + ' on ' + post_data.creationdate; // creationdate changed to date
+    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.userid).nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
     meta_element.style.textDecoration = 'underline';
     if (post_data.postid != 0) {
         meta_element.addEventListener('click', () => {
