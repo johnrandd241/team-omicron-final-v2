@@ -106,7 +106,7 @@ async function viewPost(post_id) {
         console.log("got the post data, now rendering: ");
         console.log(true_data);
         console.log(true_data[0]);
-        primary_row.appendChild(getColumnForPost(true_data));
+        primary_row.appendChild(getColumnForPost(true_data[0]));
         primary_row.appendChild(comments);
         container.appendChild(primary_row);
         document.getElementById('page').textContent = '';
