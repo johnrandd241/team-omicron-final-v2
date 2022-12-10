@@ -184,7 +184,7 @@ app.get("/users/addfriend", (req, res) => {
     let p = `SELECT friends FROM users WHERE username='${req.query["into"]}'`;
     console.log("attempting to retreive friends with " + p);
     db.any(p).then(resp => {
-        let updated_friends = resp[0];
+        let updated_friends = resp[0].friends;
         console.log(updated_friends);
         updated_friends ??= [];
         console.log(updated_friends);
