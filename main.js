@@ -245,9 +245,10 @@ function postCreator() {
 
 // runs when profile tab is clicked
 async function profile(user_id) {
+    deactivateNavs();
+    document.getElementById('profile').classList.add('active');
+    toggleSearchBar();
     cur_section = 'profile';
-            toggleSearchBar();
-            deactivateNavs();
     console.log('viewing profile ' + user_id + ' as ' + currentUser.username);
     console.log('test print');
     let is_own = user_id === currentUser.username; // is true if you are viewing your own profile
@@ -465,7 +466,6 @@ window.onload = async function() {
                     break;
                 case 'profile':
                     if (currentUser.isAuth) {
-                        link_elem.classList.add('active');
                         profile(currentUser.username);
                     } else {
                         alert("Sign in to use this feature");
