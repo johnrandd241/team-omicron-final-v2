@@ -19,28 +19,29 @@ export async function message(chatID){
     if(!response.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
-    }
-    convos = await response.json();
-    for(let c in convos){
-        let item = document.createElement('li');
-        item.id = c.friend;
-        //item.classList.add('')
-        let card =  document.createElement('div');
-        card.classList.add('d-flex','bd-highlight');
-        let pic = document.createElement('div');
-        pic.classList.add('img_cont');
-        let image = document.createElement('img');
-        image.src = './stockUserPhoto.jpeg';
-        pic.appendChild(image);
-        card.appendChild(pic);
-        let friend = document.createElement('div');
-        friend.classList.add('user_info');
-        let name = document.createElement('span');
-        name.innerHTML = c.friend;
-        friend.appendChild(name);
-        card.appendChild(friend);
-        item.appendChild(card);
-        chats.appendChild(item);
+    }else{
+        convos = await response.json();
+        for(let c in convos){
+            let item = document.createElement('li');
+            item.id = c.friend;
+            //item.classList.add('')
+            let card =  document.createElement('div');
+            card.classList.add('d-flex','bd-highlight');
+            let pic = document.createElement('div');
+            pic.classList.add('img_cont');
+            let image = document.createElement('img');
+            image.src = './stockUserPhoto.jpeg';
+            pic.appendChild(image);
+            card.appendChild(pic);
+            let friend = document.createElement('div');
+            friend.classList.add('user_info');
+            let name = document.createElement('span');
+            name.innerHTML = c.friend;
+            friend.appendChild(name);
+            card.appendChild(friend);
+            item.appendChild(card);
+            chats.appendChild(item);
+        }
     }
 
     let curchat = document.createElement('div');
@@ -59,30 +60,30 @@ export async function message(chatID){
     if(!response2.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
-    }
-    chat = await response2.json();
-    console.log(chat);
-    for(let msg in chat){
-        let bubble = document.createElement('div');
-        bubble.classList.add("d-flex","mb-4");
-        if(logged_user === msg.user){
-            bubble.classList.add('justify-content-start');
-        }else{
-            bubble.classList.add('justify-content-end');
+    }else{
+        chat = await response2.json();
+        for(let msg in chat){
+            let bubble = document.createElement('div');
+            bubble.classList.add("d-flex","mb-4");
+            if(logged_user === msg.user){
+                bubble.classList.add('justify-content-start');
+            }else{
+                bubble.classList.add('justify-content-end');
+            }
+            let uinfo = document.createElement('div');
+            uinfo.innerHTML = msg.user;
+            //uinfo.classList.add()
+            let msgC = document.createElement('div');
+            msgC.classList.add("msg_container");
+            msgC.innerHTML = msg.text;
+            let time = document.createElement('span');
+            time.classList.add('msg_time');
+            time.innerHTML = msg.date;
+            msgC.appendChild(time);
+            bubble.appendChild(uinfo);
+            bubble.appendChild(msgC);
+            curchat.appendChild(bubble);
         }
-        let uinfo = document.createElement('div');
-        uinfo.innerHTML = msg.user;
-        //uinfo.classList.add()
-        let msgC = document.createElement('div');
-        msgC.classList.add("msg_container");
-        msgC.innerHTML = msg.text;
-        let time = document.createElement('span');
-        time.classList.add('msg_time');
-        time.innerHTML = msg.date;
-        msgC.appendChild(time);
-        bubble.appendChild(uinfo);
-        bubble.appendChild(msgC);
-        curchat.appendChild(bubble);
     }
 
     let card = document.createElement('div');
