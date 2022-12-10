@@ -223,6 +223,7 @@ function postCreator() {
         Database.createPost(logged_user, session_id, title_input.value, desc_input.value, tags_input.value, url_input.value, category_select.options[category_select.selectedIndex].value);
         cur_section = 'profile';
         toggleSearchBar();
+        deactivateNavs();
         profile(logged_user);
     });
     let update_preview = () => {

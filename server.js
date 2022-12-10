@@ -113,13 +113,11 @@ app.get("/posts/create", (req, res) => {
     const q = `INSERT INTO post (comments, creationdate, imgurl, postdescription, postid, posttype, tags, title, userid) VALUES (${req.query.comments}, GETDATE(), '${req.query.imgurl}', '${req.query.postdescription}', ${req.query.postid}, '${req.query.posttype}', '${req.query.tags}', '${req.query.title}', '${req.query.userid}');`;
     console.log(req.query);
     console.log("sending query: " + q);
-    /*
     db.none(q).then(resp => {
         console.log('post created');
     }).catch(error => {
         console.log('error while making post' + error);
     });
-    */
     res.send({});
 });
 
