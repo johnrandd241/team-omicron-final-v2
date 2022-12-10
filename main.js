@@ -212,7 +212,7 @@ function postCreator() {
     preview_col.classList.add('col');
     preview_col.classList.add('bg-white');
     preview_col.appendChild(preview_header);
-    let sample = getColumnForPost({title: '', desc: '', img_src: '', user: logged_user, tags: '', date: '', type: '', id: 0});
+    let sample = getColumnForPost({title: '', desc: '', img_src: '', user: currentUser.username, tags: '', date: '', type: '', id: 0});
     preview_col.appendChild(sample);
     row.appendChild(preview_col);
     editor_table.appendChild(row);
@@ -222,11 +222,11 @@ function postCreator() {
             alert('Make sure to at least include a title and description');
             return;
         }
-        Database.createPost(logged_user, session_id, title_input.value, desc_input.value, tags_input.value, url_input.value, category_select.options[category_select.selectedIndex].value);
+        Database.createPost(currentUser.username, session_id, title_input.value, desc_input.value, tags_input.value, url_input.value, category_select.options[category_select.selectedIndex].value);
         cur_section = 'profile';
         toggleSearchBar();
         deactivateNavs();
-        profile(logged_user);
+        profile(currentUser.username);
     });
     let update_preview = () => {
         preview_col.innerHTML = '';
@@ -237,7 +237,7 @@ function postCreator() {
               [d.getHours(),
                d.getMinutes(),
                d.getSeconds()].join(':');
-        preview_col.appendChild(getColumnForPost({title: title_input.value, postdescription: desc_input.value, imgurl: url_input.value, userid: logged_user, tags: tags_input.value, creationdate: dformat, posttype: category_select.options[category_select.selectedIndex].value, postid: 0}));
+        preview_col.appendChild(getColumnForPost({title: title_input.value, postdescription: desc_input.value, imgurl: url_input.value, userid: currentUser.username, tags: tags_input.value, creationdate: dformat, posttype: category_select.options[category_select.selectedIndex].value, postid: 0}));
     };
     [...form_element.children].forEach(e => e.addEventListener('change', update_preview));
     update_preview();
@@ -245,9 +245,9 @@ function postCreator() {
 
 // runs when profile tab is clicked
 async function profile(user_id) {
-    console.log('viewing profile ' + user_id + ' as ' + logged_user);
+    console.log('viewing profile ' + user_id + ' as ' + currentUser.username);
     console.log('test print');
-    let is_own = user_id === logged_user; // is true if you are viewing your own profile
+    let is_own = user_id === currentUser.username; // is true if you are viewing your own profile
     // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
     // do some kind of check to see if user_id is the one thats signed in
     // if it is, add the buttons that allow them to edit the bio
@@ -287,7 +287,7 @@ async function profile(user_id) {
             biography.addEventListener('input', async () => {
                 (await fetch("users/changebio?" + new URLSearchParams({
                     bio: biography.value,
-                    userid: logged_user
+                    userid: currentUser.username
                 })));
             });
             biography.style.width = '100%';
@@ -325,7 +325,7 @@ async function profile(user_id) {
                 unfriend_button.type = 'button';
                 unfriend_button.value = 'Remove';
                 unfriend_button.addEventListener('click', () => {
-                    Database.removeFriend(logged_user, session_id, friend_data.username);
+                    Database.removeFriend(currentUser.username, session_id, friend_data.username);
                 });
                 friend_item.appendChild(unfriend_button);
             }
@@ -369,7 +369,7 @@ async function profile(user_id) {
             profile_pic_input.addEventListener('input', async () => {
                 (await fetch("users/changeprofile?" + new URLSearchParams({
                     imgurl: profile_pic_input.value,
-                    userid: logged_user
+                    userid: currentUser.username
                 })));
                 console.log("attempting to change profile pic to " + profile_pic_input.value);
                 photo.src = profile_pic_input.value;
@@ -443,7 +443,7 @@ window.onload = async function() {
                 case 'profile':
                     // do whatever we need for the profile
                     // go to the current signed in user (this should only even be visible if youre signed in)
-                    profile(logged_user);
+                    profile(currentUser.username);
                     break;
                 default:
                     // must be events, people, or records, which are basically all the same
