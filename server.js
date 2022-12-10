@@ -193,7 +193,8 @@ app.get("/users/addfriend", (req, res) => {
         
         });
     }).catch(error => {
-    
+        console.log("got error somehow");
+        console.log(error);
     });
     res.end();
 });
