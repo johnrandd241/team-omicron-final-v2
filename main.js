@@ -237,8 +237,6 @@ async function profile(user_id) {
     let data = await fetch("/users/get?userid=" + user_id);
     data.json().then(user_data => {
         console.log("got this user data from server: " + user_data);
-        let user_data = Database.getUserByID(user_id);
-        console.log('obtained this user data from database: ' + user_data);
         // now create the html elements
         let container = document.createElement('div');
         container.classList.add('container');
