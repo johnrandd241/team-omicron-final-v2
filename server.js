@@ -274,7 +274,7 @@ app.post("/register/auth", (req, res) => {
             console.log("made it past user checker");
             //here lies issue, must be the call to the db
             //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';
-            const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES (?,?,?,?)'" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';";
+            const createUser = "INSERT INTO users (username, pword, fullName, email) VALUES ('" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"');";
 
             db.none(createUser)
             .then(resp => {
