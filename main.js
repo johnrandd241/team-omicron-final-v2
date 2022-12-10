@@ -34,7 +34,7 @@ async function getColumnForPost(post_data) {
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = "blank for now";
+    meta_element.innerHTML = 'Posted by ' + post_data.userid + ' on ' + post_data.creationdate; // creationdate changed to date
     /*
     let userfetch = await fetch("/users/get?userid=" + post_data.userid);
     userfetch.json().then(delivered => {
