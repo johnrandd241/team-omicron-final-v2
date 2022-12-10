@@ -9,7 +9,7 @@ console.log(currentUser);
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
-export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'sbrommage1';
+export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = '';
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
@@ -245,6 +245,9 @@ function postCreator() {
 
 // runs when profile tab is clicked
 async function profile(user_id) {
+    cur_section = 'profile';
+            toggleSearchBar();
+            deactivateNavs();
     console.log('viewing profile ' + user_id + ' as ' + currentUser.username);
     console.log('test print');
     let is_own = user_id === currentUser.username; // is true if you are viewing your own profile
