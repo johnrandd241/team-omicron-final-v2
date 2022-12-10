@@ -171,7 +171,12 @@ app.get("/users/get", (req, res) => {
 });
 
 app.get("/users/changeprofile", (req, res) => {
-    const q = `UPDATE users SET imgurl='${req.query['imgurl']}' WHERE username=${req.query['userid']}`;
+    const q = `UPDATE users SET imgurl='${req.query['imgurl']}' WHERE username='${req.query['userid']}'`;
+    db.none(q)
+    .then(resp => {
+        console.log("updated profile picture");
+        console.log(resp);
+    });
 });
 
 let username = null;
