@@ -431,6 +431,7 @@ window.onload = async function() {
     document.getElementById('nav-list').querySelectorAll('a').forEach(link_elem => {
         link_elem.addEventListener('click', function() {
             let switch_tab = () => {
+                deactivateNavs();
                 link_elem.classList.add('active');
                 cur_section = link_elem.id.split('-')[0];
                 toggleSearchBar();
@@ -460,8 +461,6 @@ window.onload = async function() {
                 default:
                     // must be events, people, or records, which are basically all the same
                     // jsut do a default search to sort by date
-                    cur_section = link_elem.id.split('-')[0];
-                    toggleSearchBar();
                     search('');
                     break;
             }
