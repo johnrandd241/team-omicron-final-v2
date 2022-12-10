@@ -52,7 +52,7 @@ export async function createPost(logged, session, tit, desc, tagz, img_src, type
     // console.log('creating post with this information');
     // console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
 
-    let unique_id = Date.now();
+    let unique_id = Date.now() % 2000000000;
     let data = await fetch("posts/create?" + new URLSearchParams({
         comments: unique_id,
         creationdate: null,  // creationdate set inside SQL
