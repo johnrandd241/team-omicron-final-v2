@@ -246,7 +246,7 @@ function postCreator() {
 // runs when profile tab is clicked
 async function profile(user_id) {
     deactivateNavs();
-    document.getElementById('profile').classList.add('active');
+    document.getElementById('profile-link').classList.add('active');
     toggleSearchBar();
     cur_section = 'profile';
     console.log('viewing profile ' + user_id + ' as ' + currentUser.username);
