@@ -11,7 +11,7 @@ const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
 export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'sbrommage1';
 
-async function getColumnForPost(post_data) {
+function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
     cur_col.classList.add('col');
     cur_col.classList.add('p-' + POSTS_PER_ROW);
