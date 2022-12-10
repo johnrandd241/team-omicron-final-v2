@@ -69,7 +69,7 @@ app.get('/CreateCommentSection', (req, res)=>{
                 UPDATE posts
                 SET comments = ${logid}
                 WHERE postid = ${postid};`
-    bd.none(q)
+    db.none(q)
     .then(resp => {
         res.json(resp);
     })
