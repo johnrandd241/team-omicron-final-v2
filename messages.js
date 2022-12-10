@@ -30,7 +30,7 @@ export async function message(chatID){
             let pic = document.createElement('div');
             pic.classList.add('img_cont');
             let image = document.createElement('img');
-            image.src = './stockUserPhoto.jpeg';
+            image.src = './stockUserPhoto.jpg';
             pic.appendChild(image);
             card.appendChild(pic);
             let friend = document.createElement('div');
