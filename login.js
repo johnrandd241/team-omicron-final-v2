@@ -39,13 +39,11 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
                 }
                 else{
                     window.alert("Invalid username/password");
-                    //window.location.replace("/login");
                 }
             });
 
          } catch (error) {
              console.log(error);
-
          }
      };
      handleFormData();

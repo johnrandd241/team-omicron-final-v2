@@ -266,6 +266,26 @@ app.post("/register/auth", (req, res) => {
                 console.log(error);
 
             });
+        }
+    })
+    .catch(error => {//unsuccessfully finds user with specified credentials
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        user.username = null;
+        user.password = null;
+        //res.end();
+    });
+    res.json({"username": user.username, 
+    "isAuth": user.isAuth,
+    'email': user.email,
+    "password": user.password, 
+    "fullName": user.fullName,
+    "bio": user.bio,
+    "friends": user.friends,
+    "imgurl": user.imgurl
+   });
+
+});
 /*
             db.any(createUser)
             .then(resp => {
@@ -297,18 +317,7 @@ app.post("/register/auth", (req, res) => {
           */      
 
 
-        }
-    })
-    .catch(error => {//unsuccessfully finds user with specified credentials
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
-        console.log(error);
-        user.username = null;
-        user.password = null;
-        //res.end();
-    });
-    
 
-});
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");

@@ -1,16 +1,16 @@
 
 document.getElementById('registerButton').addEventListener('click', (e) => {
     e.preventDefault()
+
     let fullName = document.getElementById("fullName").value;
     let email = document.getElementById("email").value;
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
-    console.log('head')
+
     const data = {fullName, email, username, password};
+    
     //sends data to server
     const handleFormData = async () => {
-        console.log('asuync')
-
         const sent = await fetch('/register/auth', {
              method: 'POST',
              headers: {
@@ -20,14 +20,9 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
          })
  
          try {
-            console.log('try')
-
             const result = await sent.json();
-            console.log('aftres');
             console.log(result);
             DO().then(function(result){
-                console.log('do')
-
                 if(result.isAuth){
                     let theUser = JSON.parse(window.localStorage.getItem('user'));
                     theUser.username = result.username;
@@ -44,8 +39,7 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
                     window.location.replace("/events");
                 }
                 else{
-                    window.alert("Invalid username/password");
-                    window.location.replace("/register");
+                    window.alert("Username/email already in use");
                 }
             });
          } catch (error) {
@@ -54,9 +48,6 @@ document.getElementById('registerButton').addEventListener('click', (e) => {
      };
 
      handleFormData();
-     //takes promise from above and gets data from server
-     //to check if user is validated
-
 });
 async function DO(){
     const res = await fetch("/sendAllCred");
