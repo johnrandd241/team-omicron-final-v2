@@ -171,7 +171,7 @@ app.get("/users/get", (req, res) => {
 });
 
 app.get("/users/changeprofile", (req, res) => {
-    const q = `UPDATE users SET imgurl='${req.query['']}'`;
+    const q = `UPDATE users SET imgurl='${req.query['imgurl']}' WHERE username=${req.query['userid']}`;
 });
 
 let username = null;
