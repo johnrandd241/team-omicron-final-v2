@@ -57,9 +57,8 @@ app.get("/GetMsgFromUser", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/GetMsgFromUser) Dumping Error now...\n");
         console.log(error);
-        res.end();
     });
 });
 //--------------------------------
@@ -76,9 +75,8 @@ app.get('/CreateCommentSection', (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/CreateCommentSection) Dumping Error now...\n");
         console.log(error);
-        res.end();
     });
 });
 
@@ -90,9 +88,8 @@ app.get("/GetMsgFromID", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/GetMsgFromID) Dumping Error now...\n");
         console.log(error);
-        res.end();
     });
 });
 
@@ -105,9 +102,8 @@ app.get("/posts", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/posts) Dumping Error now...\n");
         console.log(error);
-        res.end();
     });
 });
 
@@ -131,9 +127,8 @@ app.get("/users", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/Users) Dumping Error now...\n");
         console.log(error);
-        res.end();
     });
 });
 
@@ -145,7 +140,7 @@ app.get("/posts/get", (req, res)=>{
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/post/get) Dumping Error now...\n");
         console.log(error);
         res.end();
     });
@@ -164,7 +159,7 @@ app.get("/users/get", (req, res) => {
         res.json(resp);
     })
     .catch(error => {
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/users/get) Dumping Error now...\n");
         console.log(error);
         res.end();
     });
@@ -238,7 +233,7 @@ app.post("/login/auth", (req, res) => {
         user.imgurl = resp[0].imgurl;
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An error occured in the SQL call to the server. (/login/auth) Dumping Error now...\n");
         console.log(error);
         console.log(user);
 
