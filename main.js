@@ -238,6 +238,8 @@ async function profile(user_id) {
     data.json().then(user_data => {
         console.log("got this user data from server: ");
         console.log(user_data);
+        console.log(user_data.bio);
+        console.log(user_data.nameofuser);
         // now create the html elements
         let container = document.createElement('div');
         container.classList.add('container');
