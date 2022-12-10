@@ -234,7 +234,7 @@ function postCreator() {
               [d.getHours(),
                d.getMinutes(),
                d.getSeconds()].join(':');
-        preview_col.appendChild(getColumnForPost({title: title_input.value, desc: desc_input.value, img_src: url_input.value, user: logged_user, tags: tags_input.value, date: dformat, type: category_select.options[category_select.selectedIndex].value, id: 0}));
+        preview_col.appendChild(getColumnForPost({title: title_input.value, postdescription: desc_input.value, imgurl: url_input.value, userid: logged_user, tags: tags_input.value, creationdate: dformat, posttype: category_select.options[category_select.selectedIndex].value, postid: 0}));
     };
     [...form_element.children].forEach(e => e.addEventListener('change', update_preview));
     update_preview();
