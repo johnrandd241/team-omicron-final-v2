@@ -228,6 +228,8 @@ app.post("/login/auth", (req, res) => {
     .catch(error => {//unsuccessfully finds user with specified credentials
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
+        console.log(user);
+
         user.username = null;
         user.password = null;
         res.json({"username": user.username, 
