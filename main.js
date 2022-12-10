@@ -236,6 +236,7 @@ async function profile(user_id) {
     // fetch the user information
     let data = await fetch("/users/get?userid=" + user_id);
     data.json().then(user_data => {
+        user_data = user_data[0];
         console.log("got this user data from server: ");
         console.log(user_data);
         console.log(user_data.bio);
