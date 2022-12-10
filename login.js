@@ -22,7 +22,7 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
              const result = await sent.json();
              console.log(result);
              DO().then(function(result){
-                if(result.isAuth){
+                if(result != undefined){
                     let theUser = JSON.parse(window.localStorage.getItem('user'));
                     theUser.username = result.username;
                     theUser.password = result.password;
