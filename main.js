@@ -456,6 +456,14 @@ function loadUser(){
     let inStor = window.localStorage.getItem('user');
     if(inStor === null){
         let newUser = new user();
+        newUser.bio = null;
+        newUser.username = null;
+        newUser.friends = null;
+        newUser.password = null;
+        newUser.fullName = null;
+        newUser.isAuth = false;
+        newUser.email = null;
+        newUser.imgurl = null;
         window.localStorage.setItem('user', JSON.stringify(newUser));
         return newUser;
     }else{
