@@ -187,7 +187,11 @@ app.get("/users/addfriend", (req, res) => {
         updated_friends.push(req.query["who"]);
         const q = `UPDATE users SET friends=${updated_friends} WHERE username='${req.query["into"]}'`;
         console.log("updating friends as with query: " + q);
-        db.none(q);
+        db.none(q).catch(error => {
+        
+        });
+    }).catch(error => {
+    
     });
     res.end();
 });
