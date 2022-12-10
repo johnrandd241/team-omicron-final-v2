@@ -213,10 +213,7 @@ app.post("/login/auth", (req, res) => {
         user.bio = resp[0].bio;
         user.friends = resp[0].friends;
         user.imgurl = resp[0].imgurl;
-        }else{
-            user.username = null;
-            user.password = null;
-        }
+
         res.json({"username": user.username, 
                   "isAuth": user.isAuth,
                   'email': user.email,
