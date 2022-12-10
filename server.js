@@ -134,7 +134,7 @@ app.get("/users", (req, res)=>{
 });
 
 app.get("/posts/get", (req, res)=>{
-    const q = `SELECT * FROM post WHERE postid=${res.query.postid};`;
+    const q = `SELECT * FROM post WHERE postid=${req.query.postid};`;
     console.log("querying this: " + q);
     db.any(q)
     .then(resp => {
