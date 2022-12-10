@@ -362,7 +362,7 @@ async function profile(user_id) {
         sub_personal_left.appendChild(biography);
         if (!is_own && currentUser.isAuth) {
             let friendButton = document.createElement("button");
-            friendButton.value = "Add";
+            friendButton.innerHTML = "Add";
             friendButton.onclick = async function() {
                 (await fetch("users/addfriend?" + new URLSearchParams({
                     into: currentUser.logged_user,
