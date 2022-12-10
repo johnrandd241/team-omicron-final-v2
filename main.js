@@ -3,7 +3,7 @@ import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
 import * as Database from './database.js';
 
-let currentUser = loadUser();
+export let currentUser = loadUser();
 console.log(currentUser);
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
