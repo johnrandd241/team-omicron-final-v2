@@ -278,8 +278,21 @@ app.post("/register/auth", (req, res) => {
 
             db.none(createUser)
             .then(resp => {
-                console.log(resp);
-                res.json(resp);
+                user.isAuth = true;
+                user.email = req.body.email;
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.fullName = req.body.fullName;
+                
+                res.json({"username": user.username, 
+                "isAuth": user.isAuth,
+               'email': user.email,
+               "password": user.password, 
+               "fullName": user.fullName,
+               "bio": user.bio,
+               "friends": user.friends,
+               "imgurl": user.imgurl
+               });
             })
             .catch(error => {
                 console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
