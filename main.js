@@ -366,7 +366,7 @@ async function profile(user_id) {
             friendButton.innerHTML = "Add";
             friendButton.onclick = async function() {
                 (await fetch("users/addfriend?" + new URLSearchParams({
-                    into: currentUser.logged_user,
+                    into: currentUser.username,
                     who: user_id
                 })));
             };
