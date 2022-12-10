@@ -103,6 +103,9 @@ async function viewPost(post_id) {
     console.log("attempting to view post with id " + post_id);
     console.log(post_data);
     post_data.json().then(true_data => {
+        console.log("got the post data, now rendering: ");
+        console.log(true_data);
+        console.log(true_data[0]);
         primary_row.appendChild(getColumnForPost(true_data));
         primary_row.appendChild(comments);
         container.appendChild(primary_row);
