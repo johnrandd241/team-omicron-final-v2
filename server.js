@@ -66,7 +66,7 @@ app.get('/CreateCommentSection', (req, res)=>{
     const postid = req.query.postid;
     const q = `INSERT INTO logs (logID) VALUES (${logid}); 
                 INSERT INTO commentlog(clogid) VALUES (${logid});
-                UPDATE posts
+                UPDATE post
                 SET comments = ${logid}
                 WHERE postid = ${postid};`
     db.none(q)
