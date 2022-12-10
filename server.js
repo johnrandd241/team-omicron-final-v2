@@ -241,8 +241,7 @@ app.post("/register/auth", (req, res) => {
         console.log(resp);
         if(resp[0].exists){
             console.log("username or email already exists");
-            user.username = null;
-            user.password = null;
+
         }else{//if it doesnt exist, proceed with creating data
             console.log("made it past user checker");
             //here lies issue, must be the call to the db
@@ -262,14 +261,14 @@ app.post("/register/auth", (req, res) => {
         
             })
             .catch(error => {
-                console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+                console.log("An inner error occured in the SQL call to the server. Dumping Error now...\n");
                 console.log(error);
 
             });
         }
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
-        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log("An outer error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
         user.username = null;
         user.password = null;
