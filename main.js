@@ -361,15 +361,16 @@ async function profile(user_id) {
         personal_col.appendChild(friends);
         row.appendChild(personal_col);
         history_col.appendChild(history_header);
-        user_data.posts.forEach(post_id => {
-            [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
-                history_col.appendChild(childElem);
-            });
-        });
-        if (user_data.posts.length === 0) {
+        if (user_data.posts == undefined || user_data.posts.length === 0) {
             let no_posts = document.createElement('p');
             no_posts.innerHTML = 'This user has no posts';
             history_col.appendChild(no_posts);
+        } else {
+            user_data.posts.forEach(post_id => {
+                [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
+                    history_col.appendChild(childElem);
+                });
+            });
         }
         row.appendChild(history_col);
         container.appendChild(row);
