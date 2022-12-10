@@ -66,7 +66,8 @@ app.post("/update/msg", (req, res)=>{
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
     const q = `SELECT messages FROM users WHERE username = "$(user)";`;
-    console.log("attempting this query: " + q +user);
+    console.log("attempting this query: " + q);
+    console.log(user);
     db.any(q)
     .then(resp => {
         console.log("got this response (THTHTHT): ");
