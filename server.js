@@ -206,7 +206,7 @@ app.post("/login/auth", (req, res) => {
     .then(resp => {//successfully returns user variables
         //console.log(resp[0].username);
         console.log(resp);
-        if(resp !== []){
+        console.log(resp[0]);
         user.isAuth = true;
         user.email = resp[0].email;
         user.username = resp[0].username;
@@ -225,20 +225,14 @@ app.post("/login/auth", (req, res) => {
                   "friends": user.friends,
                   "imgurl": user.imgurl
                  });
-                }
-        else{
-            console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
-            console.log(error);
-            user.username = null;
-            user.password = null;
-        }
+
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
         user.username = null;
         user.password = null;
-        //res.end();
+        res.end();
     });
     
     /*
