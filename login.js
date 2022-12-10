@@ -33,14 +33,13 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
                     theUser.friends = result.friends;
                     theUser.imgurl = result.imgurl;
 
-        
                     window.localStorage.setItem('user', JSON.stringify(theUser));
                     window.alert("Signed in as " + result.username);
                     window.location.replace("/events");
                 }
                 else{
                     window.alert("Invalid username/password");
-                    window.location.replace("/login");
+                    //window.location.replace("/login");
                 }
             });
 
@@ -49,12 +48,7 @@ document.getElementById('loginButton').addEventListener('click', (e) => {
 
          }
      };
-     //console.log(result);
      handleFormData();
-     
-     //takes promise from above and gets data from server
-     //to check if user is validated
-
 });
 async function DO(){
     const res = await fetch("/sendAllCred");

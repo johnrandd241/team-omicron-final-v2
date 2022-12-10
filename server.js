@@ -197,13 +197,9 @@ app.get("/sendAllCred", (req, res) => {
 });
 //Authorizes user
 app.post("/login/auth", (req, res) => {
-    //user.username = req.body.username;
-    //user.password = req.body.password;
     const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
-    //if(user.username !== null && user.password !== null){
     db.any(q)
     .then(resp => {//successfully returns user variables
-        //console.log(resp[0].username);
         user.isAuth = true;
         user.email = resp[0].email;
         user.username = resp[0].username;
@@ -212,7 +208,6 @@ app.post("/login/auth", (req, res) => {
         user.bio = resp[0].bio;
         user.friends = resp[0].friends;
         user.imgurl = resp[0].imgurl;
-
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
@@ -231,27 +226,6 @@ app.post("/login/auth", (req, res) => {
     "imgurl": user.imgurl
    });
 });
-    /*
-        //if not null
-        if(user.username !== null && user.password !== null){
-            //check in db if it matches
-            if(user.username === 'admin'){
-                //get all user fields from db and update user var
-                user.isAuth = true;
-            //if not in db, reset user and pass values and redirect to login
-            }else{
-                user.username = null;
-                user.password = null;
-            }
-        //if null 
-        }else{
-            user.username = null;
-            user.password = null;
-        }
-        res.json({"username": user.username, 
-         "isAuth": user.isAuth});
-        */
-
 
 app.get("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
