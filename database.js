@@ -8,9 +8,16 @@ export function registerUser(username) {
     // set the profile pic to something default, the bio to something default, the name to something default
 }
 
-export function getPostByID(post_id) {
+export async function getPostByID(post_id) {
     // returns some object like DUMMY_POST
-    return DUMMY_POST;
+    let data = await fetch("/posts/get?" + new URLSearchParams({
+        postid: post_id
+    })).catch(error => {
+        console.log("error while fetching user data");
+        console.log(error);
+    });
+    let resp = await data.json();
+    return resp[0];
 }
 
 export async function getUserByID(user_id) {
