@@ -229,7 +229,7 @@ app.post("/login/auth", (req, res) => {
         console.log(error);
         user.username = null;
         user.password = null;
-        //res.end();
+        res.end();
     });
     
     /*
@@ -261,11 +261,11 @@ app.get("/register", (req, res) => {
    //             INSERT INTO commentlog(clogid) VALUES (${logid});
 app.post("/register/auth", (req, res) => {
     console.log("called reg");
-    /*
     const q = "SELECT EXISTS(SELECT username, email FROM users WHERE username = '" + req.body.username + "' OR email = '" + req.body.email + "');";
     db.any(q)
     .then(resp => {//if q returns 1 it means username or email already exist
                     // in user table, so 
+        console.log(resp);
         if(resp[0].exists){
             console.log("username or email already exists");
             user.username = null;
@@ -273,42 +273,26 @@ app.post("/register/auth", (req, res) => {
         }else{//if it doesnt exist, proceed with creating data
             console.log("made it past user checker");
             //here lies issue, must be the call to the db
-            //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';*/
-            const q = "SELECT username, email FROM users WHERE username = '"  + req.body.username+ "' OR email = '"  + req.body.password+"';";
-            db.any(q)
-            .then(res => {
-                console.log("username or email already exists");
-                user.username = null;
-                user.password = null;
+            //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';
+            const createUser = "INSERT INTO users (username, pword, nameofuser, email) VALUES ('" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"');";
+
+            db.none(createUser)
+            .then(resp => {
+                user.isAuth = true;
+                user.email = req.body.email;
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.fullName = req.body.fullName;
+                user.bio = user.bio;
+                user.friends = user.friends;
+                user.imgurl = user.imgurl;
+        
             })
             .catch(error => {
-                const createUser = "INSERT INTO users (username, pword, nameofuser, email) VALUES ('" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"');";
+                console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+                console.log(error);
 
-                db.none(createUser)
-                .then(resp => {
-                    user.isAuth = true;
-                    user.email = req.body.email;
-                    user.username = req.body.username;
-                    user.password = req.body.password;
-                    user.fullName = req.body.fullName;
-    
-                    res.json({"username": user.username, 
-                    "isAuth": user.isAuth,
-                   'email': user.email,
-                   "password": user.password, 
-                   "fullName": user.fullName,
-                   "bio": user.bio,
-                   "friends": user.friends,
-                   "imgurl": user.imgurl
-                   });
-                })
-                .catch(error => {
-                    console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
-                    console.log(error);
-                    //res.end();
-                });
-            })
-
+            });
 /*
             db.any(createUser)
             .then(resp => {
@@ -340,15 +324,15 @@ app.post("/register/auth", (req, res) => {
           */      
 
 
-       // }
-   // })
-   // .catch(error => {//unsuccessfully finds user with specified credentials
-     //   console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
-       // console.log(error);
-        //user.username = null;
-        //user.password = null;
+        }
+    })
+    .catch(error => {//unsuccessfully finds user with specified credentials
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        user.username = null;
+        user.password = null;
         //res.end();
-    //});
+    });
     
 
 });
