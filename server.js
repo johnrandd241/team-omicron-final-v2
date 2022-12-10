@@ -199,7 +199,6 @@ app.get("/sendAllCred", (req, res) => {
 app.post("/login/auth", (req, res) => {
     //user.username = req.body.username;
     //user.password = req.body.password;
-    
     const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
     //if(user.username !== null && user.password !== null){
     db.any(q)
@@ -214,37 +213,24 @@ app.post("/login/auth", (req, res) => {
         user.friends = resp[0].friends;
         user.imgurl = resp[0].imgurl;
 
-        res.json({"username": user.username, 
-                  "isAuth": user.isAuth,
-                  'email': user.email,
-                  "password": user.password, 
-                  "fullName": user.fullName,
-                  "bio": user.bio,
-                  "friends": user.friends,
-                  "imgurl": user.imgurl
-                 });
-
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
         console.log(user);
 
-        user.username = null;
-        user.password = null;
         user.isAuth = false;
-        res.json({"username": user.username, 
-        "isAuth": user.isAuth,
-        'email': user.email,
-        "password": user.password, 
-        "fullName": user.fullName,
-        "bio": user.bio,
-        "friends": user.friends,
-        "imgurl": user.imgurl
-       });
-        //res.end();
     });
-    
+    res.json({"username": user.username, 
+    "isAuth": user.isAuth,
+    'email': user.email,
+    "password": user.password, 
+    "fullName": user.fullName,
+    "bio": user.bio,
+    "friends": user.friends,
+    "imgurl": user.imgurl
+   });
+});
     /*
         //if not null
         if(user.username !== null && user.password !== null){
@@ -265,7 +251,7 @@ app.post("/login/auth", (req, res) => {
         res.json({"username": user.username, 
          "isAuth": user.isAuth});
         */
-});
+
 
 app.get("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
