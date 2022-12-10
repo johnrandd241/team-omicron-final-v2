@@ -35,7 +35,7 @@ async function getColumnForPost(post_data) {
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
     let userfetch = await fetch("/users/get?userid=" + post_data.userid);
-    userfetch.then(delivered => {
+    userfetch.json().then(delivered => {
         meta_element.innerHTML = 'Posted by ' + delivered[0].nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
     });
     meta_element.style.textDecoration = 'underline';
