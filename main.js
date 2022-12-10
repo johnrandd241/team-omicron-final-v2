@@ -435,7 +435,9 @@ window.onload = async function() {
             // set the clicked link to active
             link_elem.classList.add('active');
             // update the current section
-            cur_section = link_elem.id.split('-')[0];
+            if (currentUser.isAuth) {
+                cur_section = link_elem.id.split('-')[0];
+            }
             toggleSearchBar();
             // now we do whatever we need to based on the section we are in
             switch (cur_section) {
@@ -456,6 +458,7 @@ window.onload = async function() {
                 default:
                     // must be events, people, or records, which are basically all the same
                     // jsut do a default search to sort by date
+                    cur_section = link_elem.id.split('-')[0];
                     search('');
                     break;
             }
