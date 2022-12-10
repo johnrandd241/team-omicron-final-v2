@@ -440,7 +440,7 @@ window.onload = async function() {
                 toggleSearchBar();
             }
             // now we do whatever we need to based on the section we are in
-            switch (cur_section) {
+            switch (link_elem.id.split('-')[0]) {
                 case 'messages':
                     if (currentUser.isAuth) {
                         cur_section = link_elem.id.split('-')[0];
