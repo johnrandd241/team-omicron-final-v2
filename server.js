@@ -121,6 +121,7 @@ app.get("/posts/create", (req, res) => {
 
 app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
+    console.log("where does this go");
     db.any(q)
     .then(resp => {
         res.json(resp);
