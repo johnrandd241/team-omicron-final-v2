@@ -177,6 +177,17 @@ app.get("/users/changeprofile", (req, res) => {
         console.log("updated profile picture");
         console.log(resp);
     });
+    res.end();
+});
+
+app.get("/users/changebio", (req, res) => {
+    const q = `UPDATE users SET bio='${req.query['bio']}' WHERE username='${req.query['userid']}'`;
+    db.none(q)
+    .then(resp => {
+        console.log("updated bio");
+        console.log(resp);
+    });
+    res.end();
 });
 
 let username = null;

@@ -284,9 +284,11 @@ async function profile(user_id) {
         let biography;
         if (is_own) {
             biography = document.createElement('textarea');
-            biography.addEventListener('input', () => {
-
-                // send updated biography back to server
+            biography.addEventListener('input', async () => {
+                (await fetch("users/changebio?" + new URLSearchParams({
+                    bio: biography.value,
+                    userid: logged_user
+                })));
             });
             biography.style.width = '100%';
             biography.value = user_data.bio; // good
