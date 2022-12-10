@@ -360,6 +360,18 @@ async function profile(user_id) {
         bio_label.innerHTML = 'Biography:';
         sub_personal_left.appendChild(bio_label);
         sub_personal_left.appendChild(biography);
+        if (!is_own && currentUser.isAuth) {
+            let friendButton = document.createElement("button");
+            friendButton.value = "Add";
+            friendButton.onclick = async function() {
+                (await fetch("users/addfriend?" + new URLSearchParams({
+                    into: currentUser.logged_user,
+                    who: user_id
+                })));
+            };
+            sub_personal_left.appendChild(friendButton);
+        }
+        
         if (is_own) {
             // let submit_bio_button = document.createElement('input');
             // submit_bio_button.type = 'button';
