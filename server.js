@@ -185,7 +185,9 @@ app.get("/users/addfriend", (req, res) => {
     console.log("attempting to retreive friends with " + p);
     db.any(p).then(resp => {
         let updated_friends = resp[0];
+        console.log(updated_friends);
         updated_friends ??= [];
+        console.log(updated_friends);
         updated_friends.push(req.query["who"]);
         const q = `UPDATE users SET friends=${JSON.stringify(updated_friends)} WHERE username='${req.query["into"]}'`;
         console.log("updating friends as with query: " + q);
