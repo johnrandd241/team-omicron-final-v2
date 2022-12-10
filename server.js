@@ -59,6 +59,7 @@ app.get("/GetMsgFromUser", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. (/GetMsgFromUser) Dumping Error now...\n");
         console.log(error);
+        res.json({});
     });
 });
 //--------------------------------
@@ -77,6 +78,7 @@ app.get('/CreateCommentSection', (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. (/CreateCommentSection) Dumping Error now...\n");
         console.log(error);
+        res.json({});
     });
 });
 
@@ -90,6 +92,7 @@ app.get("/GetMsgFromID", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. (/GetMsgFromID) Dumping Error now...\n");
         console.log(error);
+        res.json({});
     });
 });
 
@@ -104,6 +107,7 @@ app.get("/posts", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. (/posts) Dumping Error now...\n");
         console.log(error);
+        res.json({});
     });
 });
 
@@ -129,6 +133,7 @@ app.get("/users", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. (/Users) Dumping Error now...\n");
         console.log(error);
+        res.json({});
     });
 });
 
@@ -142,7 +147,7 @@ app.get("/posts/get", (req, res)=>{
     .catch(error => {
         console.log("An error occured in the SQL call to the server. (/post/get) Dumping Error now...\n");
         console.log(error);
-        res.end();
+        res.json({});
     });
 });
 
