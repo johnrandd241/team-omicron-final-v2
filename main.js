@@ -437,19 +437,26 @@ window.onload = async function() {
             // update the current section
             if (currentUser.isAuth) {
                 cur_section = link_elem.id.split('-')[0];
+                toggleSearchBar();
             }
-            toggleSearchBar();
             // now we do whatever we need to based on the section we are in
             switch (cur_section) {
                 case 'messages':
-                    // do whatever we need for the messages
-                    message(null);
+                    if (currentUser.isAuth) {
+                        cur_section = link_elem.id.split('-')[0];
+                        toggleSearchBar();
+                        // do whatever we need for the messages
+                        message(null);
+                    } else {
+                        alert("Sign in to use this feature");
+                    }
                     break;
                 case 'profile':
                     if (currentUser.isAuth) {
                         // do whatever we need for the profile
                         // go to the current signed in user (this should only even be visible if youre signed in)
                         profile(currentUser.username);
+                        toggleSearchBar();
                     } else {
                         alert("Sign in to use this feature");
                     }
@@ -459,6 +466,7 @@ window.onload = async function() {
                     // must be events, people, or records, which are basically all the same
                     // jsut do a default search to sort by date
                     cur_section = link_elem.id.split('-')[0];
+                    toggleSearchBar();
                     search('');
                     break;
             }
