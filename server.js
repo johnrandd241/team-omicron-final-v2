@@ -205,6 +205,7 @@ app.post("/login/auth", (req, res) => {
     db.any(q)
     .then(resp => {//successfully returns user variables
         //console.log(resp[0].username);
+        console.log(resp);
         user.isAuth = true;
         user.email = resp[0].email;
         user.username = resp[0].username;
