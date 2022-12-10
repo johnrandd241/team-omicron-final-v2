@@ -46,6 +46,7 @@ function getColumnForPost(post_data) {
         meta_element.addEventListener('click', () => {
             cur_section = 'profile';
             toggleSearchBar();
+            deactivateNavs();
             profile(post_data.userid); // changed user to userid
         });
     }
