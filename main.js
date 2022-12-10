@@ -34,8 +34,10 @@ async function getColumnForPost(post_data) {
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    (await (await fetch("/users/get?userid=" + post_data.userid)).json()).then(user_data => {
-        meta_element.innerHTML = 'Posted by ' + user_data[0].nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
+    let userfetch = await fetch("/users/get?userid=" + post_data.userid);
+    let userdata = await userfetch.json();
+    userdata.then(delivered => {
+        meta_element.innerHTML = 'Posted by ' + delivered[0].nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
     });
     meta_element.style.textDecoration = 'underline';
     if (post_data.postid != 0) {
