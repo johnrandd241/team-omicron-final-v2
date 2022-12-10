@@ -48,7 +48,7 @@ module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    const q = `SELECT messages FROM users WHERE username = ${user};`;
+    const q = `SELECT messages FROM users WHERE username = '${user}';`;
     console.log("attempting this query: " + q);
     db.any(q)
     .then(resp => {
@@ -69,8 +69,8 @@ app.get('/CreateCommentSection', (req, res)=>{
     const q = `INSERT INTO logs (logID) VALUES (${logid}); 
                 INSERT INTO commentlog(clogid) VALUES (${logid});
                 UPDATE post
-                SET comments = ${logid}
-                WHERE postid = ${postid};`
+                SET comments = '${logid}'
+                WHERE postid = '${postid}';`
     db.none(q)
     .then(resp => {
         res.json(resp);
@@ -84,7 +84,7 @@ app.get('/CreateCommentSection', (req, res)=>{
 
 app.get("/GetMsgFromID", (req, res)=>{
     const chatID = req.query.chatID;
-    const q = `SELECT * FROM messagelog where mlogid = ${chatID};`;
+    const q = `SELECT * FROM messagelog where mlogid = '${chatID}';`;
     db.any(q)
     .then(resp => {
         res.json(resp);
@@ -138,7 +138,7 @@ app.get("/users", (req, res)=>{
 });
 
 app.get("/posts/get", (req, res)=>{
-    const q = `SELECT * FROM post WHERE postid=${req.query.postid};`;
+    const q = `SELECT * FROM post WHERE postid='${req.query.postid}';`;
     console.log("querying this: " + q);
     db.any(q)
     .then(resp => {
