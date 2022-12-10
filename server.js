@@ -46,6 +46,23 @@ const db = pgp(cn);
 // Exporting the database object for shared use:
 module.exports = db;
 
+app.post("/update/msg", (req, res)=>{
+    const currUser = req.query.currUser;
+    const charID = req.query.chatID;
+    const messages = req.query.chat;
+    const q = `UPDATE messagelog
+                SET messages = '${messages}'
+                WHERE mlogID = '${chatID}'`;
+    db.none(q)
+        .catch(error => {
+            console.log("An error occured in the SQL call to the server. (/update/msg) Dumping Error now...\n");
+            console.log(error);
+            res.json({success:false});
+        });
+    res.json({success:true});
+
+});
+
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
     const q = `SELECT messages FROM users WHERE username = '${user}';`;

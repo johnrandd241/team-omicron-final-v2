@@ -103,6 +103,42 @@ export async function message(chatID){
     send.classList.add('input-group-append');
     let butt = document.createElement('span');
     butt.classList.add('input-group-text', 'send_btn');
+    butt.setAttribute('id','sendbutn');
+    butt.addEventListener('click', async function(){
+        let ret = {user:logged_user,
+                    date:date(),
+                    text:""};
+        ret.text = msgEntry.value;
+        let w = await fetch(`/update/msg?currUser=${logged_user}&chatID=${chatID}&chat=${JSON.stringify(ret)}`);
+        if(!w.ok){
+            console.log("API call failed (msg.js). Dumping Error....")
+            console.log(w);
+            window.alert("Failed to connect to server.");
+        }else{
+            let suc = await w.json();
+            if(suc.success == false){
+                console.log("Failed to push new msg to server.");
+                console.log(suc);
+            }
+            let bubble = document.createElement('div');
+            bubble.classList.add("d-flex","mb-4");
+            bubble.classList.add('justify-content-start');
+            let uinfo = document.createElement('div');
+            uinfo.innerHTML = logged_user;
+            //uinfo.classList.add()
+            let msgC = document.createElement('div');
+            msgC.classList.add("msg_container");
+            msgC.innerHTML = ret.text;
+            let time = document.createElement('span');
+            time.classList.add('msg_time');
+            time.innerHTML = ret.date;
+            msgC.appendChild(time);
+            bubble.appendChild(uinfo);
+            bubble.appendChild(msgC);
+            curchat.appendChild(bubble);
+            msgEntry.value = null;
+        }
+    });
     let innerButt = document.createElement('i');
     innerButt.classList.add('fas','fa-location-arrow');
     butt.appendChild(innerButt);
