@@ -48,9 +48,11 @@ module.exports = db;
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    const q = `SELECT messages FROM users WHERE Username = ${user};`;
+    const q = `SELECT messages FROM users WHERE username = ${user};`;
+    console.log("attempting this query: " + q);
     db.any(q)
     .then(resp => {
+        console.log("got this response (THTHTHT): ");
         console.log(resp);
         res.json(resp);
     })
@@ -60,16 +62,16 @@ app.get("/GetMsgFromUser", (req, res)=>{
         res.end();
     });
 });
-
+//--------------------------------
 app.get('/CreateCommentSection', (req, res)=>{
     const logid = req.query.logid;
     const postid = req.query.postid;
     const q = `INSERT INTO logs (logID) VALUES (${logid}); 
                 INSERT INTO commentlog(clogid) VALUES (${logid});
-                UPDATE posts
+                UPDATE post
                 SET comments = ${logid}
                 WHERE postid = ${postid};`
-    bd.none(q)
+    db.none(q)
     .then(resp => {
         res.json(resp);
     })
@@ -110,17 +112,34 @@ app.get("/posts", (req, res)=>{
 });
 
 app.get("/posts/create", (req, res) => {
-    const q = `INSERT INTO post (comments, creationdate, imgurl, postdescription, postid, posttype, tags, title, userid) VALUES (${req.params['comments']}, GETDATE(), ${req.params['imgurl']}, ${req.params['postdescription']}, ${req.params['postid']}, ${req.params['posttype']}, ${req.params['tags']}, ${req.params['title']}, ${req.params['userid']});`;
+    const q = `INSERT INTO post (comments, creationdate, imgurl, postdescription, postid, posttype, tags, title, userid) VALUES (${req.query.comments}, NOW(), '${req.query.imgurl}', '${req.query.postdescription}', ${req.query.postid}, '${req.query.posttype}', '${req.query.tags}', '${req.query.title}', '${req.query.userid}');`;
+    console.log(req.query);
+    console.log("sending query: " + q);
     db.none(q).then(resp => {
         console.log('post created');
     }).catch(error => {
-        console.log('error while making post' + error);
+        console.log('error while making post ' + error);
     });
     res.send({});
 });
 
 app.get("/users", (req, res)=>{
     const q = "SELECT * FROM users;";
+    console.log("where does this go");
+    db.any(q)
+    .then(resp => {
+        res.json(resp);
+    })
+    .catch(error => {
+        console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        res.end();
+    });
+});
+
+app.get("/posts/get", (req, res)=>{
+    const q = `SELECT * FROM post WHERE postid=${req.query.postid};`;
+    console.log("querying this: " + q);
     db.any(q)
     .then(resp => {
         res.json(resp);
@@ -134,9 +153,14 @@ app.get("/users", (req, res)=>{
 
 
 app.get("/users/get", (req, res) => {
-    const q = `SELECT * FROM users WHERE username=${req.params['userid']};`;
+    const q = `SELECT * FROM users WHERE username='${req.query['userid']}';`;
+    console.log("got these params: " + req.params);
+    console.log("got this query: " + req.query);
+    console.log("userid: " + req.params['userid'] + ", " + req.query.userid);
+    console.log("making this query: " + q);
     db.any(q)
     .then(resp => {
+        console.log("got this response from database: " + resp.toString());
         res.json(resp);
     })
     .catch(error => {
@@ -146,19 +170,28 @@ app.get("/users/get", (req, res) => {
     });
 });
 
+app.get("/users/changeprofile", (req, res) => {
+    const q = `UPDATE users SET imgurl='${req.query['']}'`;
+});
+
 let username = null;
 let password = null;
-let fName = null;
-let lName = null;
 let email = null;
 let isAuth = false;
+let fullName = null;
+let bio = null;
+let friends = [];
+let imgurl = null;
+
 let user = {"user":{
-                "fName": fName,
-                "lName": lName,
                 'email': email,
                 "username": username,
                 "password": password, 
-                "isAuth": isAuth          
+                "isAuth": isAuth,
+                "fullName": fullName,
+                "bio": bio,
+                "friends": friends,
+                "imgurl": imgurl
 }};
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");
@@ -170,12 +203,14 @@ app.get("/login", (req, res) => {
 
 app.get("/logout", (req, res) => {
     user = {"user":{
-        "fName": null,
-        "lName": null,
         'email': null,
         "username": null,
         "password": null, 
-        "isAuth": false          
+        "isAuth": false, 
+        "fullName": null,
+        "bio": null,
+        "friends": null,
+        "imgurl": null        
     }};
     res.redirect("/events");
 });
@@ -190,88 +225,126 @@ app.get("/sendAllCred", (req, res) => {
 });
 //Authorizes user
 app.post("/login/auth", (req, res) => {
-    //user.username = req.body.username;
-    //user.password = req.body.password;
-    
     const q = "SELECT * FROM users WHERE Username = '" + req.body.username + "' and pword = '" + req.body.password + "';";
-    console.log(q);
-    //if(user.username !== null && user.password !== null){
     db.any(q)
     .then(resp => {//successfully returns user variables
-        console.log(resp[0].username);
         user.isAuth = true;
         user.email = resp[0].email;
         user.username = resp[0].username;
         user.password = resp[0].pword;
-        res.json({"username": user.username, 
-        "isAuth": user.isAuth});
-        //res.json(resp);
+        user.fullName = resp[0].nameofuser;
+        user.bio = resp[0].bio;
+        user.friends = resp[0].friends;
+        user.imgurl = resp[0].imgurl;
     })
     .catch(error => {//unsuccessfully finds user with specified credentials
         console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
         console.log(error);
-        user.username = null;
-        user.password = null;
-        //res.end();
+        console.log(user);
+
+        user.isAuth = false;
     });
-    
-    /*
-        //if not null
-        if(user.username !== null && user.password !== null){
-            //check in db if it matches
-            if(user.username === 'admin'){
-                //get all user fields from db and update user var
-                user.isAuth = true;
-            //if not in db, reset user and pass values and redirect to login
-            }else{
-                user.username = null;
-                user.password = null;
-            }
-        //if null 
-        }else{
-            user.username = null;
-            user.password = null;
-        }
-        res.json({"username": user.username, 
-         "isAuth": user.isAuth});
-        */
+    res.json({"username": user.username, 
+    "isAuth": user.isAuth,
+    'email': user.email,
+    "password": user.password, 
+    "fullName": user.fullName,
+    "bio": user.bio,
+    "friends": user.friends,
+    "imgurl": user.imgurl
+   });
 });
 
 app.get("/register", (req, res) => {
     res.sendFile(__dirname + "/register.html");
 });
-
+//`INSERT INTO logs (logID) VALUES (${logid}); 
+   //             INSERT INTO commentlog(clogid) VALUES (${logid});
 app.post("/register/auth", (req, res) => {
-    user.fName = req.body.fName;
-    user.lName = req.body.lName;
-    user.email = req.body.email;
-    user.username = req.body.username;
-    user.password = req.body.password;
-    
+    console.log("called reg");
+    const q = "SELECT EXISTS(SELECT username, email FROM users WHERE username = '" + req.body.username + "' OR email = '" + req.body.email + "');";
+    db.any(q)
+    .then(resp => {//if q returns 1 it means username or email already exist
+                    // in user table, so 
+        console.log(resp);
+        if(resp[0].exists){
+            console.log("username or email already exists");
 
-        //if not null
-        if(user.username !== null && user.password !== null &&
-            user.fName !== null && user.lName !== null && user.email !== null){
-            //check in db if it matches
-            if(user.username === 'admin'){
+        }else{//if it doesnt exist, proceed with creating data
+            console.log("made it past user checker");
+            //here lies issue, must be the call to the db
+            //INSERT INTO users (username, pword, fullName, email) VALUES '" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"';
+            const createUser = "INSERT INTO users (username, pword, nameofuser, email) VALUES ('" + req.body.username+"','" + req.body.password+"','" +req.body.fullName +"','" + req.body.email +"');";
+
+            db.none(createUser)
+            .then(resp => {
                 user.isAuth = true;
-            //if not in db, reset user and pass values and redirect to login
-            }else{
-                user.fName = null;
-                user.lName = null;
-                user.email = null;
-                user.username = null;
-                user.password = null;
-            }
-        //if null 
-        }else{
-            user.fName = null;
-            user.lName = null;
-            user.email = null;
+                user.email = req.body.email;
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.fullName = req.body.fullName;
+                user.bio = user.bio;
+                user.friends = user.friends;
+                user.imgurl = user.imgurl;
+        
+            })
+            .catch(error => {
+                console.log("An inner error occured in the SQL call to the server. Dumping Error now...\n");
+                console.log(error);
+
+            });
+        }
+    })
+    .catch(error => {//unsuccessfully finds user with specified credentials
+        console.log("An outer error occured in the SQL call to the server. Dumping Error now...\n");
+        console.log(error);
+        user.username = null;
+        user.password = null;
+        //res.end();
+    });
+    res.json({"username": user.username, 
+    "isAuth": user.isAuth,
+    'email': user.email,
+    "password": user.password, 
+    "fullName": user.fullName,
+    "bio": user.bio,
+    "friends": user.friends,
+    "imgurl": user.imgurl
+   });
+
+});
+/*
+            db.any(createUser)
+            .then(resp => {
+                user.isAuth = true;
+                user.email = req.body.email;
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.fullName = req.body.fullName;
+
+                res.json({"username": user.username, 
+                "isAuth": user.isAuth,
+               'email': user.email,
+               "password": user.password, 
+               "fullName": user.fullName,
+               "bio": user.bio,
+               "friends": user.friends,
+               "imgurl": user.imgurl
+               });
+            })    
+            .catch(error => {//unsuccessfully finds user with specified credentials
+            console.log("An error occured in the SQL call to the server. Dumping Error now...\n");
+            console.log(error);
             user.username = null;
             user.password = null;
-        }
-});
+            //res.end();
+    });
+
+
+          */      
+
+
+
 
 app.get("/events", (req, res) => {// tag is /events due to it being the homepage
     res.sendFile(__dirname + "/index.html");

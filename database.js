@@ -8,16 +8,26 @@ export function registerUser(username) {
     // set the profile pic to something default, the bio to something default, the name to something default
 }
 
-export function getPostByID(post_id) {
+export async function getPostByID(post_id) {
     // returns some object like DUMMY_POST
-    return DUMMY_POST;
+    let data = await fetch("/posts/get?" + new URLSearchParams({
+        postid: post_id
+    })).catch(error => {
+        console.log("error while fetching user data");
+        console.log(error);
+    });
+    let resp = await data.json();
+    return resp[0];
 }
 
 export async function getUserByID(user_id) {
     // returns something like DUMMY_USER
     let data = await fetch("/users/get?" + new URLSearchParams({
         userid: user_id
-    }));
+    })).catch(error => {
+        console.log("error while fetching user data");
+        console.log(error);
+    });
     let resp = await data.json();
     return resp[0];
 }
@@ -41,19 +51,24 @@ export function addFriend(logged, session, to_add) {
 export async function createPost(logged, session, tit, desc, tagz, img_src, type) {
     // console.log('creating post with this information');
     // console.log(logged + ' ' + session + ' ' + title + ' ' + desc + ' ' + tags + ' ' + img_src + ' ' + type);
-
-    let unique_id = Date.now();
-    let data = await fetch("posts/create?" + new URLSearchParams({
-        comments: unique_id,
-        creationdate: null,  // creationdate set inside SQL
-        imgurl: img_src,
-        postdescription: desc,
-        postid: unique_id,
-        posttype: type,
-        tags: tagz,
-        title: tit,
-        userid: logged
-    }));
+    let unique_id = Date.now() % 2000000000;
+    // create the comment section
+    (await fetch("/CreateCommentSection?" + new URLSearchParams({
+        logid: unique_id,
+        postid: unique_id
+    }))).json().then(async resp => { // then publish the post
+        let data = await fetch("posts/create?" + new URLSearchParams({
+            comments: unique_id,
+            creationdate: null,  // creationdate set inside SQL
+            imgurl: img_src,
+            postdescription: desc,
+            postid: unique_id,
+            posttype: type,
+            tags: tagz,
+            title: tit,
+            userid: logged
+        }));
+    });
     // verify user is legit
     // create new row in post table with this info
     // note that date is not provided

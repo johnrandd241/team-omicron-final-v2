@@ -1,14 +1,14 @@
 
 export class user{
-    constructor(fName, lName, email, username, password, isAuth){
-        this.fName = fName;
-        this.lName = lName;
-        this.fullName = this.fName + ' ' + this.lName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.isAuth = isAuth;
-        
+    constructor(){
+        this.fullName = null;
+        this.email = null;
+        this.username = null;
+        this.password = null;
+        this.bio = null;
+        this.friends = null;
+        this.imgurl = null;
+        this.isAuth = false;
     }
 }
 

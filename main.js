@@ -34,12 +34,19 @@ function getColumnForPost(post_data) {
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.userid).name + ' on ' + post_data.creationdate; // creationdate changed to date
+    meta_element.innerHTML = 'Posted by ' + post_data.userid + ' on ' + post_data.creationdate; // creationdate changed to date
+    /*
+    let userfetch = await fetch("/users/get?userid=" + post_data.userid);
+    userfetch.json().then(delivered => {
+        meta_element.innerHTML = 'Posted by ' + delivered[0].nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
+    });
+    */
     meta_element.style.textDecoration = 'underline';
     if (post_data.postid != 0) {
         meta_element.addEventListener('click', () => {
             cur_section = 'profile';
             toggleSearchBar();
+            deactivateNavs();
             profile(post_data.userid); // changed user to userid
         });
     }
@@ -57,30 +64,32 @@ async function search(keywords) {
     // render the elements into the page
     // at this point, all of the 'posts' should be in some kind of array, all we gotta do now is render them
     let data = await fetch("/posts");
-    let arr = await data.json(); // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
-    // create the base element for the posts (this container holds the rows and columns and what not)
-    let container = document.createElement('div');
-    container.classList.add('container'); // specify the fact it is a container
-    container.classList.add('mt-5'); // set the size
-    // while there are still posts to render
-    while (arr.length > 0) {
-        // create the element for this row of posts
-        let cur_row = document.createElement('div');
-        cur_row.classList.add('row'); // specify that it is a row
-        cur_row.classList.add('gx-5'); // set the sizing
-        // go through them POSTS_PER_ROW at a time (i think 2 posts per row is good)
-        arr.slice(0, POSTS_PER_ROW).forEach(post_data => {
-            // create the column cell for the post
-            cur_row.appendChild(getColumnForPost(post_data));
-            arr.shift();
-        });
-        container.appendChild(cur_row);
-    }
-    document.getElementById('page').textContent = '';
-    document.getElementById('page').appendChild(container);
+    data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
+        arr = arr.filter(e => cur_section.startsWith(e.posttype));
+        // create the base element for the posts (this container holds the rows and columns and what not)
+        let container = document.createElement('div');
+        container.classList.add('container'); // specify the fact it is a container
+        container.classList.add('mt-5'); // set the size
+        // while there are still posts to render
+        while (arr.length > 0) {
+            // create the element for this row of posts
+            let cur_row = document.createElement('div');
+            cur_row.classList.add('row'); // specify that it is a row
+            cur_row.classList.add('gx-5'); // set the sizing
+            // go through them POSTS_PER_ROW at a time (i think 2 posts per row is good)
+            arr.slice(0, POSTS_PER_ROW).forEach(post_data => {
+                // create the column cell for the post
+                cur_row.appendChild(getColumnForPost(post_data));
+                arr.shift();
+            });
+            container.appendChild(cur_row);
+        }
+        document.getElementById('page').textContent = '';
+        document.getElementById('page').appendChild(container);
+    });
 }
 
-function viewPost(post_id) {
+async function viewPost(post_id) {
     let container = document.createElement('div');
     container.classList.add('container');
     container.classList.add('mt-5');
@@ -93,11 +102,19 @@ function viewPost(post_id) {
     comments_header.innerHTML = 'Comments';
     // TODO STILL: write in all the comments on the post, we just have to fetch these from the Database and then probably fill them into p elements or something
     comments.appendChild(comments_header);
-    primary_row.appendChild(getColumnForPost(Database.getPostByID(post_id)));
-    primary_row.appendChild(comments);
-    container.appendChild(primary_row);
-    document.getElementById('page').textContent = '';
-    document.getElementById('page').appendChild(container);
+    let post_data = await fetch("posts/get?postid=" + post_id);
+    console.log("attempting to view post with id " + post_id);
+    console.log(post_data);
+    post_data.json().then(true_data => {
+        console.log("got the post data, now rendering: ");
+        console.log(true_data);
+        console.log(true_data[0]);
+        primary_row.appendChild(getColumnForPost(true_data[0]));
+        primary_row.appendChild(comments);
+        container.appendChild(primary_row);
+        document.getElementById('page').textContent = '';
+        document.getElementById('page').appendChild(container);
+    });
 }
 
 function toggleSearchBar() {
@@ -161,7 +178,7 @@ function postCreator() {
     category_select.id = 'postMakerType';
     let event_option = document.createElement('option');
     event_option.innerHTML = 'Events';
-    event_option.value = 'events';
+    event_option.value = 'event';
     category_select.appendChild(event_option);
     let people_option = document.createElement('option');
     people_option.innerHTML = 'People';
@@ -208,6 +225,7 @@ function postCreator() {
         Database.createPost(logged_user, session_id, title_input.value, desc_input.value, tags_input.value, url_input.value, category_select.options[category_select.selectedIndex].value);
         cur_section = 'profile';
         toggleSearchBar();
+        deactivateNavs();
         profile(logged_user);
     });
     let update_preview = () => {
@@ -219,158 +237,170 @@ function postCreator() {
               [d.getHours(),
                d.getMinutes(),
                d.getSeconds()].join(':');
-        preview_col.appendChild(getColumnForPost({title: title_input.value, desc: desc_input.value, img_src: url_input.value, user: logged_user, tags: tags_input.value, date: dformat, type: category_select.options[category_select.selectedIndex].value, id: 0}));
+        preview_col.appendChild(getColumnForPost({title: title_input.value, postdescription: desc_input.value, imgurl: url_input.value, userid: logged_user, tags: tags_input.value, creationdate: dformat, posttype: category_select.options[category_select.selectedIndex].value, postid: 0}));
     };
     [...form_element.children].forEach(e => e.addEventListener('change', update_preview));
     update_preview();
 }
 
 // runs when profile tab is clicked
-function profile(user_id) {
+async function profile(user_id) {
     console.log('viewing profile ' + user_id + ' as ' + logged_user);
+    console.log('test print');
     let is_own = user_id === logged_user; // is true if you are viewing your own profile
     // this function generates the profile page into the body, which may appear different whether you are viewing your own or someone elses
     // do some kind of check to see if user_id is the one thats signed in
     // if it is, add the buttons that allow them to edit the bio
     // fetch the user information
-    let user_data = Database.getUserByID(user_id);
-    // now create the html elements
-    let container = document.createElement('div');
-    container.classList.add('container');
-    container.classList.add('mt-5');
-    let row = document.createElement('div');
-    row.classList.add('row');
-    let personal_col = document.createElement('div');
-    personal_col.classList.add('col');
-    personal_col.classList.add('p-2');
-    personal_col.classList.add('bg-white');
-    let sub_personal = document.createElement('div');
-    sub_personal.classList.add('container');
-    let sub_personal_row = document.createElement('div');
-    sub_personal_row.classList.add('row');
-    let sub_personal_left = document.createElement('div');
-    sub_personal_left.classList.add('col');
-    sub_personal_left.classList.add('p-2');
-    let header2 = document.createElement('h2');
-    header2.innerHTML = user_data.nameofuser; // name => nameofuser
-    let header3 = document.createElement('h3');
-    header3.classList.add('text-muted');
-    header3.innerHTML = '@' + user_data.username; // good
-    let biography;
-    if (is_own) {
-        biography = document.createElement('textarea');
-        biography.addEventListener('input', () => {
-            // send updated biography back to server
-        });
-        biography.style.width = '100%';
-        biography.value = user_data.bio; // good
-    } else {
-        biography = document.createElement('p');
-        biography.innerHTML = user_data.bio; // good
-    }
-    let sub_personal_right = document.createElement('div');
-    sub_personal_right.classList.add('col');
-    sub_personal_right.classList.add('p-2');
-    let friends = document.createElement('div');
-    let post_creator_head = document.createElement('h2');
-    post_creator_head.innerHTML = 'Create';
-    let post_creator_p = document.createElement('p');
-    post_creator_p.innerHTML = 'Click here to go to the post creator';
-    post_creator_p.classList.add('hoverline');
-    post_creator_p.addEventListener('click', () => {
-        cur_section = 'postCreator';
-        toggleSearchBar();
-        deactivateNavs();
-        postCreator();
-    });
-    let friends_header = document.createElement('h2');
-    friends_header.innerHTML = "Friends";
-    friends.appendChild(friends_header);
-    let user_friends = user_data.friends; // good
-    user_friends ??= [];
-    user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
-        let friend_item = document.createElement('p');
-        friend_item.classList.add('hoverline');
-        friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
+    let data = await fetch("/users/get?userid=" + user_id);
+    data.json().then(user_data => {
+        user_data = user_data[0];
+        console.log("got this user data from server: ");
+        console.log(user_data);
+        console.log(user_data.bio);
+        console.log(user_data.nameofuser);
+        // now create the html elements
+        let container = document.createElement('div');
+        container.classList.add('container');
+        container.classList.add('mt-5');
+        let row = document.createElement('div');
+        row.classList.add('row');
+        let personal_col = document.createElement('div');
+        personal_col.classList.add('col');
+        personal_col.classList.add('p-2');
+        personal_col.classList.add('bg-white');
+        let sub_personal = document.createElement('div');
+        sub_personal.classList.add('container');
+        let sub_personal_row = document.createElement('div');
+        sub_personal_row.classList.add('row');
+        let sub_personal_left = document.createElement('div');
+        sub_personal_left.classList.add('col');
+        sub_personal_left.classList.add('p-2');
+        let header2 = document.createElement('h2');
+        header2.innerHTML = user_data.nameofuser; // name => nameofuser
+        let header3 = document.createElement('h3');
+        header3.classList.add('text-muted');
+        header3.innerHTML = '@' + user_data.username; // good
+        let biography;
         if (is_own) {
-            let unfriend_button = document.createElement('input');
-            unfriend_button.type = 'button';
-            unfriend_button.value = 'Remove';
-            unfriend_button.addEventListener('click', () => {
-                Database.removeFriend(logged_user, session_id, friend_data.username);
+            biography = document.createElement('textarea');
+            biography.addEventListener('input', () => {
+                // send updated biography back to server
             });
-            friend_item.appendChild(unfriend_button);
+            biography.style.width = '100%';
+            biography.value = user_data.bio; // good
+        } else {
+            biography = document.createElement('p');
+            biography.innerHTML = user_data.bio; // good
         }
-        friend_item.addEventListener('click', () => {
-            cur_section = 'profile';
+        let sub_personal_right = document.createElement('div');
+        sub_personal_right.classList.add('col');
+        sub_personal_right.classList.add('p-2');
+        let friends = document.createElement('div');
+        let post_creator_head = document.createElement('h2');
+        post_creator_head.innerHTML = 'Create';
+        let post_creator_p = document.createElement('p');
+        post_creator_p.innerHTML = 'Click here to go to the post creator';
+        post_creator_p.classList.add('hoverline');
+        post_creator_p.addEventListener('click', () => {
+            cur_section = 'postCreator';
             toggleSearchBar();
-            profile(friend_data.username);
+            deactivateNavs();
+            postCreator();
         });
-        friends.appendChild(friend_item);
+        let friends_header = document.createElement('h2');
+        friends_header.innerHTML = "Friends";
+        friends.appendChild(friends_header);
+        let user_friends = user_data.friends; // good
+        user_friends ??= [];
+        user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
+            let friend_item = document.createElement('p');
+            friend_item.classList.add('hoverline');
+            friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
+            if (is_own) {
+                let unfriend_button = document.createElement('input');
+                unfriend_button.type = 'button';
+                unfriend_button.value = 'Remove';
+                unfriend_button.addEventListener('click', () => {
+                    Database.removeFriend(logged_user, session_id, friend_data.username);
+                });
+                friend_item.appendChild(unfriend_button);
+            }
+            friend_item.addEventListener('click', () => {
+                cur_section = 'profile';
+                toggleSearchBar();
+                profile(friend_data.username);
+            });
+            friends.appendChild(friend_item);
+        });
+        if (user_friends.length === 0) {
+            let no_friends = document.createElement('p');
+            no_friends.innerHTML = 'This user has no friends';
+            friends.appendChild(no_friends);
+        }
+        let photo = document.createElement('img');
+        photo.classList.add('img-responsive');
+        photo.classList.add('profile-pic');
+        let history_col = document.createElement('div');
+        history_col.classList.add('col');
+        history_col.classList.add('p-2');
+        history_col.classList.add('bg-white');
+        let history_header = document.createElement('h2');
+        history_header.innerHTML = 'History';
+        photo.src = user_data.imgurl; // img_src => imgurl
+        sub_personal_left.appendChild(header2);
+        sub_personal_left.appendChild(header3);
+        let bio_label = document.createElement('span');
+        bio_label.innerHTML = 'Biography:';
+        sub_personal_left.appendChild(bio_label);
+        sub_personal_left.appendChild(biography);
+        if (is_own) {
+            // let submit_bio_button = document.createElement('input');
+            // submit_bio_button.type = 'button';
+            // submit_bio_button.value = 'Update';
+            // sub_personal_left.appendChild(submit_bio_button);
+            let profile_pic_text = document.createElement('span');
+            profile_pic_text.innerHTML = 'Profile picture URL:';
+            sub_personal_left.appendChild(profile_pic_text);
+            let profile_pic_input = document.createElement('input');
+            profile_pic_input.addEventListener('input', async () => {
+                (await fetch("users/changeprofile?" + new URLSearchParams({
+                    imgurl: profile_pic_input
+                })));
+                // send updated profile picture back to server
+            });
+            profile_pic_input.value = user_data.imgurl; // img_src => imgurl
+            profile_pic_input.type = 'text';
+            sub_personal_left.appendChild(profile_pic_input);
+        }
+        sub_personal_right.appendChild(photo);
+        sub_personal_row.appendChild(sub_personal_left);
+        sub_personal_row.appendChild(sub_personal_right);
+        sub_personal.appendChild(sub_personal_row);
+        personal_col.appendChild(sub_personal);
+        if (is_own) {
+            personal_col.appendChild(post_creator_head);
+            personal_col.appendChild(post_creator_p);
+        }
+        personal_col.appendChild(friends);
+        row.appendChild(personal_col);
+        history_col.appendChild(history_header);
+        if (user_data.posts == undefined || user_data.posts.length === 0) {
+            let no_posts = document.createElement('p');
+            no_posts.innerHTML = 'This user has no posts';
+            history_col.appendChild(no_posts);
+        } else {
+            user_data.posts.forEach(post_id => {
+                [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
+                    history_col.appendChild(childElem);
+                });
+            });
+        }
+        row.appendChild(history_col);
+        container.appendChild(row);
+        document.getElementById('page').textContent = '';
+        document.getElementById('page').appendChild(container);
     });
-    if (user_friends.length === 0) {
-        let no_friends = document.createElement('p');
-        no_friends.innerHTML = 'This user has no friends';
-        friends.appendChild(no_friends);
-    }
-    let photo = document.createElement('img');
-    photo.classList.add('img-responsive');
-    photo.classList.add('profile-pic');
-    let history_col = document.createElement('div');
-    history_col.classList.add('col');
-    history_col.classList.add('p-2');
-    history_col.classList.add('bg-white');
-    let history_header = document.createElement('h2');
-    history_header.innerHTML = 'History';
-    photo.src = user_data.imgurl; // img_src => imgurl
-    sub_personal_left.appendChild(header2);
-    sub_personal_left.appendChild(header3);
-    let bio_label = document.createElement('span');
-    bio_label.innerHTML = 'Biography:';
-    sub_personal_left.appendChild(bio_label);
-    sub_personal_left.appendChild(biography);
-    if (is_own) {
-        // let submit_bio_button = document.createElement('input');
-        // submit_bio_button.type = 'button';
-        // submit_bio_button.value = 'Update';
-        // sub_personal_left.appendChild(submit_bio_button);
-        let profile_pic_text = document.createElement('span');
-        profile_pic_text.innerHTML = 'Profile picture URL:';
-        sub_personal_left.appendChild(profile_pic_text);
-        let profile_pic_input = document.createElement('input');
-        profile_pic_input.addEventListener('input', () => {
-            // send updated profile picture back to server
-        });
-        profile_pic_input.value = user_data.imgurl; // img_src => imgurl
-        profile_pic_input.type = 'text';
-        sub_personal_left.appendChild(profile_pic_input);
-    }
-    sub_personal_right.appendChild(photo);
-    sub_personal_row.appendChild(sub_personal_left);
-    sub_personal_row.appendChild(sub_personal_right);
-    sub_personal.appendChild(sub_personal_row);
-    personal_col.appendChild(sub_personal);
-    if (is_own) {
-        personal_col.appendChild(post_creator_head);
-        personal_col.appendChild(post_creator_p);
-    }
-    personal_col.appendChild(friends);
-    row.appendChild(personal_col);
-    history_col.appendChild(history_header);
-    user_data.posts.forEach(post_id => {
-        [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
-            history_col.appendChild(childElem);
-        });
-    });
-    if (user_data.posts.length === 0) {
-        let no_posts = document.createElement('p');
-        no_posts.innerHTML = 'This user has no posts';
-        history_col.appendChild(no_posts);
-    }
-    row.appendChild(history_col);
-    container.appendChild(row);
-    document.getElementById('page').textContent = '';
-    document.getElementById('page').appendChild(container);
 }
 
 function deactivateNavs() {
@@ -425,7 +455,7 @@ window.onload = async function() {
 function loadUser(){
     let inStor = window.localStorage.getItem('user');
     if(inStor === null){
-        let newUser = new user(null, null, null, null, null, false);
+        let newUser = new user();
         window.localStorage.setItem('user', JSON.stringify(newUser));
         return newUser;
     }else{
