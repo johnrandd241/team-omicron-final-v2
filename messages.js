@@ -31,6 +31,7 @@ export async function message(chatID){
             pic.classList.add('img_cont');
             let image = document.createElement('img');
             image.src = './stockUserPhoto.jpg';
+            image.classList.add('user_img');
             pic.appendChild(image);
             card.appendChild(pic);
             let friend = document.createElement('div');
