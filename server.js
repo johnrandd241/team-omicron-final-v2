@@ -136,10 +136,12 @@ app.get("/users", (req, res)=>{
 
 app.get("/users/get", (req, res) => {
     const q = `SELECT * FROM users WHERE username='${req.params['userid']}';`;
+    console.log("got these params: " + req.params);
+    console.log("userid: " + req.params['userid']);
     console.log("making this query: " + q);
     db.any(q)
     .then(resp => {
-        console.log("got this response from database: " > resp.toString());
+        console.log("got this response from database: " + resp.toString());
         res.json(resp);
     })
     .catch(error => {
