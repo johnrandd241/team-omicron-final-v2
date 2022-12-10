@@ -86,7 +86,7 @@ async function search(keywords) {
     document.getElementById('page').appendChild(container);
 }
 
-function viewPost(post_id) {
+async function viewPost(post_id) {
     let container = document.createElement('div');
     container.classList.add('container');
     container.classList.add('mt-5');
@@ -99,11 +99,16 @@ function viewPost(post_id) {
     comments_header.innerHTML = 'Comments';
     // TODO STILL: write in all the comments on the post, we just have to fetch these from the Database and then probably fill them into p elements or something
     comments.appendChild(comments_header);
-    primary_row.appendChild(getColumnForPost(Database.getPostByID(post_id)));
-    primary_row.appendChild(comments);
-    container.appendChild(primary_row);
-    document.getElementById('page').textContent = '';
-    document.getElementById('page').appendChild(container);
+    let post_data = await fetch("posts/get?postid=" + post_id);
+    console.log("attempting to view post with id " + post_id);
+    console.log(post_data);
+    post_data.json().then(true_data => {
+        primary_row.appendChild(getColumnForPost(true_data));
+        primary_row.appendChild(comments);
+        container.appendChild(primary_row);
+        document.getElementById('page').textContent = '';
+        document.getElementById('page').appendChild(container);
+    });
 }
 
 function toggleSearchBar() {
