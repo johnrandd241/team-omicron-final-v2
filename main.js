@@ -11,7 +11,7 @@ const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
 export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'sbrommage1';
 
-function getColumnForPost(post_data) {
+async function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
     cur_col.classList.add('col');
     cur_col.classList.add('p-' + POSTS_PER_ROW);
@@ -34,7 +34,9 @@ function getColumnForPost(post_data) {
     let desc_element = document.createElement('p');
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
-    meta_element.innerHTML = 'Posted by ' + Database.getUserByID(post_data.userid).nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
+    await (await fetch("/users/get?userid=" + post_data.userid)).then(user_data => {
+        meta_element.innerHTML = 'Posted by ' + user_data[0].nameofuser + ' on ' + post_data.creationdate; // creationdate changed to date
+    });
     meta_element.style.textDecoration = 'underline';
     if (post_data.postid != 0) {
         meta_element.addEventListener('click', () => {
