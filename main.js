@@ -4,7 +4,6 @@ import {message} from './messages.js';
 import * as Database from './database.js';
 
 let currentUser = loadUser();
-export {currentUser};
 console.log(currentUser);
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
@@ -582,6 +581,8 @@ function renderLogout(){
         }
     }
     
+    
+export {currentUser};
 /*
     if(currentUser.isAuth === true){
         let logBut = document.getElementById('loginButton');
