@@ -334,7 +334,7 @@ async function profile(user_id) {
         console.log("IN THE PROFILE, USERS FRIENDS ARE");
         console.log(user_friends);
         user_friends ??= [];
-        user_friends.forEach(friend_id => async () {
+        user_friends.forEach(async friend_id =>  {
             (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
                 let friend_data = resp[0];
                 let friend_item = document.createElement('p');
