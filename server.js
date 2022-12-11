@@ -277,7 +277,7 @@ app.get("/users/removefriend", (req, res) => {
 app.get("/users/removepost", (req, res) => {
     let p = `SELECT posts FROM users WHERE username='${req.query["into"]}'`;
     console.log("JUST CALLED REMOVE FRIEND");
-    console.log("attempting to remove friends with " + p);
+    console.log("attempting to remove post with " + p);
     db.any(p).then(resp => {
         console.log("GOT A RESPONSE " + resp);
         let updated_friends = resp[0].posts;
