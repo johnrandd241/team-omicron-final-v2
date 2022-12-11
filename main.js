@@ -340,6 +340,11 @@ async function profile(user_id) {
                 let friend_item = document.createElement('div');
                 friend_item.classList.add('hoverline');
                 friend_item.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
+                friend_item.addEventListener('click', () => {
+                    cur_section = 'profile';
+                    toggleSearchBar();
+                    profile(friend_data.username);
+                });
                 if (is_own) {
                     let unfriend_button = document.createElement('button');
                     unfriend_button.innerHTML = 'Remove';
@@ -347,15 +352,10 @@ async function profile(user_id) {
                         await fetch("/users/removefriend?" + new URLSearchParams({
                             into: currentUser.username,
                             who: friend_data.username
-                        }));
+                        })).then(); 
                     });
                     friend_item.appendChild(unfriend_button);
                 }
-                friend_item.addEventListener('click', () => {
-                    cur_section = 'profile';
-                    toggleSearchBar();
-                    profile(friend_data.username);
-                });
                 friends.appendChild(friend_item);
             });
         });
@@ -442,6 +442,12 @@ async function profile(user_id) {
                     [].slice.call(getColumnForPost(post_data).children).forEach(childElem => {
                         history_col.appendChild(childElem);
                     });
+                    let remove_post_button = document.createElement("button");
+                    remove_post_button.innerHTML = "Remove";
+                    remove_post_button.addEventListener('click', () => {
+                        // remove post from database
+                    });
+                    history_col.appendChild(remove_post_button);
                 });
             });
         }
