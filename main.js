@@ -332,7 +332,7 @@ async function profile(user_id) {
         friends.appendChild(friends_header);
         let user_friends = user_data.friends; // good
         console.log("IN THE PROFILE, USERS FRIENDS ARE");
-        consolw.log(user_friends);
+        console.log(user_friends);
         user_friends ??= [];
         user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
             let friend_item = document.createElement('p');
