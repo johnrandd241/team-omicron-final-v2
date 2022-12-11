@@ -48,43 +48,43 @@ export async function message(chatID){
     let curchat = document.createElement('div');
     curchat.classList.add("card-body", "msg_card_body");
     curchat.setAttribute('id', 'curchat');
-    
-    if(typeof(chatID) == "undefined"){
+
+    //Request chat data from database
+    let chat ={};
+    if(chatID != undefined){
+        const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
+        if(!response2.ok){
+            console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
+            chats.innerHTML = "Error API called failed!\nPlease try again later.";
+        }else{
+            chat = await response2.json();
+            for(let msg in chat){
+                let bubble = document.createElement('div');
+                bubble.classList.add("d-flex","mb-4");
+                if(logged_user === msg.user){
+                    bubble.classList.add('justify-content-start');
+                }else{
+                    bubble.classList.add('justify-content-end');
+                }
+                let uinfo = document.createElement('div');
+                uinfo.innerHTML = msg.user;
+                //uinfo.classList.add()
+                let msgC = document.createElement('div');
+                msgC.classList.add("msg_container");
+                msgC.innerHTML = msg.text;
+                let time = document.createElement('span');
+                time.classList.add('msg_time');
+                time.innerHTML = msg.date;
+                msgC.appendChild(time);
+                bubble.appendChild(uinfo);
+                bubble.appendChild(msgC);
+                curchat.appendChild(bubble);
+            }
+        }
+    }else{   
         let empty = document.createElement('div');
         empty.innerHTML = "Please Select a chat from the list on the left";
         curchat.appendChild(empty);
-        return;
-    }
-    //Request chat data from database
-    let chat ={};
-    const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
-    if(!response2.ok){
-        console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
-        chats.innerHTML = "Error API called failed!\nPlease try again later.";
-    }else{
-        chat = await response2.json();
-        for(let msg in chat){
-            let bubble = document.createElement('div');
-            bubble.classList.add("d-flex","mb-4");
-            if(logged_user === msg.user){
-                bubble.classList.add('justify-content-start');
-            }else{
-                bubble.classList.add('justify-content-end');
-            }
-            let uinfo = document.createElement('div');
-            uinfo.innerHTML = msg.user;
-            //uinfo.classList.add()
-            let msgC = document.createElement('div');
-            msgC.classList.add("msg_container");
-            msgC.innerHTML = msg.text;
-            let time = document.createElement('span');
-            time.classList.add('msg_time');
-            time.innerHTML = msg.date;
-            msgC.appendChild(time);
-            bubble.appendChild(uinfo);
-            bubble.appendChild(msgC);
-            curchat.appendChild(bubble);
-        }
     }
 
     let card = document.createElement('div');
