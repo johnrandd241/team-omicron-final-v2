@@ -80,7 +80,7 @@ async function search(keywords) {
     let data = await fetch("/posts");
     data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
         arr = arr.filter(e => cur_section.startsWith(e.posttype));
-        let score = tags => {
+        let score = function (tags) {
             tags = tags.split(",").map(e => e.trim());
             let sum = 0;
             keywords.forEach(e => {
