@@ -21,6 +21,7 @@ export async function message(chatID){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
     }else{
+        //Creates list of coversations
         convos = await response.json();
         for(let c in convos){
             let item = document.createElement('li');
@@ -53,6 +54,7 @@ export async function message(chatID){
     //Request chat data from database
     let chat ={};
     if(chatID != undefined){
+        //Populates the current chat
         const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
         if(!response2.ok){
             console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
