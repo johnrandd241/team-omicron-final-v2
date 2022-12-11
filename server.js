@@ -46,7 +46,7 @@ const db = pgp(cn);
 // Exporting the database object for shared use:
 module.exports = db;
 
-app.get("/update/msg", (req, res)=>{
+app.post("/update/msg", (req, res)=>{
     const currUser = req.body.currUser;
     const chatID = req.body.chatID;
     const messages = req.body.chat;
