@@ -1,4 +1,3 @@
-import { result } from "./server";
 
 //import {getCurrentUser} from "./main.js";
 export async function message(chatID){
