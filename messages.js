@@ -1,5 +1,5 @@
-import {getCurrentUser} from "./main.js";
-let logged_user = getCurrentUser().username;
+//import {getCurrentUser} from "./main.js";
+let logged_user = window.localStorage.getItem("user").username;
 export async function message(chatID){
     let div = document.getElementById('page');
     div.innerHTML = "";
