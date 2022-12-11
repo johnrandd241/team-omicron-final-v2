@@ -250,7 +250,7 @@ app.get("/users/addfriend", (req, res) => {
 
 app.get("/users/removefriend", (req, res) => {
     let p = `SELECT friends FROM users WHERE username='${req.query["into"]}'`;
-    console.log("attempting to retreive friends with " + p);
+    console.log("attempting to remove friends with " + p);
     db.any(p).then(resp => {
         let updated_friends = resp[0].friends;
         console.log(updated_friends);
