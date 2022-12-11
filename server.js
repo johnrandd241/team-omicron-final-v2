@@ -206,7 +206,7 @@ app.get("/users/addpost", (req, res) => {
             console.log(error);
         });
     }).catch(error => {
-        console.log("got error somehow");
+        console.log("got error somehow3");
         console.log(error);
     });
     res.end();
@@ -242,7 +242,7 @@ app.get("/users/addfriend", (req, res) => {
             });
         }
     }).catch(error => {
-        console.log("got error somehow");
+        console.log("got error somehow2");
         console.log(error);
     });
     res.end();
@@ -270,7 +270,7 @@ app.get("/users/removefriend", (req, res) => {
             console.log(error);
         });
     }).catch(error => {
-        console.log("got error somehow");
+        console.log("got error somehow1");
         console.log(error);
     });
     res.end();
