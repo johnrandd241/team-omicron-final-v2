@@ -444,7 +444,11 @@ async function profile(user_id) {
                     });
                     let remove_post_button = document.createElement("button");
                     remove_post_button.innerHTML = "Remove";
-                    remove_post_button.addEventListener('click', () => {
+                    remove_post_button.addEventListener('click', async () => {
+                        await fetch("/users/removepost?" + new URLSearchParams({
+                            into: logged_user,
+                            who: post_id
+                        }));
                         // remove post from database
                     });
                     history_col.appendChild(remove_post_button);

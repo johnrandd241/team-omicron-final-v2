@@ -274,6 +274,32 @@ app.get("/users/removefriend", (req, res) => {
     res.end();
 });
 
+app.get("/users/removepost", (req, res) => {
+    let p = `SELECT posts FROM users WHERE username='${req.query["into"]}'`;
+    console.log("JUST CALLED REMOVE FRIEND");
+    console.log("attempting to remove friends with " + p);
+    db.any(p).then(resp => {
+        console.log("GOT A RESPONSE " + resp);
+        let updated_friends = resp[0].posts;
+        console.log(updated_friends);
+        updated_friends ??= [];
+        console.log(updated_friends);
+        updated_friends = updated_friends.filter(e => e !== req.query["who"]);
+        let stringed = JSON.stringify(updated_friends);
+        stringed = stringed.substring(1, stringed.length - 1);
+        const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["into"]}'`;
+        console.log("updating friends as with query: " + q);
+        db.none(q).catch(error => {
+            console.log("got another error");
+            console.log(error);
+        });
+    }).catch(error => {
+        console.log("got error somehow1");
+        console.log(error);
+    });
+    res.end();
+});
+
 app.get("/users/changebio", (req, res) => {
     const q = `UPDATE users SET bio='${req.query['bio']}' WHERE username='${req.query['userid']}'`;
     db.none(q)
