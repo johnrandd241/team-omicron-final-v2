@@ -3,7 +3,20 @@ import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
 import * as Database from './database.js';
 
-let currentUser = loadUser();
+function loadUser(){
+    let inStor = window.localStorage.getItem('user');
+    if(inStor === null){
+        let newUser = new user();
+        window.localStorage.setItem('user', JSON.stringify(newUser));
+        return newUser;
+    }else{
+        let userFromStorage = JSON.parse(inStor);
+        return userFromStorage;
+    }
+}
+
+let currentUser = new user();
+currentUser = loadUser();
 console.log(currentUser);
 
 export function getCurrentUser() {
@@ -489,18 +502,6 @@ window.onload = async function() {
     // sort posts by date into the page
     search('');
 };
-
-function loadUser(){
-    let inStor = window.localStorage.getItem('user');
-    if(inStor === null){
-        let newUser = new user();
-        window.localStorage.setItem('user', JSON.stringify(newUser));
-        return newUser;
-    }else{
-        let userFromStorage = JSON.parse(inStor);
-        return userFromStorage;
-    }
-}
 
 function removeUser(){
     window.localStorage.clear('user');
