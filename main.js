@@ -344,8 +344,11 @@ async function profile(user_id) {
                     let unfriend_button = document.createElement('input');
                     unfriend_button.type = 'button';
                     unfriend_button.value = 'Remove';
-                    unfriend_button.addEventListener('click', () => {
-                        Database.removeFriend(currentUser.username, session_id, friend_data.username);
+                    unfriend_button.addEventListener('click', async () => {
+                        await fetch("/users/removefriend?" + new URLSearchParams({
+                            into: currentUser.username,
+                            who: friend_data.username
+                        }));
                     });
                     friend_item.appendChild(unfriend_button);
                 }
