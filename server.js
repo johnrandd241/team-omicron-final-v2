@@ -196,7 +196,7 @@ app.get("/users/addpost", (req, res) => {
         console.log(updated_friends);
         updated_friends ??= [];
         console.log(updated_friends);
-        updated_friends.push(req.query["postid"]);
+        updated_friends.push(parseInt(req.query["postid"]));
         let stringed = JSON.stringify(updated_friends);
         stringed = stringed.substring(1, stringed.length - 1);
         const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["userid"]}'`;
