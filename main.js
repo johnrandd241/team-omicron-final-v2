@@ -335,7 +335,7 @@ async function profile(user_id) {
         console.log(user_friends);
         user_friends ??= [];
         user_friends.forEach(friend_id => async () {
-            let friend_data = (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
+            (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
                 let friend_data = resp[0];
                 let friend_item = document.createElement('p');
                 friend_item.classList.add('hoverline');
