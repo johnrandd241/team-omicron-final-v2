@@ -15,8 +15,7 @@ function loadUser(){
     }
 }
 
-let currentUser = new user();
-currentUser = loadUser();
+export let currentUser = loadUser();
 console.log(currentUser);
 
 export function getCurrentUser() {
