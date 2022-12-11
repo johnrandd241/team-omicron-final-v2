@@ -192,12 +192,12 @@ app.get("/users/addpost", (req, res) => {
     let p = `SELECT posts FROM users WHERE username='${req.query["userid"]}'`;
     console.log("attempting to add post with " + p);
     db.any(p).then(resp => {
-        let updated_friends = resp[0].friends;
-        console.log(updated_friends);
-        updated_friends ??= [];
-        console.log(updated_friends);
-        updated_friends.push(parseInt(req.query["postid"]));
-        let stringed = JSON.stringify(updated_friends);
+        let updated_posts = resp[0].posts;
+        console.log(updated_posts);
+        updated_posts ??= [];
+        console.log(updated_posts);
+        updated_posts.push(parseInt(req.query["postid"]));
+        let stringed = JSON.stringify(updated_posts);
         stringed = stringed.substring(1, stringed.length - 1);
         const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["userid"]}'`;
         console.log("updating friends as with query: " + q);
