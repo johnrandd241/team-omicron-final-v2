@@ -456,7 +456,8 @@ async function profile(user_id) {
         } else {
             console.log("user posts");
             console.log(user_data.posts);
-            user_data.posts.forEach(async post_id => {
+            let ordered = user_data.posts.sort((a, b) => b - a);
+            ordered.forEach(async post_id => {
                 (await fetch("posts/get?postid=" + post_id)).json().then(post_data => {
                     console.log(post_data);
                     post_data = post_data[0];
