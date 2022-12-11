@@ -353,7 +353,7 @@ async function profile(user_id) {
                         await fetch("/users/removefriend?" + new URLSearchParams({
                             into: currentUser.username,
                             who: friend_data.username
-                        })).then(); 
+                        })); 
                     });
                     friend_item.appendChild(unfriend_button);
                 }
@@ -443,6 +443,7 @@ async function profile(user_id) {
                     [].slice.call(getColumnForPost(post_data).children).forEach(childElem => {
                         history_col.appendChild(childElem);
                     });
+                    /*
                     let remove_post_button = document.createElement("button");
                     remove_post_button.innerHTML = "Remove";
                     remove_post_button.addEventListener('click', async () => {
@@ -453,6 +454,7 @@ async function profile(user_id) {
                         // remove post from database
                     });
                     history_col.appendChild(remove_post_button);
+                    */
                 });
             });
         }
