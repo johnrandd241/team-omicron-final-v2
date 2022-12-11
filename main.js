@@ -3,12 +3,20 @@ import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
 import * as Database from './database.js';
 
+function loadUser(){
+    let inStor = window.localStorage.getItem('user');
+    if(inStor === null){
+        let newUser = new user();
+        window.localStorage.setItem('user', JSON.stringify(newUser));
+        return newUser;
+    }else{
+        let userFromStorage = JSON.parse(inStor);
+        return userFromStorage;
+    }
+}
+
 let currentUser = loadUser();
 console.log(currentUser);
-
-export function getCurrentUser() {
-    return currentUser;
-}
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
@@ -489,18 +497,6 @@ window.onload = async function() {
     // sort posts by date into the page
     search('');
 };
-
-function loadUser(){
-    let inStor = window.localStorage.getItem('user');
-    if(inStor === null){
-        let newUser = new user();
-        window.localStorage.setItem('user', JSON.stringify(newUser));
-        return newUser;
-    }else{
-        let userFromStorage = JSON.parse(inStor);
-        return userFromStorage;
-    }
-}
 
 function removeUser(){
     window.localStorage.clear('user');
