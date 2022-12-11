@@ -72,6 +72,7 @@ function getColumnForPost(post_data) {
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
 async function search(keywords) {
+    keywords = keywords.split(",").map(e => e.trim());
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
@@ -79,6 +80,17 @@ async function search(keywords) {
     let data = await fetch("/posts");
     data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
         arr = arr.filter(e => cur_section.startsWith(e.posttype));
+        let score = tags => {
+            tags = tags.split(",").map(e => e.trim());
+            let sum = 0;
+            keywords.forEach(e => {
+                if (tags.indexOf(keywords) !== -1) {
+                    sum += 1 / tags.indexOf(keywords);
+                }
+            });
+            return sum;
+        };
+        e.sort((a, b) => score(b.tags) - score(a.tags));
         // create the base element for the posts (this container holds the rows and columns and what not)
         let container = document.createElement('div');
         container.classList.add('container'); // specify the fact it is a container
