@@ -334,25 +334,28 @@ async function profile(user_id) {
         console.log("IN THE PROFILE, USERS FRIENDS ARE");
         console.log(user_friends);
         user_friends ??= [];
-        user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
-            let friend_item = document.createElement('p');
-            friend_item.classList.add('hoverline');
-            friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
-            if (is_own) {
-                let unfriend_button = document.createElement('input');
-                unfriend_button.type = 'button';
-                unfriend_button.value = 'Remove';
-                unfriend_button.addEventListener('click', () => {
-                    Database.removeFriend(currentUser.username, session_id, friend_data.username);
+        user_friends.forEach(friend_id => async () {
+            (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
+                let friend_data = resp[0];
+                let friend_item = document.createElement('p');
+                friend_item.classList.add('hoverline');
+                friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
+                if (is_own) {
+                    let unfriend_button = document.createElement('input');
+                    unfriend_button.type = 'button';
+                    unfriend_button.value = 'Remove';
+                    unfriend_button.addEventListener('click', () => {
+                        Database.removeFriend(currentUser.username, session_id, friend_data.username);
+                    });
+                    friend_item.appendChild(unfriend_button);
+                }
+                friend_item.addEventListener('click', () => {
+                    cur_section = 'profile';
+                    toggleSearchBar();
+                    profile(friend_data.username);
                 });
-                friend_item.appendChild(unfriend_button);
-            }
-            friend_item.addEventListener('click', () => {
-                cur_section = 'profile';
-                toggleSearchBar();
-                profile(friend_data.username);
+                friends.appendChild(friend_item);
             });
-            friends.appendChild(friend_item);
         });
         if (user_friends.length === 0) {
             let no_friends = document.createElement('p');
