@@ -16,7 +16,8 @@ export async function message(chatID){
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const response = await fetch(`/GetMsgFromUser?user=${window.localStorage.getItem('user').username}`);
+    let user = window.localStorage.getItem('user').username;
+    const response = await fetch(`/GetMsgFromUser?user=${user}`);
     if(!response.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
