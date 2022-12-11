@@ -196,17 +196,15 @@ app.get("/users/addpost", (req, res) => {
         console.log(updated_friends);
         updated_friends ??= [];
         console.log(updated_friends);
-        if (updated_friends.indexOf(req.query["postid"]) === -1) {
-            updated_friends.push(req.query["postid"]);
-            let stringed = JSON.stringify(updated_friends);
-            stringed = stringed.substring(1, stringed.length - 1);
-            const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["userid"]}'`;
-            console.log("updating friends as with query: " + q);
-            db.none(q).catch(error => {
-                console.log("got another error");
-                console.log(error);
-            });
-        }
+        updated_friends.push(req.query["postid"]);
+        let stringed = JSON.stringify(updated_friends);
+        stringed = stringed.substring(1, stringed.length - 1);
+        const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["userid"]}'`;
+        console.log("updating friends as with query: " + q);
+        db.none(q).catch(error => {
+            console.log("got another error");
+            console.log(error);
+        });
     }).catch(error => {
         console.log("got error somehow");
         console.log(error);
