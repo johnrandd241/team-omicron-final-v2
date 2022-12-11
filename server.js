@@ -46,10 +46,10 @@ const db = pgp(cn);
 // Exporting the database object for shared use:
 module.exports = db;
 
-app.post("/update/msg", (req, res)=>{
-    const currUser = req.query.currUser;
-    const charID = req.query.chatID;
-    const messages = req.query.chat;
+app.get("/update/msg", (req, res)=>{
+    const currUser = req.body.currUser;
+    const chatID = req.body.chatID;
+    const messages = req.body.chat;
     const q = `UPDATE messagelog
                 SET messages = '${messages}'
                 WHERE mlogID = '${chatID}'`;

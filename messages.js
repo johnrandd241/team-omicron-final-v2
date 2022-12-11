@@ -1,3 +1,5 @@
+import { result } from "./server";
+
 //import {getCurrentUser} from "./main.js";
 export async function message(chatID){
     let div = document.getElementById('page');
@@ -111,7 +113,20 @@ export async function message(chatID){
         ret.date = Date();
         ret.user = window.localStorage.getItem('user').username;
         ret.text = msgEntry.value;
-        let w = await fetch(`/update/msg?currUser=${window.localStorage.getItem('user').username}&chatID=${chatID}&chat=${JSON.stringify(ret)}`);
+        data = {currUser:null,
+                chatID:null,
+                chat:null
+        };
+        data.chat = ret;
+        data.chatID = chatID;
+        data.currUser = window.localStorage.getItem('user').username;
+        let w = await fetch(`/update/msg`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
         if(!w.ok){
             console.log("API call failed (msg.js). Dumping Error....")
             console.log(w);
