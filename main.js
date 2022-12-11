@@ -18,10 +18,6 @@ function loadUser(){
 let currentUser = loadUser();
 console.log(currentUser);
 
-export function getCurrentUser() {
-    return currentUser;
-}
-
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
