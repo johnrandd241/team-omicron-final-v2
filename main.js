@@ -92,8 +92,8 @@ async function search(keywords) {
         };
         console.log("about to view these posts");
         console.log(arr);
-        arr.forEach(e => console.log(e.tags));
-        // arr.sort((a, b) => score(b.tags) - score(a.tags));
+        arr.forEach(e => console.log(score(e.tags)));
+        arr = arr.sort((a, b) => score(b.tags) - score(a.tags));
         // create the base element for the posts (this container holds the rows and columns and what not)
         let container = document.createElement('div');
         container.classList.add('container'); // specify the fact it is a container
