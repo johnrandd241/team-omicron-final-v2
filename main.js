@@ -97,9 +97,9 @@ async function search(keywords) {
             console.log("attempting to compare");
             console.log(a);
             console.log(b);
-            console.log(a.tags);
-            console.log(b.tags);
-            return score(b) - score(a);
+            console.log(typeof a.tags);
+            console.log(typeof b.tags);
+            return score(b.tags) - score(a.tags);
         });
         // create the base element for the posts (this container holds the rows and columns and what not)
         let container = document.createElement('div');
