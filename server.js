@@ -259,7 +259,7 @@ app.get("/users/removefriend", (req, res) => {
         updated_friends ??= [];
         console.log(updated_friends);
         updated_friends = updated_friends.filter(e => {
-            e != req.query(who);
+            e != req.query["who"];
         });
         let stringed = JSON.stringify(updated_friends);
         stringed = stringed.substring(1, stringed.length - 1);
