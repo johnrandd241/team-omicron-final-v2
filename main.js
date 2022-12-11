@@ -339,7 +339,7 @@ async function profile(user_id) {
                 let friend_data = resp[0];
                 let friend_item = document.createElement('p');
                 friend_item.classList.add('hoverline');
-                friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
+                friend_item.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
                 if (is_own) {
                     let unfriend_button = document.createElement('input');
                     unfriend_button.type = 'button';
