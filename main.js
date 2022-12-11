@@ -429,6 +429,8 @@ async function profile(user_id) {
             no_posts.innerHTML = 'This user has no posts';
             history_col.appendChild(no_posts);
         } else {
+            console.log("user posts");
+            console.log(user_data.posts);
             user_data.posts.forEach(post_id => {
                 [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
                     history_col.appendChild(childElem);

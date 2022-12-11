@@ -69,6 +69,7 @@ export async function createPost(logged, session, tit, desc, tagz, img_src, type
             userid: logged
         }));
     });
+    await fetch("/users/addpost?postid=" + unique_id + "&userid=" + logged);
     // verify user is legit
     // create new row in post table with this info
     // note that date is not provided
