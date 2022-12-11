@@ -1,4 +1,4 @@
-import {getCurrentUser} from "./main.js";
+import {current} from "./main.js";
 let logged_user = getCurrentUser().username;
 export async function message(chatID){
     let div = document.getElementById('page');
