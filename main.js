@@ -342,7 +342,7 @@ async function profile(user_id) {
                 friend_item.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
                 if (is_own) {
                     let unfriend_button = document.createElement('button');
-                    unfriend_button.value = 'Remove';
+                    unfriend_button.innerHTML = 'Remove';
                     unfriend_button.addEventListener('click', async () => {
                         await fetch("/users/removefriend?" + new URLSearchParams({
                             into: currentUser.username,
