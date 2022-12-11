@@ -188,6 +188,32 @@ app.get("/users/get", (req, res) => {
     });
 });
 
+app.get("/users/addpost", (req, res) => {
+    let p = `SELECT posts FROM users WHERE username='${req.query["userid"]}'`;
+    console.log("attempting to add post with " + p);
+    db.any(p).then(resp => {
+        let updated_friends = resp[0].friends;
+        console.log(updated_friends);
+        updated_friends ??= [];
+        console.log(updated_friends);
+        if (updated_friends.indexOf(req.query["postid"]) === -1) {
+            updated_friends.push(req.query["postid"]);
+            let stringed = JSON.stringify(updated_friends);
+            stringed = stringed.substring(1, stringed.length - 1);
+            const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["userid"]}'`;
+            console.log("updating friends as with query: " + q);
+            db.none(q).catch(error => {
+                console.log("got another error");
+                console.log(error);
+            });
+        }
+    }).catch(error => {
+        console.log("got error somehow");
+        console.log(error);
+    });
+    res.end();
+});
+
 app.get("/users/changeprofile", (req, res) => {
     const q = `UPDATE users SET imgurl='${req.query['imgurl']}' WHERE username='${req.query['userid']}'`;
     db.none(q)
