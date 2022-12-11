@@ -1,5 +1,5 @@
-import {currentUser} from "./main.js";
-let logged_user = currentUser.username;
+//import {getCurrentUser} from "./main.js";
+let logged_user = window.localStorage.getItem("user").username;
 export async function message(chatID){
     let div = document.getElementById('page');
     div.innerHTML = "";
@@ -107,8 +107,9 @@ export async function message(chatID){
     butt.setAttribute('id','sendbutn');
     butt.addEventListener('click', async function(){
         let ret = {user:logged_user,
-                    date:date(),
+                    date:null,
                     text:""};
+        ret.date = Date();
         ret.text = msgEntry.value;
         let w = await fetch(`/update/msg?currUser=${logged_user}&chatID=${chatID}&chat=${JSON.stringify(ret)}`);
         if(!w.ok){
