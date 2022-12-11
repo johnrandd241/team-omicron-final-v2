@@ -433,7 +433,9 @@ async function profile(user_id) {
             console.log(user_data.posts);
             user_data.posts.forEach(async post_id => {
                 (await fetch("posts/get?postid=" + post_id)).json().then(post_data => {
+                    console.log(post_data);
                     post_data = post_data[0];
+                    console.log(post_data);
                     // Database.getPostByID(post_id);
                     [].slice.call(getColumnForPost(post_data).children).forEach(childElem => {
                         history_col.appendChild(childElem);

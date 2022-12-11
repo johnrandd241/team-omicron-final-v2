@@ -155,6 +155,8 @@ app.get("/users", (req, res)=>{
     });
 });
 
+db.none(`UPDATE users SET pword='test' WHERE username='steenbrugge'`);
+
 app.get("/posts/get", (req, res)=>{
     const q = `SELECT * FROM post WHERE postid='${req.query.postid}';`;
     console.log("querying this: " + q);
