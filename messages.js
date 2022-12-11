@@ -1,5 +1,5 @@
-import {currentUser} from "./main.js";
-let logged_user = currentUser.username;
+import {getCurrentUser} from "./main.js";
+let logged_user = getCurrentUser().username;
 export async function message(chatID){
     let div = document.getElementById('page');
     div.innerHTML = "";
@@ -32,7 +32,7 @@ export async function message(chatID){
             pic.classList.add('img_cont');
             let image = document.createElement('img');
             image.src = './stockUserPhoto.jpg';
-            image.classList.add('user_img');
+            imagegetclassList.add('user_img');
             pic.appendChild(image);
             card.appendChild(pic);
             let friend = document.createElement('div');
