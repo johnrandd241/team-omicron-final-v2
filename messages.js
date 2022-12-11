@@ -1,5 +1,4 @@
 //import {getCurrentUser} from "./main.js";
-let logged_user = window.localStorage.getItem("user").username;
 export async function message(chatID){
     let div = document.getElementById('page');
     div.innerHTML = "";
@@ -16,7 +15,7 @@ export async function message(chatID){
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const response = await fetch(`/GetMsgFromUser?user=${logged_user}`);
+    const response = await fetch(`/GetMsgFromUser?user=${window.localStorage.getItem('user').username}`);
     if(!response.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
@@ -106,12 +105,13 @@ export async function message(chatID){
     butt.classList.add('input-group-text', 'send_btn');
     butt.setAttribute('id','sendbutn');
     butt.addEventListener('click', async function(){
-        let ret = {user:logged_user,
+        let ret = {user:null,
                     date:null,
                     text:""};
         ret.date = Date();
+        ret.user = window.localStorage.getItem('user').username;
         ret.text = msgEntry.value;
-        let w = await fetch(`/update/msg?currUser=${logged_user}&chatID=${chatID}&chat=${JSON.stringify(ret)}`);
+        let w = await fetch(`/update/msg?currUser=${window.localStorage.getItem('user').username}&chatID=${chatID}&chat=${JSON.stringify(ret)}`);
         if(!w.ok){
             console.log("API call failed (msg.js). Dumping Error....")
             console.log(w);
@@ -126,7 +126,7 @@ export async function message(chatID){
             bubble.classList.add("d-flex","mb-4");
             bubble.classList.add('justify-content-start');
             let uinfo = document.createElement('div');
-            uinfo.innerHTML = logged_user;
+            uinfo.innerHTML = window.localStorage.getItem('user').username;
             //uinfo.classList.add()
             let msgC = document.createElement('div');
             msgC.classList.add("msg_container");
