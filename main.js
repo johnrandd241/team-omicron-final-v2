@@ -73,6 +73,8 @@ function getColumnForPost(post_data) {
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
 async function search(keywords) {
     keywords = keywords.split(",").map(e => e.trim());
+    keywords = keywords.filter(e => e !== "");
+    console.log("key len: " + keywords.length);
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
