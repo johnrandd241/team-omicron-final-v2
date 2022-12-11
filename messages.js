@@ -115,7 +115,7 @@ export async function message(chatID){
         ret.date = Date();
         ret.user = window.localStorage.getItem('user').username;
         ret.text = msgEntry.value;
-        data = {currUser:null,
+        let data = {currUser:null,
                 chatID:null,
                 chat:null
         };
