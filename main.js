@@ -15,7 +15,7 @@ function loadUser(){
     }
 }
 
-export let currentUser = loadUser();
+let currentUser = loadUser();
 console.log(currentUser);
 
 export function getCurrentUser() {
