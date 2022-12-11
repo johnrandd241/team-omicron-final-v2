@@ -337,9 +337,11 @@ async function profile(user_id) {
         user_friends.forEach(async friend_id =>  {
             (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
                 let friend_data = resp[0];
-                let friend_item = document.createElement('p');
-                friend_item.classList.add('hoverline');
-                friend_item.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
+                let friend_item = document.createElement('div');
+                friend_p = document.createElement('p');
+                friend_p.classList.add('hoverline');
+                friend_p.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
+                friend_item.appendChild(friend_p);
                 if (is_own) {
                     let unfriend_button = document.createElement('button');
                     unfriend_button.innerHTML = 'Remove';
@@ -351,7 +353,7 @@ async function profile(user_id) {
                     });
                     friend_item.appendChild(unfriend_button);
                 }
-                friend_item.addEventListener('click', () => {
+                friend_p.addEventListener('click', () => {
                     cur_section = 'profile';
                     toggleSearchBar();
                     profile(friend_data.username);
