@@ -261,7 +261,6 @@ app.get("/users/removefriend", (req, res) => {
         updated_friends = updated_friends.filter(e => {
             e != req.query(who);
         });
-        updated_friends.push(req.query["who"]);
         let stringed = JSON.stringify(updated_friends);
         stringed = stringed.substring(1, stringed.length - 1);
         const q = `UPDATE users SET friends='{${stringed}}' WHERE username='${req.query["into"]}'`;
