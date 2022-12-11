@@ -84,8 +84,8 @@ async function search(keywords) {
             tags = tags.split(",").map(e => e.trim());
             let sum = 0;
             keywords.forEach(e => {
-                if (tags.indexOf(keywords) !== -1) {
-                    sum += 1 / tags.indexOf(keywords);
+                if (tags.indexOf(e) !== -1) {
+                    sum += 1 / tags.indexOf(e);
                 }
             });
             return sum;
