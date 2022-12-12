@@ -73,6 +73,8 @@ function getColumnForPost(post_data) {
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
 async function search(keywords) {
     keywords = keywords.split(",").map(e => e.trim());
+    keywords = keywords.filter(e => e !== "");
+    console.log("key len: " + keywords.length);
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
@@ -81,6 +83,7 @@ async function search(keywords) {
     data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
         arr = arr.filter(e => cur_section.startsWith(e.posttype));
         let score = function (tags) {
+            tags ??= "";
             tags = tags.split(",").map(e => e.trim());
             let sum = 0;
             keywords.forEach(e => {
@@ -92,15 +95,12 @@ async function search(keywords) {
         };
         // console.log("about to view these posts");
         // console.log(arr);
-        // arr.forEach(e => console.log(score(e.tags)));
-        arr = arr.sort((a, b) => {
-            console.log("attempting to compare");
-            console.log(a);
-            console.log(b);
-            console.log(a.tags);
-            console.log(b.tags);
-            return score(b) - score(a);
-        });
+        // arr.forEach(e => console.log(score(e.tags)))
+        if (keywords.length > 0) {
+            arr = arr.sort((a, b) => {
+                return score(b.tags) - score(a.tags);
+            });
+        }
         // create the base element for the posts (this container holds the rows and columns and what not)
         let container = document.createElement('div');
         container.classList.add('container'); // specify the fact it is a container
@@ -456,7 +456,8 @@ async function profile(user_id) {
         } else {
             console.log("user posts");
             console.log(user_data.posts);
-            user_data.posts.forEach(async post_id => {
+            let ordered = user_data.posts.sort((a, b) => b - a);
+            ordered.forEach(async post_id => {
                 (await fetch("posts/get?postid=" + post_id)).json().then(post_data => {
                     console.log(post_data);
                     post_data = post_data[0];
