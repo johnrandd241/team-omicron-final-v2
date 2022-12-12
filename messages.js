@@ -17,7 +17,7 @@ export async function message(chatID){
     let list = document.createElement('ul');
     list.classList.add('contacts');
     let user = window.localStorage.getItem('user').username;
-    const response = await fetch(`/GetMsgFromUser?user=${user}`);
+    /* const response = await fetch(`/GetMsgFromUser?user=${user}`);
     if(!response.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
@@ -47,6 +47,30 @@ export async function message(chatID){
             chats.appendChild(item);
         }
     }
+ */
+    let item = document.createElement('li');
+    item.id = "Tester1";
+    //item.classList.add('')
+    let c =  document.createElement('div');
+    c.classList.add('d-flex','bd-highlight');
+    let pic = document.createElement('div');
+    pic.classList.add('img_cont');
+    let image = document.createElement('img');
+    image.src = './stockUserPhoto.jpg';
+    imagegetclassList.add('user_img');
+    pic.appendChild(image);
+    card.appendChild(pic);
+    let friend = document.createElement('div');
+    friend.classList.add('user_info');
+    let name = document.createElement('span');
+    name.innerHTML = "Tester1";
+    friend.appendChild(name);
+    card.appendChild(friend);
+    item.appendChild(c);
+    chats.appendChild(item);
+
+
+
 
     let curchat = document.createElement('div');
     curchat.classList.add("card-body", "msg_card_body");
@@ -85,10 +109,31 @@ export async function message(chatID){
                 curchat.appendChild(bubble);
             }
         }
-    }else{   
-        let empty = document.createElement('div');
-        empty.innerHTML = "Please Select a chat from the list on the left";
-        curchat.appendChild(empty);
+    }else{
+        msg = {user:"Tester1",
+                date:null,
+                text:"Hello This is Tester1"};  
+        msg.date= Date(); 
+        let bubble = document.createElement('div');
+        bubble.classList.add("d-flex","mb-4");
+        if(logged_user === msg.user){
+            bubble.classList.add('justify-content-start');
+        }else{
+            bubble.classList.add('justify-content-end');
+        }
+        let uinfo = document.createElement('div');
+        uinfo.innerHTML = msg.user;
+        //uinfo.classList.add()
+        let msgC = document.createElement('div');
+        msgC.classList.add("msg_container");
+        msgC.innerHTML = msg.text;
+        let time = document.createElement('span');
+        time.classList.add('msg_time');
+        time.innerHTML = msg.date;
+        msgC.appendChild(time);
+        bubble.appendChild(uinfo);
+        bubble.appendChild(msgC);
+        curchat.appendChild(bubble);
     }
 
     let card = document.createElement('div');
