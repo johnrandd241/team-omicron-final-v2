@@ -59,13 +59,13 @@ export async function message(chatID){
     image.src = './stockUserPhoto.jpg';
     image.classList.add('user_img');
     pic.appendChild(image);
-    card.appendChild(pic);
+    c.appendChild(pic);
     let friend = document.createElement('div');
     friend.classList.add('user_info');
     let name = document.createElement('span');
     name.innerHTML = "Tester1";
     friend.appendChild(name);
-    card.appendChild(friend);
+    c.appendChild(friend);
     item.appendChild(c);
     chats.appendChild(item);
 
