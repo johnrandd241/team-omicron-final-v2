@@ -110,7 +110,7 @@ export async function message(chatID){
             }
         }
     }else{
-        msg = {user:"Tester1",
+        let msg = {user:"Tester1",
                 date:null,
                 text:"Hello This is Tester1"};  
         msg.date= Date(); 
