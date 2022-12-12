@@ -3,18 +3,6 @@ import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
 import * as Database from './database.js';
 
-function loadUser(){
-    let inStor = window.localStorage.getItem('user');
-    if(inStor === null){
-        let newUser = new user();
-        window.localStorage.setItem('user', JSON.stringify(newUser));
-        return newUser;
-    }else{
-        let userFromStorage = JSON.parse(inStor);
-        return userFromStorage;
-    }
-}
-
 let currentUser = loadUser();
 console.log(currentUser);
 
