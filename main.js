@@ -47,6 +47,7 @@ function getColumnForPost(post_data) {
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
     meta_element.innerHTML = 'Posted by ' + post_data.userid + ' on ' + post_data.creationdate; // creationdate changed to date
+    meta_element.classList.add("hoverline");
     /*
     let userfetch = await fetch("/users/get?userid=" + post_data.userid);
     userfetch.json().then(delivered => {
@@ -71,6 +72,9 @@ function getColumnForPost(post_data) {
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
 async function search(keywords) {
+    keywords = keywords.split(",").map(e => e.trim());
+    keywords = keywords.filter(e => e !== "");
+    console.log("key len: " + keywords.length);
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
@@ -78,6 +82,25 @@ async function search(keywords) {
     let data = await fetch("/posts");
     data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
         arr = arr.filter(e => cur_section.startsWith(e.posttype));
+        let score = function (tags) {
+            tags ??= "";
+            tags = tags.split(",").map(e => e.trim());
+            let sum = 0;
+            keywords.forEach(e => {
+                if (tags.indexOf(e) !== -1) {
+                    sum += 1 / tags.indexOf(e);
+                }
+            });
+            return sum;
+        };
+        // console.log("about to view these posts");
+        // console.log(arr);
+        // arr.forEach(e => console.log(score(e.tags)))
+        if (keywords.length > 0) {
+            arr = arr.sort((a, b) => {
+                return score(b.tags) - score(a.tags);
+            });
+        }
         // create the base element for the posts (this container holds the rows and columns and what not)
         let container = document.createElement('div');
         container.classList.add('container'); // specify the fact it is a container
@@ -337,23 +360,25 @@ async function profile(user_id) {
         user_friends.forEach(async friend_id =>  {
             (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
                 let friend_data = resp[0];
-                let friend_item = document.createElement('p');
+                let friend_item = document.createElement('div');
                 friend_item.classList.add('hoverline');
                 friend_item.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
-                if (is_own) {
-                    let unfriend_button = document.createElement('input');
-                    unfriend_button.type = 'button';
-                    unfriend_button.value = 'Remove';
-                    unfriend_button.addEventListener('click', () => {
-                        Database.removeFriend(currentUser.username, session_id, friend_data.username);
-                    });
-                    friend_item.appendChild(unfriend_button);
-                }
                 friend_item.addEventListener('click', () => {
                     cur_section = 'profile';
                     toggleSearchBar();
                     profile(friend_data.username);
                 });
+                if (is_own) {
+                    let unfriend_button = document.createElement('button');
+                    unfriend_button.innerHTML = 'Remove';
+                    unfriend_button.addEventListener('click', async () => {
+                        await fetch("/users/removefriend?" + new URLSearchParams({
+                            into: currentUser.username,
+                            who: friend_data.username
+                        })); 
+                    });
+                    friend_item.appendChild(unfriend_button);
+                }
                 friends.appendChild(friend_item);
             });
         });
@@ -431,9 +456,28 @@ async function profile(user_id) {
         } else {
             console.log("user posts");
             console.log(user_data.posts);
-            user_data.posts.forEach(post_id => {
-                [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
-                    history_col.appendChild(childElem);
+            let ordered = user_data.posts.sort((a, b) => b - a);
+            ordered.forEach(async post_id => {
+                (await fetch("posts/get?postid=" + post_id)).json().then(post_data => {
+                    console.log(post_data);
+                    post_data = post_data[0];
+                    console.log(post_data);
+                    // Database.getPostByID(post_id);
+                    [].slice.call(getColumnForPost(post_data).children).forEach(childElem => {
+                        history_col.appendChild(childElem);
+                    });
+                    /*
+                    let remove_post_button = document.createElement("button");
+                    remove_post_button.innerHTML = "Remove";
+                    remove_post_button.addEventListener('click', async () => {
+                        await fetch("/users/removepost?" + new URLSearchParams({
+                            into: logged_user,
+                            who: post_id
+                        }));
+                        // remove post from database
+                    });
+                    history_col.appendChild(remove_post_button);
+                    */
                 });
             });
         }
@@ -502,6 +546,18 @@ window.onload = async function() {
     // sort posts by date into the page
     search('');
 };
+
+function loadUser(){
+    let inStor = window.localStorage.getItem('user');
+    if(inStor === null){
+        let newUser = new user();
+        window.localStorage.setItem('user', JSON.stringify(newUser));
+        return newUser;
+    }else{
+        let userFromStorage = JSON.parse(inStor);
+        return userFromStorage;
+    }
+}
 
 function removeUser(){
     window.localStorage.clear('user');
