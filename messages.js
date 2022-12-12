@@ -78,7 +78,7 @@ export async function message(chatID){
 
     //Request chat data from database
     let chat ={};
-    if(chatID != undefined){
+    if(chatID != undefined && chatID != null){
         //Populates the current chat
         const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
         if(!response2.ok){
@@ -89,7 +89,7 @@ export async function message(chatID){
             for(let msg in chat){
                 let bubble = document.createElement('div');
                 bubble.classList.add("d-flex","mb-4");
-                if(logged_user === msg.user){
+                if(window.localStorage.getItem('user').username === msg.user){
                     bubble.classList.add('justify-content-start');
                 }else{
                     bubble.classList.add('justify-content-end');
@@ -116,11 +116,7 @@ export async function message(chatID){
         msg.date= Date(); 
         let bubble = document.createElement('div');
         bubble.classList.add("d-flex","mb-4");
-        if(logged_user === msg.user){
-            bubble.classList.add('justify-content-start');
-        }else{
-            bubble.classList.add('justify-content-end');
-        }
+        bubble.classList.add('justify-content-start');
         let uinfo = document.createElement('div');
         uinfo.innerHTML = msg.user;
         //uinfo.classList.add()
