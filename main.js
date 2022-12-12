@@ -3,13 +3,25 @@ import  {checkUserLogin, createUser, user} from './user.js';
 import {message} from './messages.js';
 import * as Database from './database.js';
 
+function loadUser(){
+    let inStor = window.localStorage.getItem('user');
+    if(inStor === null){
+        let newUser = new user();
+        window.localStorage.setItem('user', JSON.stringify(newUser));
+        return newUser;
+    }else{
+        let userFromStorage = JSON.parse(inStor);
+        return userFromStorage;
+    }
+}
+
 let currentUser = loadUser();
 console.log(currentUser);
 
 let cur_section = 'events'; // we open the events section by default, this variable keeps track of which section we have open
 const POSTS_PER_ROW = 3;
 // hopefully john rand can set these variables upon logging in
-export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = 'sbrommage1';
+export let session_id = 'the_session_id_administered_by_the_server_upon_login', logged_user = '';
 
 function getColumnForPost(post_data) {
     let cur_col = document.createElement('div');
@@ -35,6 +47,7 @@ function getColumnForPost(post_data) {
     desc_element.innerHTML = post_data.postdescription; // .substring(0, 100); // desc changed to postdescription
     let meta_element = document.createElement('p');
     meta_element.innerHTML = 'Posted by ' + post_data.userid + ' on ' + post_data.creationdate; // creationdate changed to date
+    meta_element.classList.add("hoverline");
     /*
     let userfetch = await fetch("/users/get?userid=" + post_data.userid);
     userfetch.json().then(delivered => {
@@ -59,6 +72,7 @@ function getColumnForPost(post_data) {
 
 // if search button is pressed and the search text is blank, just return everything from that section, sorted by date
 async function search(keywords) {
+    keywords = keywords.split(",").map(e => e.trim());
     // obtain stuff from database (based on cur_section and keywords)
     // programatically create the html that displays the post (the response from the database)
     // render the elements into the page
@@ -66,6 +80,27 @@ async function search(keywords) {
     let data = await fetch("/posts");
     data.json().then(arr => { // let arr = Array(5).fill(0).map(e => Database.DUMMY_POST);
         arr = arr.filter(e => cur_section.startsWith(e.posttype));
+        let score = function (tags) {
+            tags = tags.split(",").map(e => e.trim());
+            let sum = 0;
+            keywords.forEach(e => {
+                if (tags.indexOf(e) !== -1) {
+                    sum += 1 / tags.indexOf(e);
+                }
+            });
+            return sum;
+        };
+        // console.log("about to view these posts");
+        // console.log(arr);
+        // arr.forEach(e => console.log(score(e.tags)));
+        arr = arr.sort((a, b) => {
+            console.log("attempting to compare");
+            console.log(a);
+            console.log(b);
+            console.log(a.tags);
+            console.log(b.tags);
+            return score(b) - score(a);
+        });
         // create the base element for the posts (this container holds the rows and columns and what not)
         let container = document.createElement('div');
         container.classList.add('container'); // specify the fact it is a container
@@ -245,6 +280,10 @@ function postCreator() {
 
 // runs when profile tab is clicked
 async function profile(user_id) {
+    deactivateNavs();
+    document.getElementById('profile-link').classList.add('active');
+    toggleSearchBar();
+    cur_section = 'profile';
     console.log('viewing profile ' + user_id + ' as ' + currentUser.username);
     console.log('test print');
     let is_own = user_id === currentUser.username; // is true if you are viewing your own profile
@@ -315,26 +354,33 @@ async function profile(user_id) {
         friends_header.innerHTML = "Friends";
         friends.appendChild(friends_header);
         let user_friends = user_data.friends; // good
+        console.log("IN THE PROFILE, USERS FRIENDS ARE");
+        console.log(user_friends);
         user_friends ??= [];
-        user_friends.map(friend_id => Database.getUserByID(friend_id)).forEach(friend_data => {
-            let friend_item = document.createElement('p');
-            friend_item.classList.add('hoverline');
-            friend_item.innerHTML = friend_data.name + ' @' + friend_data.username;
-            if (is_own) {
-                let unfriend_button = document.createElement('input');
-                unfriend_button.type = 'button';
-                unfriend_button.value = 'Remove';
-                unfriend_button.addEventListener('click', () => {
-                    Database.removeFriend(currentUser.username, session_id, friend_data.username);
+        user_friends.forEach(async friend_id =>  {
+            (await fetch("/users/get?userid=" + friend_id)).json().then(resp => {
+                let friend_data = resp[0];
+                let friend_item = document.createElement('div');
+                friend_item.classList.add('hoverline');
+                friend_item.innerHTML = friend_data.nameofuser + ' @' + friend_data.username;
+                friend_item.addEventListener('click', () => {
+                    cur_section = 'profile';
+                    toggleSearchBar();
+                    profile(friend_data.username);
                 });
-                friend_item.appendChild(unfriend_button);
-            }
-            friend_item.addEventListener('click', () => {
-                cur_section = 'profile';
-                toggleSearchBar();
-                profile(friend_data.username);
+                if (is_own) {
+                    let unfriend_button = document.createElement('button');
+                    unfriend_button.innerHTML = 'Remove';
+                    unfriend_button.addEventListener('click', async () => {
+                        await fetch("/users/removefriend?" + new URLSearchParams({
+                            into: currentUser.username,
+                            who: friend_data.username
+                        })); 
+                    });
+                    friend_item.appendChild(unfriend_button);
+                }
+                friends.appendChild(friend_item);
             });
-            friends.appendChild(friend_item);
         });
         if (user_friends.length === 0) {
             let no_friends = document.createElement('p');
@@ -357,6 +403,18 @@ async function profile(user_id) {
         bio_label.innerHTML = 'Biography:';
         sub_personal_left.appendChild(bio_label);
         sub_personal_left.appendChild(biography);
+        if (!is_own && currentUser.isAuth) {
+            let friendButton = document.createElement("button");
+            friendButton.innerHTML = "Add";
+            friendButton.onclick = async function() {
+                (await fetch("users/addfriend?" + new URLSearchParams({
+                    into: currentUser.username,
+                    who: user_id
+                })));
+            };
+            sub_personal_left.appendChild(friendButton);
+        }
+        
         if (is_own) {
             // let submit_bio_button = document.createElement('input');
             // submit_bio_button.type = 'button';
@@ -396,9 +454,29 @@ async function profile(user_id) {
             no_posts.innerHTML = 'This user has no posts';
             history_col.appendChild(no_posts);
         } else {
-            user_data.posts.forEach(post_id => {
-                [].slice.call(getColumnForPost(Database.getPostByID(post_id)).children).forEach(childElem => {
-                    history_col.appendChild(childElem);
+            console.log("user posts");
+            console.log(user_data.posts);
+            user_data.posts.forEach(async post_id => {
+                (await fetch("posts/get?postid=" + post_id)).json().then(post_data => {
+                    console.log(post_data);
+                    post_data = post_data[0];
+                    console.log(post_data);
+                    // Database.getPostByID(post_id);
+                    [].slice.call(getColumnForPost(post_data).children).forEach(childElem => {
+                        history_col.appendChild(childElem);
+                    });
+                    /*
+                    let remove_post_button = document.createElement("button");
+                    remove_post_button.innerHTML = "Remove";
+                    remove_post_button.addEventListener('click', async () => {
+                        await fetch("/users/removepost?" + new URLSearchParams({
+                            into: logged_user,
+                            who: post_id
+                        }));
+                        // remove post from database
+                    });
+                    history_col.appendChild(remove_post_button);
+                    */
                 });
             });
         }
@@ -427,28 +505,33 @@ window.onload = async function() {
     // add functionality to when nav links are clicked
     document.getElementById('nav-list').querySelectorAll('a').forEach(link_elem => {
         link_elem.addEventListener('click', function() {
-            // deactivate the current active link (achieved by deactivating all of them)
-            deactivateNavs();
-            // set the clicked link to active
-            link_elem.classList.add('active');
+            let switch_tab = () => {
+                deactivateNavs();
+                link_elem.classList.add('active');
+                cur_section = link_elem.id.split('-')[0];
+                toggleSearchBar();
+            };
             // update the current section
-            cur_section = link_elem.id.split('-')[0];
-            toggleSearchBar();
+            let clicked = link_elem.id.split('-')[0];
+            if (currentUser.isAuth || (clicked !== "profile" && clicked !== "messages")) {
+                switch_tab();
+            }
             // now we do whatever we need to based on the section we are in
-            switch (cur_section) {
+            switch (link_elem.id.split('-')[0]) {
                 case 'messages':
-                    // do whatever we need for the messages
-                    message(null);
+                    if (currentUser.isAuth) {
+                        // do whatever we need for the messages
+                        message(null);
+                    } else {
+                        alert("Sign in to use this feature");
+                    }
                     break;
                 case 'profile':
                     if (currentUser.isAuth) {
-                        // do whatever we need for the profile
-                        // go to the current signed in user (this should only even be visible if youre signed in)
                         profile(currentUser.username);
                     } else {
                         alert("Sign in to use this feature");
                     }
-
                     break;
                 default:
                     // must be events, people, or records, which are basically all the same
@@ -467,14 +550,6 @@ function loadUser(){
     let inStor = window.localStorage.getItem('user');
     if(inStor === null){
         let newUser = new user();
-        newUser.bio = null;
-        newUser.username = null;
-        newUser.friends = null;
-        newUser.password = null;
-        newUser.fullName = null;
-        newUser.isAuth = false;
-        newUser.email = null;
-        newUser.imgurl = null;
         window.localStorage.setItem('user', JSON.stringify(newUser));
         return newUser;
     }else{
@@ -568,6 +643,8 @@ function renderLogout(){
         }
     }
     
+    
+export {currentUser};
 /*
     if(currentUser.isAuth === true){
         let logBut = document.getElementById('loginButton');

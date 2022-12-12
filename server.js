@@ -46,10 +46,28 @@ const db = pgp(cn);
 // Exporting the database object for shared use:
 module.exports = db;
 
+app.post("/update/msg", (req, res)=>{
+    const currUser = req.query.currUser;
+    const charID = req.query.chatID;
+    const messages = req.query.chat;
+    const q = `UPDATE messagelog
+                SET messages = '${messages}'
+                WHERE mlogID = '${chatID}'`;
+    db.none(q)
+        .catch(error => {
+            console.log("An error occured in the SQL call to the server. (/update/msg) Dumping Error now...\n");
+            console.log(error);
+            res.json({success:false});
+        });
+    res.json({success:true});
+
+});
+
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    const q = `SELECT messages FROM users WHERE username = '${user}';`;
+    const q = `SELECT messages FROM users WHERE username = "$(user)";`;
     console.log("attempting this query: " + q);
+    console.log(user);
     db.any(q)
     .then(resp => {
         console.log("got this response (THTHTHT): ");
@@ -170,12 +188,114 @@ app.get("/users/get", (req, res) => {
     });
 });
 
+app.get("/users/addpost", (req, res) => {
+    let p = `SELECT posts FROM users WHERE username='${req.query["userid"]}'`;
+    console.log("attempting to add post with " + p);
+    db.any(p).then(resp => {
+        let updated_posts = resp[0].posts;
+        console.log(updated_posts);
+        updated_posts ??= [];
+        console.log(updated_posts);
+        updated_posts.push(parseInt(req.query["postid"]));
+        let stringed = JSON.stringify(updated_posts);
+        stringed = stringed.substring(1, stringed.length - 1);
+        const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["userid"]}'`;
+        console.log("updating friends as with query: " + q);
+        db.none(q).catch(error => {
+            console.log("got another error");
+            console.log(error);
+        });
+    }).catch(error => {
+        console.log("got error somehow3");
+        console.log(error);
+    });
+    res.end();
+});
+
 app.get("/users/changeprofile", (req, res) => {
     const q = `UPDATE users SET imgurl='${req.query['imgurl']}' WHERE username='${req.query['userid']}'`;
     db.none(q)
     .then(resp => {
         console.log("updated profile picture");
         console.log(resp);
+    });
+    res.end();
+});
+
+app.get("/users/addfriend", (req, res) => {
+    let p = `SELECT friends FROM users WHERE username='${req.query["into"]}'`;
+    console.log("attempting to retreive friends with " + p);
+    db.any(p).then(resp => {
+        let updated_friends = resp[0].friends;
+        console.log(updated_friends);
+        updated_friends ??= [];
+        console.log(updated_friends);
+        if (updated_friends.indexOf(req.query["who"]) === -1) {
+            updated_friends.push(req.query["who"]);
+            let stringed = JSON.stringify(updated_friends);
+            stringed = stringed.substring(1, stringed.length - 1);
+            const q = `UPDATE users SET friends='{${stringed}}' WHERE username='${req.query["into"]}'`;
+            console.log("updating friends as with query: " + q);
+            db.none(q).catch(error => {
+                console.log("got another error");
+                console.log(error);
+            });
+        }
+    }).catch(error => {
+        console.log("got error somehow2");
+        console.log(error);
+    });
+    res.end();
+});
+
+app.get("/users/removefriend", (req, res) => {
+    let p = `SELECT friends FROM users WHERE username='${req.query["into"]}'`;
+    console.log("JUST CALLED REMOVE FRIEND");
+    console.log("attempting to remove friends with " + p);
+    db.any(p).then(resp => {
+        console.log("GOT A RESPONSE " + resp);
+        let updated_friends = resp[0].friends;
+        console.log(updated_friends);
+        updated_friends ??= [];
+        console.log(updated_friends);
+        updated_friends = updated_friends.filter(e => e !== req.query["who"]);
+        let stringed = JSON.stringify(updated_friends);
+        stringed = stringed.substring(1, stringed.length - 1);
+        const q = `UPDATE users SET friends='{${stringed}}' WHERE username='${req.query["into"]}'`;
+        console.log("updating friends as with query: " + q);
+        db.none(q).catch(error => {
+            console.log("got another error");
+            console.log(error);
+        });
+    }).catch(error => {
+        console.log("got error somehow1");
+        console.log(error);
+    });
+    res.end();
+});
+
+app.get("/users/removepost", (req, res) => {
+    let p = `SELECT posts FROM users WHERE username='${req.query["into"]}'`;
+    console.log("JUST CALLED REMOVE FRIEND");
+    console.log("attempting to remove post with " + p);
+    db.any(p).then(resp => {
+        console.log("GOT A RESPONSE " + resp);
+        let updated_friends = resp[0].posts;
+        console.log(updated_friends);
+        updated_friends ??= [];
+        console.log(updated_friends);
+        updated_friends = updated_friends.filter(e => e !== req.query["who"]);
+        let stringed = JSON.stringify(updated_friends);
+        stringed = stringed.substring(1, stringed.length - 1);
+        const q = `UPDATE users SET posts='{${stringed}}' WHERE username='${req.query["into"]}'`;
+        console.log("updating friends as with query: " + q);
+        db.none(q).catch(error => {
+            console.log("got another error");
+            console.log(error);
+        });
+    }).catch(error => {
+        console.log("got error somehow1");
+        console.log(error);
     });
     res.end();
 });
