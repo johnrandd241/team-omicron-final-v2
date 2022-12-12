@@ -94,7 +94,7 @@ Default permissions for someone who isnt logged in include not being able to acc
  
 John Rand - Implemented the login/register pages. This includes checking if a user was already in the system, and also once a user is logged in, the logout button would then be displayed.  
 John Steenbruggen - Implemented profile page, ability to search and view posts in events, people, and records, and added in post creation feature.
-Connor Andrews - Setup and Implemented database including the design of tables and debugging of connection and SQL quereys. Was in charge of creating the messaging service.
+Connor Andrews - Setup and Implemented database including the design of tables and debugging of connection and SQL queries. Was in charge of creating the messaging service.
  
 ## Conclusion
  
