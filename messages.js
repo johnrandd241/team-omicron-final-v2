@@ -170,6 +170,7 @@ export async function message(chatID){
             },
             body: JSON.stringify(data)
         }); */
+        let w = {ok:true};
         if(!w.ok){
             console.log("API call failed (msg.js). Dumping Error....")
             console.log(w);
