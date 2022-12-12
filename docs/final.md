@@ -14,19 +14,20 @@ Connor Andrews - Swerdnacs
 John Rand - johnrandd241
  
 ## User-interface
-![](events.png) 
-Events page - 
+![](eventsfinal.png) 
+Events page - Displays a page of user generated post
 ![](login.png)
-Login page - 
+Login page - Displays the page to sign a user in
 ![](register.png)
-Register page - 
-Profile page - 
- 
+Register page - Displays the page to register a user
+![](profile.png)
+Profile page - Displays the user that is currently signed in
  
 ## APIs
  
 The API for our app consists of a few key components. The first being, the user logging in, they first send their credentials, server verifies them, and then gathers the rest of their data that is stored on the server. 
 The next one being the event page, the user visits the page, and the server makes a request to the db, and gathers all the events, which are then displayed client side.
+
 ## Database
  
 ## URL Routes/Mappings
