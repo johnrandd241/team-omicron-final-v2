@@ -29,6 +29,34 @@ The API for our app consists of a few key components. The first being, the user 
 The next one being the event page, the user visits the page, and the server makes a request to the db, and gathers all the events, which are then displayed client side.
 
 ## Database
+# _Users Table_
+![](Users.png)
+
+
+# _Post Table_
+![](Post.png)
+
+# _MessageLog Table_
+![](MessageLog.png)
+
+Message Object:{
+
+	“User”: string   //User who sent the message
+	“Date”: date	    //Date and time of message being sent
+	“Text”: string  //The body of the message
+    
+}
+
+# _CommentLog Table_
+![](CommentLOg.png)
+
+
+Comment Object:{
+
+	“User”: string   //User who made the comment
+	“Date”: date	    //Date and time of comment posting
+	“Text”: string  //The body of the comment
+}
  
 ## URL Routes/Mappings
  
@@ -66,7 +94,7 @@ Default permissions for someone who isnt logged in include not being able to acc
  
 John Rand - Implemented the login/register pages. This includes checking if a user was already in the system, and also once a user is logged in, the logout button would then be displayed.  
 John Steenbruggen - Implemented profile page, ability to search and view posts in events, people, and records, and added in post creation feature.
-Connor Andrews -
+Connor Andrews - Setup and Implemented database including the design of tables and debugging of connection and SQL quereys. Was in charge of creating the messaging service.
  
 ## Conclusion
  

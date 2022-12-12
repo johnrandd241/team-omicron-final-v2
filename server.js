@@ -47,9 +47,9 @@ const db = pgp(cn);
 module.exports = db;
 
 app.post("/update/msg", (req, res)=>{
-    const currUser = req.query.currUser;
-    const charID = req.query.chatID;
-    const messages = req.query.chat;
+    const currUser = req.body.currUser;
+    const chatID = req.body.chatID;
+    const messages = req.body.chat;
     const q = `UPDATE messagelog
                 SET messages = '${messages}'
                 WHERE mlogID = '${chatID}'`;
@@ -65,7 +65,7 @@ app.post("/update/msg", (req, res)=>{
 
 app.get("/GetMsgFromUser", (req, res)=>{
     const user = req.query.user;
-    const q = `SELECT messages FROM users WHERE username = "$(user)";`;
+    const q = `SELECT messages FROM users WHERE username = "${user}";`;
     console.log("attempting this query: " + q);
     console.log(user);
     db.any(q)

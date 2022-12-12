@@ -1,5 +1,5 @@
+
 //import {getCurrentUser} from "./main.js";
-let logged_user = window.localStorage.getItem("user").username;
 export async function message(chatID){
     let div = document.getElementById('page');
     div.innerHTML = "";
@@ -16,11 +16,13 @@ export async function message(chatID){
     let convos = {};
     let list = document.createElement('ul');
     list.classList.add('contacts');
-    const response = await fetch(`/GetMsgFromUser?user=${logged_user}`);
+    let user = window.localStorage.getItem('user').username;
+    /* const response = await fetch(`/GetMsgFromUser?user=${user}`);
     if(!response.ok){
         console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
         chats.innerHTML = "Error API called failed!\nPlease try again later.";
     }else{
+        //Creates list of coversations
         convos = await response.json();
         for(let c in convos){
             let item = document.createElement('li');
@@ -32,7 +34,7 @@ export async function message(chatID){
             pic.classList.add('img_cont');
             let image = document.createElement('img');
             image.src = './stockUserPhoto.jpg';
-            imagegetclassList.add('user_img');
+            image.classList.add('user_img');
             pic.appendChild(image);
             card.appendChild(pic);
             let friend = document.createElement('div');
@@ -45,47 +47,89 @@ export async function message(chatID){
             chats.appendChild(item);
         }
     }
+ */
+    let item = document.createElement('li');
+    item.id = "Tester1";
+    //item.classList.add('')
+    let c =  document.createElement('div');
+    c.classList.add('d-flex','bd-highlight');
+    let pic = document.createElement('div');
+    pic.classList.add('img_cont');
+    let image = document.createElement('img');
+    image.src = './stockUserPhoto.jpg';
+    image.classList.add('user_img');
+    pic.appendChild(image);
+    c.appendChild(pic);
+    let friend = document.createElement('div');
+    friend.classList.add('user_info');
+    let name = document.createElement('span');
+    name.innerHTML = "Tester1";
+    friend.appendChild(name);
+    c.appendChild(friend);
+    item.appendChild(c);
+    chats.appendChild(item);
+
+
+
 
     let curchat = document.createElement('div');
     curchat.classList.add("card-body", "msg_card_body");
     curchat.setAttribute('id', 'curchat');
-    
-    if(typeof(chatID) == "undefined"){
-        let empty = document.createElement('div');
-        empty.innerHTML = "Please Select a chat from the list on the left";
-        curchat.appendChild(empty);
-        return;
-    }
+
     //Request chat data from database
     let chat ={};
-    const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
-    if(!response2.ok){
-        console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
-        chats.innerHTML = "Error API called failed!\nPlease try again later.";
-    }else{
-        chat = await response2.json();
-        for(let msg in chat){
-            let bubble = document.createElement('div');
-            bubble.classList.add("d-flex","mb-4");
-            if(logged_user === msg.user){
-                bubble.classList.add('justify-content-start');
-            }else{
-                bubble.classList.add('justify-content-end');
+    if(chatID != undefined && chatID != null){
+        //Populates the current chat
+        const response2 = await fetch(`/GetMsgFromID?chatID=${chatID}`);
+        if(!response2.ok){
+            console.log("API call failed. Exiting function renderConvos. Setting Div Text to Error.");
+            chats.innerHTML = "Error API called failed!\nPlease try again later.";
+        }else{
+            chat = await response2.json();
+            for(let msg in chat){
+                let bubble = document.createElement('div');
+                bubble.classList.add("d-flex","mb-4");
+                if(window.localStorage.getItem('user').username === msg.user){
+                    bubble.classList.add('justify-content-start');
+                }else{
+                    bubble.classList.add('justify-content-end');
+                }
+                let uinfo = document.createElement('div');
+                uinfo.innerHTML = msg.user;
+                //uinfo.classList.add()
+                let msgC = document.createElement('div');
+                msgC.classList.add("msg_container");
+                msgC.innerHTML = msg.text;
+                let time = document.createElement('span');
+                time.classList.add('msg_time');
+                time.innerHTML = msg.date;
+                msgC.appendChild(time);
+                bubble.appendChild(uinfo);
+                bubble.appendChild(msgC);
+                curchat.appendChild(bubble);
             }
-            let uinfo = document.createElement('div');
-            uinfo.innerHTML = msg.user;
-            //uinfo.classList.add()
-            let msgC = document.createElement('div');
-            msgC.classList.add("msg_container");
-            msgC.innerHTML = msg.text;
-            let time = document.createElement('span');
-            time.classList.add('msg_time');
-            time.innerHTML = msg.date;
-            msgC.appendChild(time);
-            bubble.appendChild(uinfo);
-            bubble.appendChild(msgC);
-            curchat.appendChild(bubble);
         }
+    }else{
+        let msg = {user:"Tester1",
+                date:null,
+                text:"Hello This is Tester1"};  
+        msg.date= Date(); 
+        let bubble = document.createElement('div');
+        bubble.classList.add("d-flex","mb-4");
+        bubble.classList.add('justify-content-start');
+        let uinfo = document.createElement('div');
+        uinfo.innerHTML = msg.user;
+        //uinfo.classList.add()
+        let msgC = document.createElement('div');
+        msgC.classList.add("msg_container");
+        msgC.innerHTML = msg.text;
+        let time = document.createElement('span');
+        time.classList.add('msg_time');
+        time.innerHTML = msg.date;
+        msgC.appendChild(time);
+        bubble.appendChild(uinfo);
+        bubble.appendChild(msgC);
+        curchat.appendChild(bubble);
     }
 
     let card = document.createElement('div');
@@ -106,12 +150,26 @@ export async function message(chatID){
     butt.classList.add('input-group-text', 'send_btn');
     butt.setAttribute('id','sendbutn');
     butt.addEventListener('click', async function(){
-        let ret = {user:logged_user,
+        let ret = {user:null,
                     date:null,
                     text:""};
         ret.date = Date();
+        ret.user = window.localStorage.getItem('user').username;
         ret.text = msgEntry.value;
-        let w = await fetch(`/update/msg?currUser=${logged_user}&chatID=${chatID}&chat=${JSON.stringify(ret)}`);
+        let data = {currUser:null,
+                chatID:null,
+                chat:null
+        };
+        data.chat = ret;
+        data.chatID = chatID;
+        data.currUser = window.localStorage.getItem('user').username;
+        let w = await fetch(`/update/msg`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
         if(!w.ok){
             console.log("API call failed (msg.js). Dumping Error....")
             console.log(w);
@@ -126,7 +184,7 @@ export async function message(chatID){
             bubble.classList.add("d-flex","mb-4");
             bubble.classList.add('justify-content-start');
             let uinfo = document.createElement('div');
-            uinfo.innerHTML = logged_user;
+            uinfo.innerHTML = window.localStorage.getItem('user').username;
             //uinfo.classList.add()
             let msgC = document.createElement('div');
             msgC.classList.add("msg_container");
