@@ -184,7 +184,7 @@ export async function message(chatID){
             bubble.classList.add("d-flex","mb-4");
             bubble.classList.add('justify-content-end');
             let uinfo = document.createElement('div');
-            uinfo.innerHTML = "The Dogs";//window.localStorage.getItem('user').username;
+            uinfo.innerHTML = "thedoggs";//window.localStorage.getItem('user').username;
             //uinfo.classList.add()
             let msgC = document.createElement('div');
             msgC.classList.add("msg_container");
