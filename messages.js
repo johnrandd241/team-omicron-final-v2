@@ -125,7 +125,7 @@ export async function message(chatID){
         msgC.innerHTML = msg.text;
         let time = document.createElement('span');
         time.classList.add('msg_time');
-        time.innerHTML = msg.date;
+        //time.innerHTML = msg.date;
         msgC.appendChild(time);
         bubble.appendChild(uinfo);
         bubble.appendChild(msgC);
@@ -163,35 +163,35 @@ export async function message(chatID){
         data.chat = ret;
         data.chatID = chatID;
         data.currUser = window.localStorage.getItem('user').username;
-        let w = await fetch(`/update/msg`,{
+       /*  let w = await fetch(`/update/msg`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        });
+        }); */
         if(!w.ok){
             console.log("API call failed (msg.js). Dumping Error....")
             console.log(w);
             window.alert("Failed to connect to server.");
         }else{
-            let suc = await w.json();
+            /* let suc = await w.json();
             if(suc.success == false){
                 console.log("Failed to push new msg to server.");
                 console.log(suc);
-            }
+            } */
             let bubble = document.createElement('div');
             bubble.classList.add("d-flex","mb-4");
-            bubble.classList.add('justify-content-start');
+            bubble.classList.add('justify-content-end');
             let uinfo = document.createElement('div');
-            uinfo.innerHTML = window.localStorage.getItem('user').username;
+            uinfo.innerHTML = "The Dogs";//window.localStorage.getItem('user').username;
             //uinfo.classList.add()
             let msgC = document.createElement('div');
             msgC.classList.add("msg_container");
             msgC.innerHTML = ret.text;
             let time = document.createElement('span');
             time.classList.add('msg_time');
-            time.innerHTML = ret.date;
+            //time.innerHTML = ret.date;
             msgC.appendChild(time);
             bubble.appendChild(uinfo);
             bubble.appendChild(msgC);
